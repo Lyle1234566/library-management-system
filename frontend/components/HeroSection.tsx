@@ -32,16 +32,16 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#0a1221] via-[#0e1629] to-[#0b1324] flex items-center">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#0a1221] via-[#0e1629] to-[#0b1324] pt-[4.75rem]">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-sky-600/10 blur-3xl animate-float" />
         <div className="absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />
         <div className="absolute inset-0 bg-gradient-to-br from-sky-950/30 via-transparent to-amber-950/20" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24 xl:py-28">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-16 items-center">
-          <div className="space-y-8 sm:space-y-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-8 sm:py-12 lg:px-10 lg:py-14 xl:py-16">
+        <div className="grid min-h-[calc(100svh-4.75rem)] grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-12 xl:gap-16">
+          <div className="space-y-6 sm:space-y-8 lg:pt-4">
             <div className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-sky-200/90 backdrop-blur-sm tracking-wide animate-fade-up sm:px-5">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
@@ -50,9 +50,9 @@ export default function HeroSection() {
               Digital Borrowing
             </div>
 
-            <h1 className="text-white animate-fade-up delay-100">
+            <h1 className="max-w-[8.5ch] text-white animate-fade-up delay-100">
               <span
-                className="block text-[2.8rem] sm:text-5xl md:text-6xl lg:text-[5.8rem] xl:text-[6.6rem]"
+                className="block text-[clamp(3rem,8vw,6rem)]"
                 style={{
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 700,
@@ -62,17 +62,17 @@ export default function HeroSection() {
               >
                 SCSIT Digital Library
               </span>
-              <span className="block mt-2 font-sans text-2xl text-sky-200/90 sm:text-4xl md:text-5xl font-semibold">
-                Built for serious readers
+              <span className="mt-3 block font-sans text-[clamp(2rem,4.6vw,4rem)] font-semibold leading-[0.96] text-sky-200/90">
+                Built for Serious Readers
               </span>
             </h1>
 
-            <p className="max-w-3xl text-base leading-relaxed font-light text-gray-200/85 animate-fade-up delay-200 sm:text-xl">
+            <p className="max-w-2xl text-base leading-relaxed font-light text-gray-200/85 animate-fade-up delay-200 sm:text-lg lg:text-xl">
               Explore curated collections, borrow instantly, and manage your reading life with clarity.
               Search by title, author, genre, or ISBN - everything stays organized.
             </p>
 
-            <form onSubmit={handleSearch} className="max-w-2xl animate-fade-up delay-200">
+            <form onSubmit={handleSearch} className="max-w-xl animate-fade-up delay-200">
               <div className="group flex flex-col gap-3 sm:relative sm:block">
                 <input
                   type="search"
@@ -129,7 +129,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="relative hidden lg:block animate-fade-up delay-300">
+          <div className="relative hidden lg:block animate-fade-up delay-300 lg:pt-8">
             <div className="absolute -top-8 -left-8 h-40 w-32 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl animate-float-slow opacity-40" />
             <div className="absolute -bottom-10 -right-10 h-36 w-28 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl animate-float opacity-40" />
 
