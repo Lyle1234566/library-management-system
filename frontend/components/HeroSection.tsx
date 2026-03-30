@@ -40,7 +40,7 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24 xl:py-28">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-16 items-center">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:gap-10 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] xl:gap-12">
           <div className="space-y-8 sm:space-y-10">
             <div className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-sky-200/90 backdrop-blur-sm tracking-wide animate-fade-up sm:px-5">
               <span className="relative flex h-2.5 w-2.5">
@@ -52,7 +52,7 @@ export default function HeroSection() {
 
             <h1 className="text-white animate-fade-up delay-100">
               <span
-                className="block text-[2.8rem] sm:text-5xl md:text-6xl lg:text-[5.8rem] xl:text-[6.6rem]"
+                className="block whitespace-nowrap text-[clamp(2.8rem,8vw,4.25rem)] lg:text-[clamp(4.4rem,5.1vw,5.2rem)] xl:text-[clamp(5rem,5.6vw,5.9rem)]"
                 style={{
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 700,
@@ -63,7 +63,7 @@ export default function HeroSection() {
                 SCSIT Digital
               </span>
               <span
-                className="block text-[2.8rem] sm:text-5xl md:text-6xl lg:text-[5.8rem] xl:text-[6.6rem]"
+                className="block text-[clamp(2.8rem,8vw,4.25rem)] lg:text-[clamp(4.4rem,5.1vw,5.2rem)] xl:text-[clamp(5rem,5.6vw,5.9rem)]"
                 style={{
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 700,
@@ -73,7 +73,7 @@ export default function HeroSection() {
               >
                 Library
               </span>
-              <span className="block mt-2 font-sans text-2xl text-sky-200/90 sm:text-4xl md:text-5xl font-semibold lg:whitespace-nowrap">
+              <span className="mt-2 block font-sans text-[clamp(2rem,6vw,3.5rem)] font-semibold text-sky-200/90 lg:text-[clamp(2.7rem,3.4vw,3.9rem)] lg:whitespace-nowrap">
                 Built for Serious Readers
               </span>
             </h1>
