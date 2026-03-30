@@ -562,9 +562,6 @@ function RegisterPageContent({
                     <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/70">
                       {recoveryMode ? 'Registration Recovery' : 'Member Onboarding'}
                     </span>
-                    <span className="inline-flex items-center gap-2 rounded-full border border-sky-300/25 bg-sky-400/10 px-3 py-2 text-xs font-medium text-sky-100">
-                      {recoveryMode ? 'Verification repair' : `${accountLabel} onboarding`}
-                    </span>
                   </div>
 
                   <div className="space-y-4">
