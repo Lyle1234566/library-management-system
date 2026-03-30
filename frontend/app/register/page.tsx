@@ -286,9 +286,8 @@ function RegisterPageContent({
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
-  const idLabel = registerRole === 'TEACHER' ? 'Faculty ID' : 'Student ID';
-  const idPlaceholder =
-    registerRole === 'TEACHER' ? 'Enter your faculty ID' : 'Enter your student ID';
+  const idLabel = 'ID';
+  const idPlaceholder = 'Enter your ID';
   const passwordRequirements = getPasswordRequirements(formData.password);
   const passwordHasValue = formData.password.length > 0;
   const passwordsMatch =
@@ -568,8 +567,8 @@ function RegisterPageContent({
                     <h1 className="max-w-3xl text-4xl font-extrabold leading-[0.93] tracking-tight text-white sm:text-6xl lg:text-[4.15rem] xl:text-[5rem]">
                       {recoveryMode ? (
                         <>
-                          Repair the email.
-                          <span className="block text-sky-200">Resume OTP verification.</span>
+                          Repair the Email.
+                          <span className="block text-sky-200">Resume OTP Verification.</span>
                         </>
                       ) : (
                         <>
@@ -581,16 +580,14 @@ function RegisterPageContent({
                     <p className="max-w-2xl text-base leading-7 text-white/70 sm:text-lg">
                       {recoveryMode
                         ? 'If the original registration used an inaccessible address, update it here and continue the OTP step without rebuilding the account.'
-                        : registerRole === 'TEACHER'
-                          ? 'Register with your faculty ID for a cleaner approval flow, unified access across platforms, and borrowing rules tailored to teacher accounts.'
-                          : 'Register with your student ID for a polished onboarding flow, email verification, and staff approval before your first successful sign in.'}
+                        : 'Register with your ID and your account type will be automatically detected. Email verification and staff approval required before first sign in.'}
                     </p>
                   </div>
 
                   <div className="flex flex-wrap gap-2.5">
                     {(recoveryMode
                       ? ['Saved account', 'Email correction', 'Fresh OTP']
-                      : ['Web and mobile', `${accountLabel} profile`, 'Approval workflow']
+                      : ['Web and mobile', 'Auto-detected role', 'Approval workflow']
                     ).map((item) => (
                       <span
                         key={item}
@@ -607,12 +604,12 @@ function RegisterPageContent({
                     {recoveryMode ? 'Recovery lane' : 'Application lane'}
                   </p>
                   <div className="mt-2 text-[1.75rem] font-semibold leading-tight text-white">
-                    {recoveryMode ? 'Resume access' : `${accountLabel} account`}
+                    {recoveryMode ? 'Resume access' : 'Your account'}
                   </div>
                   <p className="mt-2 text-xs leading-5 text-white/60">
                     {recoveryMode
                       ? 'Keep the original account record and update only the address needed for verification.'
-                      : 'One structured registration flow with email verification and staff approval before first login.'}
+                      : 'One registration flow with automatic role detection, email verification, and staff approval.'}
                   </p>
                   <div className="mt-4 grid gap-2">
                     {showcaseHighlights.map((item) => (
@@ -639,9 +636,9 @@ function RegisterPageContent({
                 </>
               ) : (
                 <>
-                  Already approved?{' '}
+                  Already Approved?{' '}
                   <Link href="/login" className="font-semibold text-amber-300 hover:text-amber-200">
-                    Go to sign in
+                    Go to Sign in
                   </Link>
                 </>
               )}
@@ -665,7 +662,7 @@ function RegisterPageContent({
                         <p className="mt-1.5 max-w-md text-xs leading-5 text-white/60 sm:text-sm">
                           {recoveryMode
                             ? 'We kept the registration details below. Change only the email so the student can receive OTP before first login.'
-                            : `Create a ${registerRole === 'TEACHER' ? 'teacher' : 'student'} account with the same structure used across the web and mobile library system.`}
+                            : 'Create your account and your role will be automatically detected based on your ID.'}
                         </p>
                       </div>
                     </div>
@@ -689,34 +686,8 @@ function RegisterPageContent({
                   </div>
 
                   {!recoveryMode ? (
-                    <div className="mt-5 rounded-[22px] border border-white/10 bg-white/[0.04] p-2">
-                      <div className="mb-1.5 px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                        Choose account type
-                      </div>
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setRole('STUDENT')}
-                          className={`rounded-[18px] border px-4 py-2.5 text-xs font-semibold transition-all ${
-                            registerRole === 'STUDENT'
-                              ? 'border-amber-300/60 bg-amber-400/15 text-amber-100 shadow-[0_12px_26px_rgba(251,191,36,0.12)]'
-                              : 'border-white/10 bg-white/[0.03] text-white/70 hover:border-white/25 hover:bg-white/[0.06]'
-                          }`}
-                        >
-                          Student account
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setRole('TEACHER')}
-                          className={`rounded-[18px] border px-4 py-2.5 text-xs font-semibold transition-all ${
-                            registerRole === 'TEACHER'
-                              ? 'border-sky-300/60 bg-sky-400/15 text-sky-100 shadow-[0_12px_26px_rgba(56,189,248,0.12)]'
-                              : 'border-white/10 bg-white/[0.03] text-white/70 hover:border-white/25 hover:bg-white/[0.06]'
-                          }`}
-                        >
-                          Teacher account
-                        </button>
-                      </div>
+                    <div className="mt-5 rounded-[20px] border border-sky-400/30 bg-sky-500/15 px-3.5 py-2.5 text-xs text-sky-100">
+                      Your account type will be automatically detected based on your ID.
                     </div>
                   ) : (
                     <div className="mt-5 rounded-[20px] border border-sky-400/30 bg-sky-500/15 px-3.5 py-2.5 text-xs text-sky-100">
@@ -744,8 +715,7 @@ function RegisterPageContent({
                       helper={
                         recoveryMode
                           ? 'This identifier is locked to the existing registration.'
-                          : availabilityMessage ||
-                            `Use the ${registerRole === 'TEACHER' ? 'faculty' : 'student'} ID assigned by the school.`
+                          : availabilityMessage || 'Use the ID assigned by the school.'
                       }
                       rightSlot={
                         !recoveryMode && availabilityState !== 'idle' ? (
