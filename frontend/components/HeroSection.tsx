@@ -60,9 +60,20 @@ export default function HeroSection() {
                   lineHeight: 0.92,
                 }}
               >
-                SCSIT Digital Library
+                SCSIT Digital
               </span>
-              <span className="block mt-2 font-sans text-2xl text-sky-200/90 sm:text-4xl md:text-5xl font-semibold">
+              <span
+                className="block text-[2.8rem] sm:text-5xl md:text-6xl lg:text-[5.8rem] xl:text-[6.6rem]"
+                style={{
+                  fontFamily: '"Times New Roman", Times, serif',
+                  fontWeight: 700,
+                  letterSpacing: '-0.03em',
+                  lineHeight: 0.92,
+                }}
+              >
+                Library
+              </span>
+              <span className="block mt-2 font-sans text-2xl text-sky-200/90 sm:text-4xl md:text-5xl font-semibold lg:whitespace-nowrap">
                 Built for Serious Readers
               </span>
             </h1>
