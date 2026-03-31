@@ -12,10 +12,10 @@ function isValidEmail(value: string): boolean {
 }
 
 const librarianDetails = [
-  { label: 'Name', value: 'Librarian on Duty' },
-  { label: 'Role', value: 'Senior Librarian' },
   { label: 'Desk', value: 'Learning Commons 2F' },
   { label: 'Hours', value: 'Mon-Fri, 8:00 AM - 5:00 PM' },
+  { label: 'Support', value: 'Borrowing, approvals, and catalog help' },
+  { label: 'Response', value: 'Typically within 24 hours' },
 ];
 
 const contactHighlights = [
@@ -82,6 +82,9 @@ const contactHighlights = [
   },
 ];
 
+const CONTACT_FEATURE_PHOTO = '/contact-librarian.jpg';
+const CONTACT_FEATURE_FALLBACK = '/librarian-illustration.svg';
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
@@ -92,6 +95,7 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [usePhotoFallback, setUsePhotoFallback] = useState(false);
 
   const handleLowerLinkClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -194,50 +198,62 @@ export default function ContactPage() {
                 ))}
               </div>
 
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-2xl shadow-black/40 backdrop-blur-xl animate-fade-up delay-200 sm:p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.3em] text-white/60">Meet your librarian</p>
-                    <h2 className="mt-3 text-xl font-semibold text-white">Your support partner</h2>
-                    <p className="mt-2 text-sm text-white/70">
-                      We can assist with returns, approvals, and anything that needs a human touch.
-                    </p>
-                  </div>
-                  <div className="hidden sm:flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
-                    <svg className="h-6 w-6 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.7}
-                        d="M8 21h8M12 17v4m-6-4a6 6 0 1112 0H6zM12 3v4"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                <div className="relative mt-6 h-56 w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-                  <div className="absolute -left-6 -top-6 h-24 w-24 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl animate-float" />
-                  <div className="absolute -right-6 -bottom-6 h-28 w-28 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl animate-float-slow" />
+              <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] shadow-[0_32px_90px_rgba(2,6,23,0.48)] backdrop-blur-xl animate-fade-up delay-200">
+                <div className="relative h-[28rem] overflow-hidden sm:h-[36rem]">
                   <Image
-                    src="/librarian-illustration.svg"
-                    alt="Friendly librarian illustration"
+                    src={usePhotoFallback ? CONTACT_FEATURE_FALLBACK : CONTACT_FEATURE_PHOTO}
+                    alt="SCSIT librarian ready to help at the library desk"
                     fill
-                    className="object-contain p-4 sm:p-6"
+                    className={
+                      usePhotoFallback
+                        ? 'object-contain bg-[#091221] p-6 sm:p-8'
+                        : 'object-cover object-[center_52%]'
+                    }
                     sizes="(min-width: 1024px) 40vw, 100vw"
                     priority
+                    onError={() => setUsePhotoFallback(true)}
                   />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,11,25,0.02),rgba(4,11,25,0.1)_30%,rgba(4,11,25,0.28)_56%,rgba(4,11,25,0.72))]" />
+                  <div className="absolute left-4 top-4 right-4 flex items-start justify-between gap-3 sm:left-6 sm:right-6 sm:top-6">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#0b1324]/55 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/80 backdrop-blur-md">
+                      Library support desk
+                    </span>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-sky-300/20 bg-sky-400/10 px-3 py-2 text-xs font-medium text-sky-100 backdrop-blur-md">
+                      <span className="h-2 w-2 rounded-full bg-sky-300" />
+                      In-person assistance
+                    </span>
+                  </div>
+
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <div className="border-t border-white/10 bg-[linear-gradient(180deg,rgba(10,19,35,0.88),rgba(10,19,35,0.72))] p-5 sm:p-6">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/50">Meet your librarian</p>
+                      <h2 className="mt-2 text-2xl font-semibold text-white sm:text-[2rem]">Librarian on Duty</h2>
+                      <p className="mt-1 text-sm font-medium text-sky-100/90">Senior Librarian</p>
+                    </div>
+                    <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-100">
+                      <span className="h-2 w-2 rounded-full bg-emerald-300" />
+                      Ready to assist on site
+                    </div>
+                  </div>
+
+                  <p className="mt-4 max-w-2xl text-sm leading-6 text-white/68 sm:text-[0.95rem]">
+                    Direct support for borrowing concerns, account approvals, and catalog questions inside the library.
+                  </p>
+
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   {librarianDetails.map((detail) => (
                     <div
                       key={detail.label}
-                      className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition-all duration-300 hover:border-white/20 hover:bg-white/10"
+                      className="rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-3.5 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.08]"
                     >
                       <p className="text-[0.65rem] uppercase tracking-widest text-white/60">{detail.label}</p>
                       <p className="mt-1 text-sm font-semibold text-white">{detail.value}</p>
                     </div>
                   ))}
+                  </div>
                 </div>
               </div>
 
