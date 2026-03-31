@@ -52,29 +52,36 @@ export default function HeroSection() {
 
             <h1 className="text-white animate-fade-up delay-100">
               <span
-                className="block whitespace-nowrap text-[clamp(2.8rem,8vw,4.25rem)] lg:text-[clamp(4.4rem,5.1vw,5.2rem)] xl:text-[clamp(5rem,5.6vw,5.9rem)]"
+                className="block whitespace-nowrap text-[clamp(3.4rem,9.4vw,5.2rem)] lg:text-[clamp(5.4rem,6.3vw,6.7rem)] xl:text-[clamp(6.2rem,6.9vw,7.4rem)]"
                 style={{
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 700,
                   letterSpacing: '-0.03em',
-                  lineHeight: 0.92,
+                  lineHeight: 0.88,
                 }}
               >
                 SCSIT Digital
               </span>
               <span
-                className="block text-[clamp(2.8rem,8vw,4.25rem)] lg:text-[clamp(4.4rem,5.1vw,5.2rem)] xl:text-[clamp(5rem,5.6vw,5.9rem)]"
+                className="block text-[clamp(3.4rem,9.4vw,5.2rem)] lg:text-[clamp(5.4rem,6.3vw,6.7rem)] xl:text-[clamp(6.2rem,6.9vw,7.4rem)]"
                 style={{
                   fontFamily: '"Times New Roman", Times, serif',
-                  fontWeight: 700,
+                  fontWeight: 1000,
                   letterSpacing: '-0.03em',
-                  lineHeight: 0.92,
+                  lineHeight: 0.9,
                 }}
               >
                 Library
               </span>
-              <span className="mt-2 block font-sans text-[clamp(2rem,6vw,3.5rem)] font-semibold text-sky-200/90 lg:text-[clamp(2.7rem,3.4vw,3.9rem)] lg:whitespace-nowrap">
-                Built for Serious Readers
+              <span
+                className="mt-2 block whitespace-nowrap text-[clamp(1.45rem,3.3vw,2.35rem)] font-medium italic text-sky-200/90 lg:text-[clamp(1.85rem,2.55vw,2.85rem)]"
+                style={{
+                  fontFamily: 'Georgia, "Times New Roman", serif',
+                  letterSpacing: '-0.03em',
+                  lineHeight: 1,
+                }}
+              >
+                The Foundation of Perpetual Growth
               </span>
             </h1>
 
