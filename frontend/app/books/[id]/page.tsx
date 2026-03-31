@@ -145,6 +145,24 @@ const yearLevelOptions: BorrowSelectOption[] = [
   },
 ];
 
+const conditionOptions: BorrowSelectOption[] = [
+  {
+    value: 'GOOD',
+    label: 'Good',
+    description: 'No visible damage',
+  },
+  {
+    value: 'SLIGHTLY_DAMAGED',
+    label: 'Slightly Damaged',
+    description: 'Minor wear or markings',
+  },
+  {
+    value: 'NEEDS_REPAIR',
+    label: 'Needs Repair',
+    description: 'Requires attention before reuse',
+  },
+];
+
 function BorrowFormSelect({
   value,
   onChange,
@@ -2152,17 +2170,15 @@ export default function BookDetailsPage() {
                       <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
                         Condition Before Borrowing
                       </label>
-                      <select
+                      <BorrowFormSelect
                         value={studentBorrowForm.condition}
-                        onChange={(event) =>
-                          handleStudentBorrowFormChange('condition', event.target.value)
+                        onChange={(nextValue) =>
+                          handleStudentBorrowFormChange('condition', nextValue)
                         }
-                        className="mt-2 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all"
-                      >
-                        <option value="GOOD">Good</option>
-                        <option value="SLIGHTLY_DAMAGED">Slightly Damaged</option>
-                        <option value="NEEDS_REPAIR">Needs Repair</option>
-                      </select>
+                        options={conditionOptions}
+                        placeholder="Select condition"
+                        menuLabel="Book condition"
+                      />
                     </div>
                     <div>
                       <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">

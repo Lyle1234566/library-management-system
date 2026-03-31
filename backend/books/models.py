@@ -182,7 +182,7 @@ class BorrowRequest(models.Model):
         null=True,
     )
     renewal_count = models.PositiveIntegerField(default=0)
-    max_renewals = models.PositiveIntegerField(default=2)
+    max_renewals = models.PositiveIntegerField(default=1)
     last_renewed_at = models.DateTimeField(blank=True, null=True)
     requested_borrow_days = models.PositiveIntegerField(default=14)
     reporting_frequency = models.CharField(
@@ -243,11 +243,11 @@ class BorrowRequest(models.Model):
 
     @staticmethod
     def get_default_max_renewals() -> int:
-        raw = getattr(settings, 'MAX_RENEWALS_PER_BORROW', 2)
+        raw = getattr(settings, 'MAX_RENEWALS_PER_BORROW', 1)
         try:
             return max(int(raw), 0)
         except (TypeError, ValueError):
-            return 2
+            return 1
 
     @staticmethod
     def get_library_portal_url() -> str:

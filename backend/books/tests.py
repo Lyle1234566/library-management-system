@@ -259,7 +259,7 @@ class BorrowRenewalApiTests(TestCase):
             due_date=timezone.localdate() + timedelta(days=2),
             due_soon_reminder_sent_at=timezone.now(),
             requested_borrow_days=4,
-            max_renewals=2,
+            max_renewals=1,
             renewal_count=0,
         )
         self.client = APIClient()

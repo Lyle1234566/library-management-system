@@ -162,10 +162,10 @@ export default function ContactPage() {
       </div>
 
       <Navbar variant="dark" />
-      <main className="relative z-10 pt-20 pb-16">
-        <section className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="grid gap-12 lg:grid-cols-[1.08fr_0.92fr]">
-            <div className="space-y-8 animate-fade-up">
+      <main className="relative z-10 pt-24 pb-20 lg:pt-28 lg:pb-28">
+        <section className="mx-auto max-w-[1380px] px-5 sm:px-8 lg:px-10">
+          <div className="grid gap-14 lg:grid-cols-[minmax(0,1.06fr)_minmax(26rem,0.94fr)] lg:items-start xl:gap-20">
+            <div className="space-y-8 animate-fade-up lg:space-y-9">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white/70">
                 Contact
               </span>
@@ -182,7 +182,7 @@ export default function ContactPage() {
                   <div
                     key={item.label}
                     style={{ animationDelay: `${index * 90 + 120}ms` }}
-                    className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-lg shadow-black/30 animate-fade-up transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10"
+                    className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/30 animate-fade-up transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10 sm:p-6"
                   >
                     <div className="flex items-center gap-3">
                       <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10">
@@ -198,98 +198,71 @@ export default function ContactPage() {
                 ))}
               </div>
 
-              <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] shadow-[0_32px_90px_rgba(2,6,23,0.48)] backdrop-blur-xl animate-fade-up delay-200">
-                <div className="relative h-[28rem] overflow-hidden sm:h-[36rem]">
-                  <Image
-                    src={usePhotoFallback ? CONTACT_FEATURE_FALLBACK : CONTACT_FEATURE_PHOTO}
-                    alt="SCSIT librarian ready to help at the library desk"
-                    fill
-                    className={
-                      usePhotoFallback
-                        ? 'object-contain bg-[#091221] p-6 sm:p-8'
-                        : 'object-cover object-[center_52%]'
-                    }
-                    sizes="(min-width: 1024px) 40vw, 100vw"
-                    priority
-                    onError={() => setUsePhotoFallback(true)}
-                  />
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,11,25,0.02),rgba(4,11,25,0.1)_30%,rgba(4,11,25,0.28)_56%,rgba(4,11,25,0.72))]" />
-                  <div className="absolute left-4 top-4 right-4 flex items-start justify-between gap-3 sm:left-6 sm:right-6 sm:top-6">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#0b1324]/55 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/80 backdrop-blur-md">
-                      Library support desk
-                    </span>
-                    <span className="inline-flex items-center gap-2 rounded-full border border-sky-300/20 bg-sky-400/10 px-3 py-2 text-xs font-medium text-sky-100 backdrop-blur-md">
-                      <span className="h-2 w-2 rounded-full bg-sky-300" />
-                      In-person assistance
-                    </span>
+              <div className="space-y-4 sm:space-y-5">
+                <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] shadow-[0_32px_90px_rgba(2,6,23,0.48)] backdrop-blur-xl animate-fade-up delay-200">
+                  <div className="relative h-[30rem] overflow-hidden sm:h-[38rem]">
+                    <Image
+                      src={usePhotoFallback ? CONTACT_FEATURE_FALLBACK : CONTACT_FEATURE_PHOTO}
+                      alt="SCSIT librarian ready to help at the library desk"
+                      fill
+                      className={
+                        usePhotoFallback
+                          ? 'object-contain bg-[#091221] p-6 sm:p-8'
+                          : 'object-cover object-[center_52%]'
+                      }
+                      sizes="(min-width: 1024px) 40vw, 100vw"
+                      priority
+                      onError={() => setUsePhotoFallback(true)}
+                    />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,11,25,0.02),rgba(4,11,25,0.1)_30%,rgba(4,11,25,0.28)_56%,rgba(4,11,25,0.72))]" />
+                    <div className="absolute left-4 top-4 right-4 flex items-start justify-between gap-3 sm:left-6 sm:right-6 sm:top-6">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#0b1324]/55 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/80 backdrop-blur-md">
+                        Library support desk
+                      </span>
+                      <span className="inline-flex items-center gap-2 rounded-full border border-sky-300/20 bg-sky-400/10 px-3 py-2 text-xs font-medium text-sky-100 backdrop-blur-md">
+                        <span className="h-2 w-2 rounded-full bg-sky-300" />
+                        In-person assistance
+                      </span>
+                    </div>
                   </div>
 
                 </div>
 
-                <div className="border-t border-white/10 bg-[linear-gradient(180deg,rgba(10,19,35,0.88),rgba(10,19,35,0.72))] p-5 sm:p-6">
-                  <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div>
+                <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-6 shadow-2xl shadow-black/40 backdrop-blur-2xl transition-all duration-300 hover:border-white/20 sm:p-8">
+                  <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="space-y-3">
                       <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/50">Meet your librarian</p>
-                      <h2 className="mt-2 text-2xl font-semibold text-white sm:text-[2rem]">Librarian on Duty</h2>
-                      <p className="mt-1 text-sm font-medium text-sky-100/90">Senior Librarian</p>
+                      <div>
+                        <h3 className="text-[2rem] font-semibold tracking-[-0.02em] text-white">Ms. Maria Santos</h3>
+                        <p className="mt-2 text-sm font-medium uppercase tracking-[0.18em] text-sky-100/80">Senior Librarian</p>
+                      </div>
                     </div>
-                    <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-100">
+                    <div className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-300/20 bg-emerald-500/10 px-4 py-2.5 text-sm font-medium text-emerald-100">
                       <span className="h-2 w-2 rounded-full bg-emerald-300" />
                       Ready to assist on site
                     </div>
                   </div>
 
-                  <p className="mt-4 max-w-2xl text-sm leading-6 text-white/68 sm:text-[0.95rem]">
+                  <div className="mt-6 h-px w-full bg-white/10" />
+
+                  <p className="mt-6 max-w-2xl text-[0.97rem] leading-8 text-white/70">
                     Direct support for borrowing concerns, account approvals, and catalog questions inside the library.
                   </p>
-
-                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                  {librarianDetails.map((detail) => (
-                    <div
-                      key={detail.label}
-                      className="rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-3.5 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.08]"
-                    >
-                      <p className="text-[0.65rem] uppercase tracking-widest text-white/60">{detail.label}</p>
-                      <p className="mt-1 text-sm font-semibold text-white">{detail.value}</p>
-                    </div>
-                  ))}
-                  </div>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-white/70 animate-fade-up delay-300 transition-all duration-300 hover:border-white/20 hover:bg-white/10">
-                <p className="text-xs uppercase tracking-[0.3em] text-white/60">Quick links</p>
-                <div className="mt-3 flex flex-col gap-2">
-                  <Link
-                    href="/books"
-                    scroll
-                    onClick={handleLowerLinkClick}
-                    className="inline-flex w-fit text-amber-300 transition-all duration-200 hover:translate-x-1 hover:text-amber-200"
-                  >
-                    Browse books -&gt;
-                  </Link>
-                  <Link
-                    href="/my-books"
-                    scroll
-                    onClick={handleLowerLinkClick}
-                    className="inline-flex w-fit text-amber-300 transition-all duration-200 hover:translate-x-1 hover:text-amber-200"
-                  >
-                    My books -&gt;
-                  </Link>
-                </div>
-              </div>
             </div>
 
-            <div className="animate-fade-up delay-200">
-              <div className="rounded-[28px] border border-white/10 bg-white/5 p-5 shadow-2xl shadow-black/50 backdrop-blur-2xl transition-all duration-300 hover:border-white/20 sm:p-8">
+            <div className="space-y-8 animate-fade-up delay-200 lg:pt-3">
+              <div className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/50 backdrop-blur-2xl transition-all duration-300 hover:border-white/20 sm:p-8 lg:p-10">
                 <p className="text-xs uppercase tracking-[0.3em] text-white/60">Contact form</p>
                 <h3 className="mt-3 text-2xl font-semibold text-white">Tell us how we can help</h3>
-                <p className="mt-3 text-sm text-white/70 leading-relaxed">
+                <p className="mt-4 text-sm leading-7 text-white/70">
                   Share your question below and we will follow up shortly. Borrowing issues are
                   usually resolved within 24 hours.
                 </p>
 
-                <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
+                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                   {success && (
                     <div className="rounded-2xl border border-emerald-400/40 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-100 animate-fade-up">
                       {success}
@@ -372,8 +345,47 @@ export default function ContactPage() {
                   </p>
                 </form>
               </div>
+
+              <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-6 shadow-2xl shadow-black/30 backdrop-blur-2xl transition-all duration-300 hover:border-white/20 sm:p-7">
+                <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/50">Support details</p>
+
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  {librarianDetails.map((detail) => (
+                    <div
+                      key={detail.label}
+                      className="rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-4 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.08]"
+                    >
+                      <p className="text-[0.65rem] uppercase tracking-widest text-white/60">{detail.label}</p>
+                      <p className="mt-1 text-sm font-semibold text-white">{detail.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-sm text-white/70 transition-all duration-300 hover:border-white/20 hover:bg-white/10 sm:p-7">
+                <p className="text-xs uppercase tracking-[0.3em] text-white/60">Quick links</p>
+                <div className="mt-4 flex flex-col gap-3">
+                  <Link
+                    href="/books"
+                    scroll
+                    onClick={handleLowerLinkClick}
+                    className="inline-flex w-fit text-amber-300 transition-all duration-200 hover:translate-x-1 hover:text-amber-200"
+                  >
+                    Browse books -&gt;
+                  </Link>
+                  <Link
+                    href="/my-books"
+                    scroll
+                    onClick={handleLowerLinkClick}
+                    className="inline-flex w-fit text-amber-300 transition-all duration-200 hover:translate-x-1 hover:text-amber-200"
+                  >
+                    My books -&gt;
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
+
         </section>
       </main>
       <div className="relative z-10">
