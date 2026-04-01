@@ -61,6 +61,48 @@ PORTAL_ROLE_MAP = {
 REGISTRABLE_ACCOUNT_ROLES = {'STUDENT', 'TEACHER'}
 PENDING_ACCOUNT_ROLES = {'STUDENT', 'TEACHER'}
 
+
+def format_email_delivery_error(message_prefix: str, exc: Exception) -> str:
+    raw_message = re.sub(r'\s+', ' ', str(exc or '')).strip()
+    lowered = raw_message.lower()
+
+    if 'resend' in lowered:
+        if 'own email address' in lowered or 'testing' in lowered:
+            return (
+                f"{message_prefix} Resend is still in testing mode. "
+                "Verify your domain in Resend and set RESEND_FROM_EMAIL to that verified sender."
+            )
+        if 'invalid api key' in lowered or 'status 401' in lowered or 'unauthorized' in lowered:
+            return (
+                f"{message_prefix} Resend rejected the API key. "
+                "Update RESEND_API_KEY in Render and redeploy."
+            )
+        if 'from' in lowered or 'sender' in lowered or 'status 403' in lowered or 'status 422' in lowered:
+            return (
+                f"{message_prefix} Resend rejected the sender address. "
+                "RESEND_FROM_EMAIL must be a verified sender in Resend."
+            )
+        return f"{message_prefix} Resend could not accept the email request. Check the Render logs for details."
+
+    if 'email bridge' in lowered:
+        if 'status 401' in lowered or 'unauthorized' in lowered:
+            return (
+                f"{message_prefix} The email bridge rejected the request. "
+                "Check EMAIL_BRIDGE_SECRET on both Render and Vercel."
+            )
+        if 'failed to reach the email bridge' in lowered:
+            return (
+                f"{message_prefix} Render could not reach the Vercel email bridge. "
+                "Check EMAIL_BRIDGE_URL and confirm the frontend is deployed."
+            )
+        return f"{message_prefix} The email bridge could not send the message. Check the Vercel logs."
+
+    if settings.DEBUG and raw_message:
+        return f"{message_prefix} {raw_message}"
+
+    return f"{message_prefix} Please check the email service configuration and try again."
+
+
 def is_super_admin(user) -> bool:
     return bool(
         user
@@ -436,7 +478,7 @@ class RegisterView(generics.CreateAPIView):
             logger.exception("Failed to send registration OTP email: %s", exc)
             user.delete()
             return Response(
-                {'detail': 'Failed to send OTP email. Please try again.'},
+                {'detail': format_email_delivery_error('Failed to send OTP email.', exc)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
@@ -839,9 +881,7 @@ class PasswordResetRequestView(APIView):
         except Exception as exc:
             logger.exception("Failed to send reset email: %s", exc)
             if not allow_debug_fallback:
-                detail = 'Email service is not configured. Please contact support.'
-                if settings.DEBUG:
-                    detail = f"Email send failed: {exc}"
+                detail = format_email_delivery_error('Failed to send reset email.', exc)
                 return Response({'detail': detail}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             return Response(
@@ -1152,7 +1192,7 @@ class SendEmailVerificationView(APIView):
         except Exception as exc:
             logger.exception("Failed to send verification email: %s", exc)
             return Response(
-                {'detail': 'Failed to send verification email. Please try again.'},
+                {'detail': format_email_delivery_error('Failed to send verification email.', exc)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
         
@@ -1268,7 +1308,7 @@ class SendLoginOTPView(APIView):
         except Exception as exc:
             logger.exception("Failed to send login OTP email: %s", exc)
             return Response(
-                {'detail': 'Failed to send OTP email. Please try again.'},
+                {'detail': format_email_delivery_error('Failed to send OTP email.', exc)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
         
