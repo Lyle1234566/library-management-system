@@ -85,8 +85,8 @@ The Blueprint already configures:
 - Python 3.12.6
 - the backend root directory
 - `collectstatic`
-- database migrations
-- admin bootstrap
+- database migrations at startup
+- admin bootstrap at startup
 - Gunicorn startup
 - `/api/health/` as the health check
 
@@ -107,16 +107,10 @@ If you do not want to use the Blueprint, create a Python web service manually wi
 pip install -r requirements.txt && python manage.py collectstatic --noinput
 ```
 
-- Pre-Deploy Command:
-
-```bash
-python manage.py migrate && python manage.py ensure_admin_user
-```
-
 - Start Command:
 
 ```bash
-gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT
+python manage.py migrate && python manage.py ensure_admin_user && gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT
 ```
 
 Required environment variables:
