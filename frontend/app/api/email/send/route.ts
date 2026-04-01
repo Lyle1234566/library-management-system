@@ -42,6 +42,39 @@ const buildFromAddress = (): string => {
   return `${fromName} <${fromEmail}>`;
 };
 
+const formatBridgeError = (error: unknown): string => {
+  if (!(error instanceof Error)) {
+    return "Failed to send email.";
+  }
+
+  const message = error.message.trim();
+  const lowered = message.toLowerCase();
+  const errorWithCode = error as Error & { code?: string };
+
+  if (message.startsWith("Missing required environment variable:")) {
+    return message;
+  }
+
+  if (
+    errorWithCode.code === "EAUTH" ||
+    lowered.includes("invalid login") ||
+    lowered.includes("username and password not accepted") ||
+    lowered.includes('missing credentials for "plain"')
+  ) {
+    return "Gmail authentication failed. Check MAILER_GMAIL_USER and MAILER_GMAIL_APP_PASSWORD.";
+  }
+
+  if (errorWithCode.code === "EENVELOPE" || lowered.includes("from")) {
+    return "The sender address was rejected. Check MAILER_FROM_EMAIL and MAILER_FROM_NAME.";
+  }
+
+  if (lowered.includes("daily user sending quota exceeded")) {
+    return "The Gmail sending limit was reached. Try again later or use a different mail account.";
+  }
+
+  return message || "Failed to send email.";
+};
+
 export async function POST(request: Request) {
   try {
     const expectedSecret = getRequiredEnv("EMAIL_BRIDGE_SECRET");
@@ -77,7 +110,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ message: "Email sent." }, { status: 200 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to send email.";
+    const message = formatBridgeError(error);
     return NextResponse.json({ detail: message }, { status: 500 });
   }
 }

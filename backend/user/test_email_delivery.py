@@ -234,3 +234,57 @@ class ResendRegistrationIntegrationTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
         self.assertIn('Resend is still in testing mode.', response.data['detail'])
         self.assertIn('Verify your domain in Resend', response.data['detail'])
+
+
+@override_settings(
+    EMAIL_PROVIDER='bridge',
+    EMAIL_BRIDGE_URL='https://example.vercel.app/api/email/send',
+    EMAIL_BRIDGE_SECRET='bridge-secret',
+)
+class EmailBridgeRegistrationIntegrationTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+    @patch('user.email_delivery._send_via_http_bridge')
+    def test_teacher_registration_surfaces_missing_vercel_env_variable(self, mock_send_via_http_bridge):
+        mock_send_via_http_bridge.side_effect = RuntimeError(
+            'Email bridge request failed with status 500: {"detail":"Missing required environment variable: MAILER_GMAIL_USER"}'
+        )
+
+        response = self.client.post(
+            '/api/auth/register/',
+            {
+                'role': 'TEACHER',
+                'staff_id': 'T-9905',
+                'full_name': 'Teacher Applicant Bridge Missing Env',
+                'email': 'teacher-applicant-bridge-env@example.com',
+                'password': VALID_TEACHER_PASSWORD,
+                'password_confirm': VALID_TEACHER_PASSWORD,
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertIn('Vercel is missing `MAILER_GMAIL_USER`.', response.data['detail'])
+
+    @patch('user.email_delivery._send_via_http_bridge')
+    def test_teacher_registration_surfaces_gmail_auth_failure(self, mock_send_via_http_bridge):
+        mock_send_via_http_bridge.side_effect = RuntimeError(
+            'Email bridge request failed with status 500: {"detail":"Gmail authentication failed. Check MAILER_GMAIL_USER and MAILER_GMAIL_APP_PASSWORD."}'
+        )
+
+        response = self.client.post(
+            '/api/auth/register/',
+            {
+                'role': 'TEACHER',
+                'staff_id': 'T-9906',
+                'full_name': 'Teacher Applicant Bridge Gmail Auth',
+                'email': 'teacher-applicant-bridge-auth@example.com',
+                'password': VALID_TEACHER_PASSWORD,
+                'password_confirm': VALID_TEACHER_PASSWORD,
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertIn('Gmail login failed in the Vercel bridge.', response.data['detail'])

@@ -85,6 +85,28 @@ def format_email_delivery_error(message_prefix: str, exc: Exception) -> str:
         return f"{message_prefix} Resend could not accept the email request. Check the Render logs for details."
 
     if 'email bridge' in lowered:
+        if 'missing required environment variable:' in lowered:
+            match = re.search(r'Missing required environment variable:\s*([A-Z0-9_]+)', raw_message)
+            missing_var = match.group(1) if match else 'an email bridge variable'
+            return (
+                f"{message_prefix} Vercel is missing `{missing_var}`. "
+                "Add it to the frontend environment variables and redeploy Vercel."
+            )
+        if 'gmail authentication failed' in lowered:
+            return (
+                f"{message_prefix} Gmail login failed in the Vercel bridge. "
+                "Check MAILER_GMAIL_USER and MAILER_GMAIL_APP_PASSWORD in Vercel."
+            )
+        if 'sender address was rejected' in lowered:
+            return (
+                f"{message_prefix} Gmail rejected the sender address. "
+                "Check MAILER_FROM_EMAIL and MAILER_FROM_NAME in Vercel."
+            )
+        if 'gmail sending limit was reached' in lowered:
+            return (
+                f"{message_prefix} The Gmail account hit its sending limit. "
+                "Try again later or use another Gmail account."
+            )
         if 'status 401' in lowered or 'unauthorized' in lowered:
             return (
                 f"{message_prefix} The email bridge rejected the request. "
