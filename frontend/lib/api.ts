@@ -44,6 +44,9 @@ const fetchWithAuthRetry = async (
   input: RequestInfo | URL,
   init?: RequestInit
 ): Promise<Response> => {
+  const initialHeaders = new Headers(init?.headers ?? {});
+  const hadAuthHeader = initialHeaders.has('Authorization');
+  const method = (init?.method ?? 'GET').toUpperCase();
   let response = await fetch(input, init);
 
   if (response.status !== 401 || typeof window === 'undefined') {
@@ -57,10 +60,17 @@ const fetchWithAuthRetry = async (
 
   const refreshResult = await authApi.refreshToken();
   if (refreshResult.error || !refreshResult.tokens?.access) {
+    if (hadAuthHeader && ['GET', 'HEAD', 'OPTIONS'].includes(method)) {
+      initialHeaders.delete('Authorization');
+      return fetch(input, {
+        ...init,
+        headers: initialHeaders,
+      });
+    }
     return response;
   }
 
-  const nextHeaders = new Headers(init?.headers ?? {});
+  const nextHeaders = new Headers(initialHeaders);
   nextHeaders.set('Authorization', `Bearer ${refreshResult.tokens.access}`);
 
   response = await fetch(input, {
