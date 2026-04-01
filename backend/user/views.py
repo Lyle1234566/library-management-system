@@ -7,7 +7,6 @@ import math
 from datetime import datetime, timedelta
 from urllib.parse import urlencode
 from django.core import signing
-from django.core.mail import EmailMultiAlternatives
 from django.core.signing import BadSignature, SignatureExpired
 from django.core.cache import cache
 from django.db import transaction
@@ -24,6 +23,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
 from .enrollment_import import EnrollmentImportError, get_enrollment_summary, import_enrollment_csv_file
+from .email_delivery import get_email_config_error, send_email_message
 from .models import (
     PasswordResetCode,
     ContactMessage,
@@ -51,18 +51,6 @@ logger = logging.getLogger(__name__)
 OTP_CHALLENGE_SALT = 'user.login_otp.challenge'
 LOGIN_FAILURE_CACHE_PREFIX = 'auth.login_fail'
 LOGIN_LOCK_CACHE_PREFIX = 'auth.login_lock'
-
-PLACEHOLDER_EMAIL_USERS = {
-    'yourgmail@gmail.com',
-    'you@example.com',
-    'example@example.com',
-}
-PLACEHOLDER_EMAIL_PASSWORDS = {
-    'your_app_password',
-    'app_password',
-    'password',
-    'changeme',
-}
 
 PORTAL_ROLE_MAP = {
     'student': {'STUDENT', 'WORKING'},
@@ -343,16 +331,7 @@ def send_reset_code(email: str, code: str) -> None:
           <p>If you did not request a password reset, you can ignore this email.</p>
         </div>
     """
-    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@salazar-library.local')
-
-    message = EmailMultiAlternatives(
-        subject,
-        body,
-        from_email,
-        [email],
-    )
-    message.attach_alternative(html_body, "text/html")
-    message.send(fail_silently=False)
+    send_email_message(email, subject, body, html_body)
 
 
 def send_login_otp_code(email: str, code: str) -> None:
@@ -372,16 +351,7 @@ def send_login_otp_code(email: str, code: str) -> None:
           <p>If you did not attempt to login, please secure your account immediately.</p>
         </div>
     """
-    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@salazar-library.local')
-
-    message = EmailMultiAlternatives(
-        subject,
-        body,
-        from_email,
-        [email],
-    )
-    message.attach_alternative(html_body, "text/html")
-    message.send(fail_silently=False)
+    send_email_message(email, subject, body, html_body)
 
 
 def send_verification_code(email: str, code: str) -> None:
@@ -401,16 +371,7 @@ def send_verification_code(email: str, code: str) -> None:
           <p>If you did not request this code, you can ignore this email.</p>
         </div>
     """
-    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@salazar-library.local')
-
-    message = EmailMultiAlternatives(
-        subject,
-        body,
-        from_email,
-        [email],
-    )
-    message.attach_alternative(html_body, "text/html")
-    message.send(fail_silently=False)
+    send_email_message(email, subject, body, html_body)
 
 
 def build_otp_challenge_payload(user: User, message: str) -> dict:
@@ -437,37 +398,6 @@ def create_and_send_login_otp(user: User) -> None:
     otp_code.set_code(code)
     otp_code.save()
     send_login_otp_code(user.email, code)
-
-
-def get_email_config_error() -> str | None:
-    email_backend = getattr(settings, 'EMAIL_BACKEND', '')
-    non_smtp_backends = {
-        'django.core.mail.backends.console.EmailBackend',
-        'django.core.mail.backends.locmem.EmailBackend',
-        'django.core.mail.backends.filebased.EmailBackend',
-        'django.core.mail.backends.dummy.EmailBackend',
-    }
-    if email_backend in non_smtp_backends:
-        return None
-    if email_backend and email_backend != 'django.core.mail.backends.smtp.EmailBackend':
-        return None
-
-    missing = []
-    if not getattr(settings, 'EMAIL_HOST', ''):
-        missing.append('EMAIL_HOST')
-    email_host_user = getattr(settings, 'EMAIL_HOST_USER', '')
-    if not email_host_user:
-        missing.append('EMAIL_HOST_USER')
-    email_host_password = getattr(settings, 'EMAIL_HOST_PASSWORD', '')
-    if not email_host_password:
-        missing.append('EMAIL_HOST_PASSWORD')
-    if missing:
-        return f"Email service is not configured. Missing: {', '.join(missing)}."
-    if email_host_user.strip().lower() in PLACEHOLDER_EMAIL_USERS:
-        return 'Email service is not configured. Replace the placeholder EMAIL_HOST_USER value in backend/.env.'
-    if email_host_password.strip() in PLACEHOLDER_EMAIL_PASSWORDS:
-        return 'Email service is not configured. Replace the placeholder EMAIL_HOST_PASSWORD value in backend/.env.'
-    return None
 
 
 def get_latest_password_reset_code(user: User, email: str) -> PasswordResetCode | None:
