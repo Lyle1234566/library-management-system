@@ -511,7 +511,12 @@ class LoginView(APIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
         
-        if not user.email_verified and user.email:
+        requires_login_email_verification = (
+            user.role in {'STUDENT', 'TEACHER', 'WORKING'}
+            and not user.email_verified
+            and bool(user.email)
+        )
+        if requires_login_email_verification:
             return Response(
                 build_otp_challenge_payload(
                     user,

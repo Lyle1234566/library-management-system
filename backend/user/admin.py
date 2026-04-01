@@ -27,7 +27,20 @@ class UserAdmin(BaseUserAdmin):
     
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal Info', {'fields': ('full_name', 'student_id', 'staff_id', 'email', 'role', 'is_working_student')}),
+        (
+            'Personal Info',
+            {
+                'fields': (
+                    'full_name',
+                    'student_id',
+                    'staff_id',
+                    'email',
+                    'email_verified',
+                    'role',
+                    'is_working_student',
+                )
+            },
+        ),
         ('Borrowing Proof', {'fields': ('borrow_receipts',)}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important Dates', {'fields': ('last_login', 'date_joined')}),

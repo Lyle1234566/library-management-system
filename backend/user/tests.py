@@ -1357,6 +1357,38 @@ class LoginOtpChallengeSecurityTests(TestCase):
         self.assertTrue(self.user.email_verified)
 
 
+class StaffLoginBypassesEmailOtpTests(TestCase):
+    def setUp(self):
+        user_model = get_user_model()
+        self.client = APIClient()
+        self.librarian = user_model.objects.create_user(
+            username='librarian-login',
+            password=VALID_TEACHER_PASSWORD,
+            full_name='Library Staff',
+            staff_id='L-2001',
+            email='librarian@example.com',
+            role='LIBRARIAN',
+            is_active=True,
+            is_staff=True,
+            email_verified=False,
+        )
+
+    def test_librarian_login_does_not_require_email_otp(self):
+        response = self.client.post(
+            '/api/auth/login/',
+            {
+                'student_id': self.librarian.staff_id,
+                'password': VALID_TEACHER_PASSWORD,
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
+        self.assertNotIn('requires_otp', response.data)
+
+
 class LogoutBlacklistTests(TestCase):
     def setUp(self):
         user_model = get_user_model()
