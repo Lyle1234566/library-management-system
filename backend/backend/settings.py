@@ -14,6 +14,7 @@ import os
 import sys
 from pathlib import Path
 from datetime import timedelta
+from urllib.parse import parse_qs, unquote, urlparse
 
 from django.core.exceptions import ImproperlyConfigured
 
@@ -73,6 +74,24 @@ def get_env_int(key: str, default: int) -> int:
         return default
 
 
+def parse_database_url(database_url: str) -> dict[str, str]:
+    parsed = urlparse(database_url)
+    if parsed.scheme not in {'postgres', 'postgresql'}:
+        raise ImproperlyConfigured('DATABASE_URL must use a postgres or postgresql scheme.')
+    if not parsed.path or parsed.path == '/':
+        raise ImproperlyConfigured('DATABASE_URL must include a database name.')
+
+    query_params = parse_qs(parsed.query)
+    return {
+        'NAME': parsed.path.lstrip('/'),
+        'USER': unquote(parsed.username or ''),
+        'PASSWORD': unquote(parsed.password or ''),
+        'HOST': parsed.hostname or '',
+        'PORT': str(parsed.port or '5432'),
+        'SSLMODE': query_params.get('sslmode', [''])[0],
+    }
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -103,8 +122,21 @@ ALLOWED_HOSTS = get_env_list(
     "DJANGO_ALLOWED_HOSTS",
     DEFAULT_ALLOWED_HOSTS,
 )
-if ENABLE_PRODUCTION_SECURITY and not get_env_str('DJANGO_ALLOWED_HOSTS'):
-    raise ImproperlyConfigured('DJANGO_ALLOWED_HOSTS must be set when DEBUG is False.')
+RAILWAY_PUBLIC_DOMAIN = get_env_str('RAILWAY_PUBLIC_DOMAIN')
+RENDER_EXTERNAL_HOSTNAME = get_env_str('RENDER_EXTERNAL_HOSTNAME')
+if ENABLE_PRODUCTION_SECURITY and not (
+    get_env_str('DJANGO_ALLOWED_HOSTS') or RAILWAY_PUBLIC_DOMAIN or RENDER_EXTERNAL_HOSTNAME
+):
+    raise ImproperlyConfigured(
+        'DJANGO_ALLOWED_HOSTS or a platform-provided hostname must be set when DEBUG is False.'
+    )
+if RAILWAY_PUBLIC_DOMAIN and RAILWAY_PUBLIC_DOMAIN not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
+if RAILWAY_PUBLIC_DOMAIN and "healthcheck.railway.app" not in ALLOWED_HOSTS:
+    # Railway healthchecks use this hostname instead of the public app domain.
+    ALLOWED_HOSTS.append("healthcheck.railway.app")
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 if DEBUG and "*" not in ALLOWED_HOSTS:
     # Development convenience for mobile devices on LAN/tunnel hosts.
     ALLOWED_HOSTS.append("*")
@@ -326,12 +358,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database - Use environment variables for production
-DB_NAME = get_env_str('DB_NAME', 'library')
-DB_USER = get_env_str('DB_USER', 'postgres')
-DB_PASSWORD = get_env_str('DB_PASSWORD', 'postgre')
-DB_HOST = get_env_str('DB_HOST', 'localhost')
-DB_PORT = get_env_str('DB_PORT', '5432')
-if ENABLE_PRODUCTION_SECURITY:
+DATABASE_URL = get_env_str('DATABASE_URL')
+parsed_database_url = parse_database_url(DATABASE_URL) if DATABASE_URL else None
+DB_NAME = get_env_str('DB_NAME', parsed_database_url['NAME'] if parsed_database_url else 'library')
+DB_USER = get_env_str('DB_USER', parsed_database_url['USER'] if parsed_database_url else 'postgres')
+DB_PASSWORD = get_env_str(
+    'DB_PASSWORD',
+    parsed_database_url['PASSWORD'] if parsed_database_url else 'postgre',
+)
+DB_HOST = get_env_str('DB_HOST', parsed_database_url['HOST'] if parsed_database_url else 'localhost')
+DB_PORT = get_env_str('DB_PORT', parsed_database_url['PORT'] if parsed_database_url else '5432')
+if ENABLE_PRODUCTION_SECURITY and not DATABASE_URL:
     for env_key in ('DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_HOST', 'DB_PORT'):
         require_production_env(env_key)
 DATABASES = {
@@ -346,7 +383,7 @@ DATABASES = {
         'CONN_HEALTH_CHECKS': get_env_bool('DB_CONN_HEALTH_CHECKS', ENABLE_PRODUCTION_SECURITY),
     }
 }
-DB_SSLMODE = get_env_str('DB_SSLMODE')
+DB_SSLMODE = get_env_str('DB_SSLMODE', parsed_database_url['SSLMODE'] if parsed_database_url else '')
 if DB_SSLMODE:
     DATABASES['default']['OPTIONS'] = {
         'sslmode': DB_SSLMODE,

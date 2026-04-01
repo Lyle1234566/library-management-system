@@ -1,42 +1,47 @@
-# ⚡ Quick Deployment Checklist
+# Quick Deployment Checklist
 
-Use this as a quick reference while deploying.
+Use this as the production deployment checklist for the library system.
 
----
+## Before You Start
 
-## 🔴 BEFORE YOU START
+### 1. Push the code to GitHub
 
-### 1. Push Code to GitHub
 ```bash
 cd "c:\Users\lylep\Desktop\library system"
 git add .
 git commit -m "Prepare for deployment"
 git push origin main
 ```
-If the project root is not already a Git repository, initialize it first or create separate backend/frontend repositories before using the GitHub deployment flow.
 
-### 2. Generate Secret Key
+If the project root is not already a Git repository, initialize it first or split backend and frontend into separate repositories before using the GitHub deploy flow.
+
+### 2. Generate a Django secret key
+
 ```bash
 cd backend
 python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
-**Copy the output** - you'll need it for Railway.
 
----
+Copy the output. You will need it for Railway.
 
-## 🚂 RAILWAY BACKEND (15 min)
+## Railway Backend
 
 ### Setup
-- [ ] Create account at https://railway.app
-- [ ] New Project → Deploy from GitHub
-- [ ] Select your repository
-- [ ] Add PostgreSQL database (New → Database → PostgreSQL)
-- [ ] Add a persistent volume and mount it to `/data`
+
+- [ ] Create an account at https://railway.app
+- [ ] Create a new project from GitHub
+- [ ] Select this repository
+- [ ] Set the service Root Directory to `backend`
+- [ ] In Networking, generate a public domain before adding `RAILWAY_PUBLIC_DOMAIN`-based variables
+- [ ] Add PostgreSQL
+- [ ] Add a persistent volume mounted at `/data`
+- [ ] Leave the repo-root [`railway.json`](/c:/Users/lylep/Desktop/library%20system/railway.json) file in place so Railway picks up the backend deploy config automatically
 
 ### Environment Variables
-Go to backend service → Variables → Add all:
 
-```
+Add these in the Railway backend service:
+
+```env
 SECRET_KEY=<paste-generated-key-here>
 DEBUG=False
 DJANGO_ALLOWED_HOSTS=${{RAILWAY_PUBLIC_DOMAIN}}
@@ -63,170 +68,149 @@ EMAIL_HOST_PASSWORD=your-app-password
 LATE_FEE_PER_DAY=100.00
 ```
 
-### Settings
-- [ ] Settings → Root Directory → `backend`
-- [ ] Settings → Networking → Generate Domain
-- [ ] Volume mount path is exactly `/data`
-- [ ] **Copy the domain URL** (e.g., `https://abc123.railway.app`)
+Notes:
+- Railway healthchecks are allowed automatically by Django when `RAILWAY_PUBLIC_DOMAIN` is present.
+- The service will fail fast if the `/data` volume is missing because the Railway config requires it.
+
+### Deploy
+
+- [ ] Deploy the service
+- [ ] Wait for the logs to show `check --deploy`, `migrate`, `collectstatic`, and Gunicorn startup
+- [ ] Confirm the domain URL looks like `https://abc123.up.railway.app` or your custom Railway domain
 
 ### Database Setup
-- [ ] Wait for deployment to complete
-- [ ] Migrations run automatically (check logs)
-- [ ] Create superuser via Railway console:
-  ```bash
-  python manage.py createsuperuser
-  ```
+
+- [ ] Open the Railway shell for the backend service
+- [ ] Run:
+
+```bash
+python manage.py createsuperuser
+```
 
 ### Test
-- [ ] Visit `https://your-backend.railway.app/admin`
-- [ ] Should see Django admin login page ✅
-- [ ] Visit `https://your-backend.railway.app/api/health/`
-- [ ] `services.database` and `services.media_storage` should both be `ok` ✅
 
----
+- [ ] Open `https://your-backend.railway.app/api/health/`
+- [ ] Confirm `services.database` is `ok`
+- [ ] Confirm `services.media_storage` is `ok`
+- [ ] Open `https://your-backend.railway.app/admin`
+- [ ] Confirm the Django admin login page loads
 
-## ▲ VERCEL FRONTEND (10 min)
+## Vercel Frontend
 
 ### Setup
-- [ ] Create account at https://vercel.com
-- [ ] Add New → Project
-- [ ] Import your GitHub repository
-- [ ] Root Directory → `frontend`
+
+- [ ] Create an account at https://vercel.com
+- [ ] Create a project from GitHub
+- [ ] Select this repository
+- [ ] Set the Root Directory to `frontend`
 
 ### Environment Variables
-Add in Vercel:
 
-```
+Add this in Vercel:
+
+```env
 NEXT_PUBLIC_API_URL=https://your-backend.railway.app/api
 ```
 
-**Replace** `your-backend.railway.app` with your Railway URL.
+Optional:
 
-Optional for external media/CDN hosts:
-```
+```env
 NEXT_PUBLIC_MEDIA_HOSTS=https://media.your-domain.com
 ```
 
 ### Deploy
-- [ ] Click Deploy
-- [ ] Wait 2-3 minutes
-- [ ] **Copy Vercel URL** (e.g., `https://your-project.vercel.app`)
 
-### Update CORS
-Go back to Railway → Backend → Variables:
-- [ ] Update `CORS_ALLOWED_ORIGINS`:
-  ```
-  CORS_ALLOWED_ORIGINS=https://your-project.vercel.app
-  ```
-- [ ] Update `CSRF_TRUSTED_ORIGINS`:
-  ```
-  CSRF_TRUSTED_ORIGINS=https://your-backend.railway.app,https://your-project.vercel.app
-  ```
-- [ ] Update `LIBRARY_WEB_URL` and `PASSWORD_RESET_WEB_URL`:
-  ```
-  LIBRARY_WEB_URL=https://your-project.vercel.app
-  PASSWORD_RESET_WEB_URL=https://your-project.vercel.app/forgot-password
-  ```
-- [ ] Save (auto-redeploys)
+- [ ] Deploy the frontend
+- [ ] Copy the Vercel URL
+
+### Update Backend CORS
+
+Update the Railway backend service variables:
+
+```env
+CORS_ALLOWED_ORIGINS=https://your-project.vercel.app
+CSRF_TRUSTED_ORIGINS=https://your-backend.railway.app,https://your-project.vercel.app
+LIBRARY_WEB_URL=https://your-project.vercel.app
+PASSWORD_RESET_WEB_URL=https://your-project.vercel.app/forgot-password
+```
+
+- [ ] Save the variables and let Railway redeploy
 
 ### Test
-- [ ] Visit `https://your-project.vercel.app`
-- [ ] Should see library homepage ✅
-- [ ] Try logging in with superuser ✅
 
----
+- [ ] Open `https://your-project.vercel.app`
+- [ ] Confirm the homepage loads
+- [ ] Log in with the superuser to verify frontend-to-backend connectivity
 
-## ✅ POST-DEPLOYMENT
+## Post-Deployment
 
-### Add Initial Data
-- [ ] Go to `https://your-backend.railway.app/admin`
-- [ ] Add categories (Fiction, Non-Fiction, etc.)
-- [ ] Add 5-10 books with covers
-- [ ] Create test users (student, librarian)
+### Seed basic data
 
-### Test Complete Flow
-- [ ] Register as student
-- [ ] Approve student (as admin)
-- [ ] Browse books
-- [ ] Request borrow
-- [ ] Approve borrow (as admin)
-- [ ] Request return
-- [ ] Approve return (as admin)
-- [ ] Upload a book cover and confirm it still loads after a redeploy
-- [ ] Trigger password reset and confirm the email link opens the deployed frontend
+- [ ] Add categories
+- [ ] Add 5 to 10 books with cover images
+- [ ] Create test librarian and student users
 
----
+### Run a smoke test
 
-## 🐛 COMMON ISSUES
+- [ ] Register a student
+- [ ] Approve the account in admin
+- [ ] Search and browse books
+- [ ] Submit a borrow request
+- [ ] Approve the borrow request
+- [ ] Submit a return request
+- [ ] Approve the return request
+- [ ] Upload a cover image and verify it still exists after a redeploy
+- [ ] Trigger a password reset and verify the link opens the deployed frontend
 
-### "Application Error" on Railway
-```bash
-# Check logs in Railway → Deployments → View Logs
-# Usually missing migrations:
-python manage.py migrate
-```
+## Common Issues
 
-### CORS Error
-- Check `CORS_ALLOWED_ORIGINS` includes your Vercel URL
-- Must be `https://` (not `http://`)
-- No trailing slash
-- Redeploy backend after change
+### Railway app fails to start
 
-### Images Not Loading
-- Check `NEXT_PUBLIC_API_URL` and optional `NEXT_PUBLIC_MEDIA_HOSTS`
-- Redeploy frontend
+Check Railway deployment logs first. Typical causes:
 
-### Uploaded Images Disappear After Redeploy
-- Check Railway volume is mounted to `/data`
+- Missing environment variables
+- Domain not generated before using `RAILWAY_PUBLIC_DOMAIN`
+- Missing `/data` volume
+- Database variables not connected to the PostgreSQL service
+
+### CORS errors
+
+- Confirm `CORS_ALLOWED_ORIGINS` includes the exact Vercel URL
+- Use `https://`, not `http://`
+- Do not include a trailing slash
+
+### Uploaded images disappear after redeploy
+
+- Confirm the volume is mounted to `/data`
 - Confirm `MEDIA_ROOT=/data/media`
-- Re-upload one test image and redeploy backend to verify persistence
+- Re-upload one test image and redeploy again
 
-### Can't Login
-- Check `NEXT_PUBLIC_API_URL` in Vercel
-- Must end with `/api` (no trailing slash)
-- Check Railway backend is running
+### Frontend cannot log in
 
----
+- Confirm `NEXT_PUBLIC_API_URL` ends with `/api`
+- Confirm the Railway backend is healthy
+- Confirm the frontend origin is present in `CORS_ALLOWED_ORIGINS`
 
-## 📝 URLS TO SAVE
+## Save These URLs
 
-After deployment, save these:
-
-```
+```text
 Frontend: https://your-project.vercel.app
 Backend: https://your-backend.railway.app
 Admin: https://your-backend.railway.app/admin
 API: https://your-backend.railway.app/api
 ```
 
----
+## Demo Accounts
 
-## 🎓 FOR PRESENTATION
+Create demo accounts in the admin panel:
 
-### Demo Accounts
-Create these in admin panel:
-- Admin: admin / admin123
-- Librarian: librarian@test.com / test123
-- Student: student@test.com / test123
+- Admin: `admin / admin123`
+- Librarian: `librarian@test.com / test123`
+- Student: `student@test.com / test123`
 
-### Features to Show
-1. ✅ Student registration & approval
-2. ✅ Book catalog with search
-3. ✅ Borrow workflow
-4. ✅ Return workflow
-5. ✅ Late fees
-6. ✅ Analytics dashboard
-7. ✅ Admin panel
+## Estimated Time
 
----
-
-## ⏱️ ESTIMATED TIME
-
-- Railway Backend: 15 minutes
-- Vercel Frontend: 10 minutes
-- Testing & Data: 15 minutes
-- **Total: 40 minutes**
-
----
-
-**Ready? Start with Railway Backend! 🚀**
+- Railway backend: 15 minutes
+- Vercel frontend: 10 minutes
+- Testing and seed data: 15 minutes
+- Total: about 40 minutes
