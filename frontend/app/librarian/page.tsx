@@ -226,6 +226,53 @@ const formatCurrency = (amount: number) =>
     minimumFractionDigits: 2,
   }).format(amount);
 
+const formatRoleLabel = (role?: AuthUser['role'] | null) => {
+  switch (role) {
+    case 'ADMIN':
+      return 'Admin';
+    case 'LIBRARIAN':
+      return 'Librarian';
+    case 'STAFF':
+      return 'Staff';
+    case 'WORKING':
+      return 'Working Student';
+    case 'TEACHER':
+      return 'Teacher';
+    case 'STUDENT':
+      return 'Student';
+    default:
+      return 'Library Staff';
+  }
+};
+
+const getDeskLabel = (role?: AuthUser['role'] | null) => {
+  switch (role) {
+    case 'ADMIN':
+      return 'Admin Desk';
+    case 'STAFF':
+      return 'Staff Desk';
+    case 'WORKING':
+      return 'Working Desk';
+    case 'LIBRARIAN':
+    default:
+      return 'Librarian Desk';
+  }
+};
+
+const getDeskTagline = (role?: AuthUser['role'] | null) => {
+  switch (role) {
+    case 'ADMIN':
+      return 'Oversight, approvals, and full library control.';
+    case 'STAFF':
+      return 'Service operations, borrower support, and circulation updates.';
+    case 'WORKING':
+      return 'Student support tasks and day-to-day circulation coverage.';
+    case 'LIBRARIAN':
+    default:
+      return 'Catalog care, circulation review, and daily desk operations.';
+  }
+};
+
 const toMonthKey = (date: Date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 
@@ -344,6 +391,9 @@ export default function LibrarianDeskPage() {
   const canManageFinePayments = useMemo(() => {
     return Boolean(user && (user.role === 'ADMIN' || user.role === 'LIBRARIAN' || hasStaffDeskAccess(user)));
   }, [user]);
+  const roleLabel = useMemo(() => formatRoleLabel(user?.role), [user?.role]);
+  const deskLabel = useMemo(() => getDeskLabel(user?.role), [user?.role]);
+  const deskTagline = useMemo(() => getDeskTagline(user?.role), [user?.role]);
   const reviewQueueTargetId = useMemo(() => {
     if (canApproveStudents && pendingStudents.length > 0) {
       return 'desk-accounts';
@@ -673,6 +723,31 @@ export default function LibrarianDeskPage() {
         return sum + (Number.isFinite(amount) ? amount : 0);
       }, 0),
     [finePayments]
+  );
+  const dashboardQueueCount = useMemo(
+    () => borrowRequests.length + renewalRequests.length + returnRequests.length,
+    [borrowRequests.length, renewalRequests.length, returnRequests.length]
+  );
+  const isDashboardQuiet = useMemo(
+    () =>
+      dashboardQueueCount === 0 &&
+      pendingStudents.length === 0 &&
+      activeBorrowedRequests.length === 0 &&
+      overdueRequests.length === 0 &&
+      finePayments.length === 0 &&
+      notificationUnreadCount === 0 &&
+      mostBorrowedBooks.length === 0 &&
+      mostActiveStudents.length === 0,
+    [
+      activeBorrowedRequests.length,
+      dashboardQueueCount,
+      finePayments.length,
+      mostActiveStudents.length,
+      mostBorrowedBooks.length,
+      notificationUnreadCount,
+      overdueRequests.length,
+      pendingStudents.length,
+    ]
   );
 
   const fineHistoryMetrics = useMemo(() => {
@@ -1909,7 +1984,7 @@ export default function LibrarianDeskPage() {
                   <div>
                     <p className="text-sm font-semibold text-white">SCSIT Digital Library</p>
                     <p className="text-xs uppercase tracking-[0.28em] text-white/45">
-                      Admin Desk
+                      {deskLabel}
                     </p>
                   </div>
                 </Link>
@@ -1936,11 +2011,12 @@ export default function LibrarianDeskPage() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-200/70">
                 Desk Summary
               </p>
+              <p className="mt-2 text-sm text-white/55">{deskTagline}</p>
               <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
                 <div className="rounded-2xl border border-white/10 bg-[#0b1729]/80 p-3">
                   <p className="text-white/55">Open queue</p>
                   <p className="mt-2 text-2xl font-semibold text-white">
-                    {borrowRequests.length + renewalRequests.length + returnRequests.length}
+                    {dashboardQueueCount}
                   </p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-[#0b1729]/80 p-3">
@@ -2022,7 +2098,7 @@ export default function LibrarianDeskPage() {
                   </button>
                   <div className="min-w-0">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-200/70">
-                      Librarian Desk
+                      {deskLabel}
                     </p>
                     <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white">
                       {activeSectionTitle}
@@ -2196,7 +2272,7 @@ export default function LibrarianDeskPage() {
                           {user?.full_name ?? 'Library Staff'}
                         </p>
                         <p className="truncate text-xs uppercase tracking-[0.2em] text-white/45">
-                          {user?.role ?? 'Librarian'}
+                          {roleLabel}
                         </p>
                       </div>
                       <ChevronDown className="hidden h-4 w-4 text-white/50 sm:block" />
@@ -2212,7 +2288,7 @@ export default function LibrarianDeskPage() {
                             {user?.email ?? 'No email on file'}
                           </p>
                           <p className="mt-3 text-[11px] uppercase tracking-[0.28em] text-sky-200/70">
-                            {user?.role ?? 'Librarian'} - {formatUserIdentifier(user)}
+                            {roleLabel} - {formatUserIdentifier(user)}
                           </p>
                         </div>
                         <div className="mt-3 space-y-1">
@@ -2290,7 +2366,7 @@ export default function LibrarianDeskPage() {
                             </span>
                           </div>
                           <p className="mt-5 text-3xl font-semibold text-white">
-                            {borrowRequests.length + renewalRequests.length + returnRequests.length}
+                            {dashboardQueueCount}
                           </p>
                           <p className="mt-2 text-sm text-white/65">
                             Pending borrow, renewal, and return decisions.
@@ -2348,6 +2424,62 @@ export default function LibrarianDeskPage() {
                           </p>
                         </article>
                       </div>
+
+                      {isDashboardQuiet && (
+                        <div className="mt-6 rounded-3xl border border-sky-300/15 bg-[linear-gradient(135deg,rgba(56,189,248,0.14),rgba(15,23,42,0.48)_45%,rgba(251,191,36,0.12))] p-5 shadow-xl shadow-black/20">
+                          <div className="flex flex-wrap items-start justify-between gap-4">
+                            <div className="max-w-2xl">
+                              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky-100/70">
+                                Desk Setup
+                              </p>
+                              <h3 className="mt-2 text-xl font-semibold text-white">
+                                Your {roleLabel.toLowerCase()} workspace is live
+                              </h3>
+                              <p className="mt-2 text-sm text-white/70">
+                                The desk is connected and ready. Start by adding catalog records, reviewing pending
+                                accounts, or opening notifications so the first circulation activity has somewhere to go.
+                              </p>
+                            </div>
+                            <span className="rounded-full border border-emerald-300/20 bg-emerald-400/12 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100">
+                              Ready
+                            </span>
+                          </div>
+
+                          <div className="mt-5 flex flex-wrap gap-3">
+                            {canManageBooks && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setActiveSectionId('desk-books');
+                                  setIsAddBookOpen(true);
+                                }}
+                                className="inline-flex items-center gap-2 rounded-2xl border border-sky-300/20 bg-sky-400/12 px-4 py-3 text-sm font-semibold text-sky-50 transition hover:bg-sky-400/18"
+                              >
+                                <Plus className="h-4 w-4" />
+                                Add first book
+                              </button>
+                            )}
+                            {canApproveStudents && (
+                              <button
+                                type="button"
+                                onClick={() => setActiveSectionId('desk-accounts')}
+                                className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/[0.06] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.1]"
+                              >
+                                <UserPlus className="h-4 w-4" />
+                                Review accounts
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={openNotificationCenter}
+                              className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/[0.06] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.1]"
+                            >
+                              <BellRing className="h-4 w-4" />
+                              Open notifications
+                            </button>
+                          </div>
+                        </div>
+                      )}
 
                       <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.95fr)]">
                         <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5">
