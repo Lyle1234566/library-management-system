@@ -450,9 +450,24 @@ if ENABLE_PRODUCTION_SECURITY and not get_env_str('MEDIA_ROOT'):
         'MEDIA_ROOT must be set when DEBUG is False. Use a persistent path such as a mounted volume.'
     )
 MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+
+# Cloudinary Configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': get_env_str('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': get_env_str('CLOUDINARY_API_KEY'),
+    'API_SECRET': get_env_str('CLOUDINARY_API_SECRET'),
+}
+
+# Update STORAGES to use Cloudinary
+USE_CLOUDINARY = get_env_bool('USE_CLOUDINARY', False)
+
 STORAGES = {
     'default': {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        'BACKEND': (
+            'cloudinary_storage.storage.MediaCloudinaryStorage'
+            if USE_CLOUDINARY
+            else 'django.core.files.storage.FileSystemStorage'
+        ),
     },
     'staticfiles': {
         'BACKEND': (
@@ -514,3 +529,5 @@ LOGGING = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
