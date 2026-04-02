@@ -1,7 +1,7 @@
 from datetime import timedelta
 from decimal import Decimal
 from django.http import HttpResponse
-from django.test import RequestFactory
+from django.test import RequestFactory, SimpleTestCase
 
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -24,7 +24,20 @@ from books.models import (
     run_borrow_automation,
 )
 from books.middleware import DailyBorrowAutomationMiddleware
+from books.serializers import RelativeMediaField
 from user.models import Notification
+
+
+class RelativeMediaFieldTests(SimpleTestCase):
+    def test_returns_none_when_media_url_resolution_raises_unexpected_error(self):
+        class BrokenMedia:
+            @property
+            def url(self):
+                raise RuntimeError('storage unavailable')
+
+        field = RelativeMediaField()
+
+        self.assertIsNone(field.to_representation(BrokenMedia()))
 
 
 class BorrowAutomationTests(TestCase):

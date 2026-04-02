@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
@@ -8,6 +10,7 @@ from .registration_rules import get_student_identifier_status, get_teacher_ident
 
 User = get_user_model()
 REMINDER_EMAIL_REQUIRED_MESSAGE = "Email is required so due-date reminders can be sent."
+logger = logging.getLogger(__name__)
 
 
 class RelativeMediaField(serializers.ImageField):
@@ -16,7 +19,8 @@ class RelativeMediaField(serializers.ImageField):
             return None
         try:
             return value.url
-        except ValueError:
+        except Exception:
+            logger.warning("Failed to resolve media URL for user asset.", exc_info=True)
             return None
 
 

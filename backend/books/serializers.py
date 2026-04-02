@@ -1,4 +1,5 @@
 from datetime import timedelta
+import logging
 
 from django.db.models import Q
 from rest_framework import serializers
@@ -14,6 +15,8 @@ from .models import (
     ReturnRequest,
 )
 
+logger = logging.getLogger(__name__)
+
 
 class RelativeMediaField(serializers.ImageField):
     def to_representation(self, value):
@@ -21,7 +24,8 @@ class RelativeMediaField(serializers.ImageField):
             return None
         try:
             return value.url
-        except ValueError:
+        except Exception:
+            logger.warning("Failed to resolve media URL for book asset.", exc_info=True)
             return None
 
 
