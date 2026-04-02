@@ -2334,8 +2334,8 @@ export default function LibrarianDeskPage() {
               <div className="flex min-h-[calc(100vh-137px)] flex-col rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-4 shadow-[0_28px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl sm:p-5 lg:p-6">
                 <div className="min-w-0 flex-1 space-y-8">
                 {resolvedActiveSectionId === 'desk-dashboard' && (
-                  <div className="grid gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(320px,0.95fr)]">
-                    <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-7">
+                  <div className="space-y-6">
+                    <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-7 xl:p-8">
                       <div className="flex flex-wrap items-start justify-between gap-4">
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-sky-200/70">
@@ -2481,8 +2481,8 @@ export default function LibrarianDeskPage() {
                         </div>
                       )}
 
-                      <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.95fr)]">
-                        <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5">
+                      <div className="mt-6 grid gap-4 xl:grid-cols-12 xl:items-start">
+                        <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5 xl:col-span-7 2xl:col-span-8">
                           <div className="flex items-center justify-between gap-3">
                             <div>
                               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
@@ -2505,7 +2505,7 @@ export default function LibrarianDeskPage() {
                             </button>
                           </div>
 
-                          <div className="mt-5 space-y-3">
+                          <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
                             {canApproveStudents && (
                               <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-300/12 text-amber-100">
@@ -2552,11 +2552,11 @@ export default function LibrarianDeskPage() {
                           </div>
                         </div>
 
-                        <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5">
+                        <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5 xl:col-span-5 2xl:col-span-4">
                           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
                             Quick Actions
                           </p>
-                          <div className="mt-4 grid gap-3">
+                          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
                             {canApproveStudents && (
                               <button
                                 type="button"
@@ -2619,8 +2619,8 @@ export default function LibrarianDeskPage() {
                       </div>
                     </section>
 
-                    <aside className="space-y-6">
-                      <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl">
+                    <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
+                      <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-6 xl:p-7">
                         <div className="flex items-center gap-3">
                           <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-400/12 text-sky-100">
                             <BarChart3 className="h-5 w-5" />
@@ -2662,7 +2662,7 @@ export default function LibrarianDeskPage() {
                         </div>
                       </section>
 
-                      <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl">
+                      <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-6 xl:p-7">
                         <div className="flex items-center gap-3">
                           <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/8 text-white">
                             <Users className="h-5 w-5" />
@@ -2705,7 +2705,7 @@ export default function LibrarianDeskPage() {
                           )}
                         </div>
                       </section>
-                    </aside>
+                    </div>
                   </div>
                 )}
 
