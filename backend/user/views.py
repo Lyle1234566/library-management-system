@@ -9,10 +9,12 @@ from urllib.parse import urlencode
 from django.core import signing
 from django.core.signing import BadSignature, SignatureExpired
 from django.core.cache import cache
+from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import check_password, make_password
 from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
@@ -49,6 +51,9 @@ from .serializers import (
 User = get_user_model()
 logger = logging.getLogger(__name__)
 OTP_CHALLENGE_SALT = 'user.login_otp.challenge'
+LOGIN_OTP_PURPOSE = 'otp_challenge'
+REGISTRATION_OTP_PURPOSE = 'registration_otp'
+REGISTRATION_SESSION_CACHE_PREFIX = 'auth.registration_session'
 LOGIN_FAILURE_CACHE_PREFIX = 'auth.login_fail'
 LOGIN_LOCK_CACHE_PREFIX = 'auth.login_lock'
 
@@ -287,10 +292,41 @@ def record_failed_login_attempt(request, identifier: str) -> None:
             cache.delete(failure_key)
 
 
+def get_registration_session_cache_key(session_id: str) -> str:
+    return f'{REGISTRATION_SESSION_CACHE_PREFIX}:{session_id}'
+
+
+def get_registration_session_timeout_seconds() -> int:
+    ttl_minutes = max(
+        int(getattr(settings, 'OTP_CHALLENGE_TTL_MINUTES', 30)),
+        int(getattr(settings, 'EMAIL_VERIFICATION_CODE_TTL_MINUTES', 15)),
+    )
+    return max(60, ttl_minutes * 60)
+
+
+def store_registration_session(state: dict, session_id: str | None = None) -> dict:
+    stored_state = dict(state)
+    resolved_session_id = str(session_id or stored_state.get('session_id') or secrets.token_urlsafe(32))
+    stored_state['session_id'] = resolved_session_id
+    cache.set(
+        get_registration_session_cache_key(resolved_session_id),
+        stored_state,
+        timeout=get_registration_session_timeout_seconds(),
+    )
+    return stored_state
+
+
+def delete_registration_session(session_id: str | None) -> None:
+    resolved_session_id = str(session_id or '').strip()
+    if not resolved_session_id:
+        return
+    cache.delete(get_registration_session_cache_key(resolved_session_id))
+
+
 def build_otp_challenge_token(user: User) -> str:
     return signing.dumps(
         {
-            'purpose': 'otp_challenge',
+            'purpose': LOGIN_OTP_PURPOSE,
             'user_id': user.id,
             'email': normalize_email_value(user.email),
         },
@@ -299,7 +335,24 @@ def build_otp_challenge_token(user: User) -> str:
     )
 
 
-def resolve_otp_challenge_user(raw_token: str) -> tuple[User | None, str | None]:
+def build_registration_otp_challenge_token(state: dict) -> str:
+    return signing.dumps(
+        {
+            'purpose': REGISTRATION_OTP_PURPOSE,
+            'session_id': state.get('session_id'),
+            'email': normalize_email_value(state.get('email')),
+        },
+        salt=OTP_CHALLENGE_SALT,
+        compress=True,
+    )
+
+
+def decode_otp_session(
+    raw_token: str,
+    *,
+    expired_message: str,
+    invalid_message: str,
+) -> tuple[dict | None, str | None]:
     token = str(raw_token or '').strip()
     if not token:
         return None, 'Verification session is required.'
@@ -312,27 +365,64 @@ def resolve_otp_challenge_user(raw_token: str) -> tuple[User | None, str | None]
             max_age=ttl_minutes * 60,
         )
     except SignatureExpired:
-        return None, 'This verification session has expired. Please sign in again.'
+        return None, expired_message
     except BadSignature:
+        return None, invalid_message
+
+    return payload, None
+
+
+def resolve_otp_session_context(raw_token: str) -> tuple[dict | None, str | None]:
+    payload, challenge_error = decode_otp_session(
+        raw_token,
+        expired_message='This verification session has expired. Please start again.',
+        invalid_message='Invalid verification session. Please start again.',
+    )
+    if challenge_error:
+        return None, challenge_error
+
+    purpose = payload.get('purpose')
+    if purpose == LOGIN_OTP_PURPOSE:
+        user_id = payload.get('user_id')
+        expected_email = normalize_email_value(payload.get('email'))
+        if not user_id or not expected_email:
+            return None, 'Invalid verification session. Please sign in again.'
+
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None, 'Account not found. Please sign in again.'
+
+        if normalize_email_value(user.email) != expected_email:
+            return None, 'This verification session is no longer valid. Please sign in again.'
+
+        return {'kind': 'user', 'user': user}, None
+
+    if purpose == REGISTRATION_OTP_PURPOSE:
+        session_id = str(payload.get('session_id') or '').strip()
+        expected_email = normalize_email_value(payload.get('email'))
+        if not session_id or not expected_email:
+            return None, 'Invalid verification session. Please register again.'
+
+        state = cache.get(get_registration_session_cache_key(session_id))
+        if not state:
+            return None, 'This verification session has expired. Please register again.'
+
+        if normalize_email_value(state.get('email')) != expected_email:
+            return None, 'This verification session is no longer valid. Please register again.'
+
+        return {'kind': 'registration', 'state': dict(state)}, None
+
+    return None, 'Invalid verification session. Please start again.'
+
+
+def resolve_otp_challenge_user(raw_token: str) -> tuple[User | None, str | None]:
+    session_context, challenge_error = resolve_otp_session_context(raw_token)
+    if challenge_error:
+        return None, challenge_error
+    if session_context.get('kind') != 'user':
         return None, 'Invalid verification session. Please sign in again.'
-
-    if payload.get('purpose') != 'otp_challenge':
-        return None, 'Invalid verification session. Please sign in again.'
-
-    user_id = payload.get('user_id')
-    expected_email = normalize_email_value(payload.get('email'))
-    if not user_id or not expected_email:
-        return None, 'Invalid verification session. Please sign in again.'
-
-    try:
-        user = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        return None, 'Account not found. Please sign in again.'
-
-    if normalize_email_value(user.email) != expected_email:
-        return None, 'This verification session is no longer valid. Please start again.'
-
-    return user, None
+    return session_context['user'], None
 
 
 def blacklist_user_refresh_tokens(user: User) -> int:
@@ -464,6 +554,97 @@ def create_and_send_login_otp(user: User) -> None:
     send_login_otp_code(user.email, code)
 
 
+def create_and_send_registration_otp(state: dict) -> dict:
+    email = normalize_email_value(state.get('email'))
+    if not email:
+        raise ValueError('No email associated with this registration session.')
+
+    code = generate_reset_code()
+    next_state = dict(state)
+    next_state['email'] = email
+    next_state['otp_code_hash'] = make_password(code)
+    next_state['otp_created_at'] = timezone.now().isoformat()
+    next_state['otp_attempt_count'] = 0
+    next_state['otp_used_at'] = None
+    stored_state = store_registration_session(next_state)
+    send_verification_code(email, code)
+    return stored_state
+
+
+def parse_cached_datetime(raw_value: str | None) -> datetime | None:
+    if not raw_value:
+        return None
+    try:
+        return datetime.fromisoformat(str(raw_value))
+    except ValueError:
+        return None
+
+
+def format_validation_error(exc: ValidationError) -> str:
+    if hasattr(exc, 'message_dict') and exc.message_dict:
+        first_messages = next(iter(exc.message_dict.values()), None)
+        if first_messages:
+            return str(first_messages[0])
+    if getattr(exc, 'messages', None):
+        return str(exc.messages[0])
+    return 'Unable to complete registration. Please check your details and try again.'
+
+
+def build_registration_otp_payload(state: dict, message: str) -> dict:
+    return {
+        'requires_otp': True,
+        'otp_session': build_registration_otp_challenge_token(state),
+        'email': state.get('email'),
+        'full_name': state.get('full_name'),
+        'role': state.get('role'),
+        'student_id': state.get('student_id'),
+        'staff_id': state.get('staff_id'),
+        'message': message,
+    }
+
+
+def finalize_pending_registration(state: dict) -> tuple[User | None, str | None]:
+    role = str(state.get('role') or 'STUDENT').strip().upper()
+    student_id = (state.get('student_id') or '').strip().upper() or None
+    staff_id = (state.get('staff_id') or '').strip().upper() or None
+    identifier = staff_id if role == 'TEACHER' else student_id
+    password_hash = str(state.get('password_hash') or '').strip()
+    email = normalize_email_value(state.get('email'))
+
+    if not identifier or not password_hash or not email:
+        return None, 'This registration session is invalid. Please register again.'
+
+    identifier_status = get_identifier_status(role, identifier)
+    if not identifier_status.available:
+        return None, identifier_status.message
+
+    if User.objects.filter(email__iexact=email).exists():
+        return None, 'This email is already registered.'
+
+    user = User(
+        username=identifier,
+        student_id=student_id if role == 'STUDENT' else None,
+        staff_id=staff_id if role == 'TEACHER' else None,
+        full_name=state.get('full_name'),
+        email=email,
+        role=role,
+        is_active=False,
+        email_verified=True,
+    )
+    user.password = password_hash
+
+    try:
+        with transaction.atomic():
+            user.full_clean()
+            user.save()
+    except ValidationError as exc:
+        return None, format_validation_error(exc)
+    except IntegrityError:
+        return None, 'This registration session is no longer valid. Please register again.'
+
+    return user, None
+
+
 def get_latest_password_reset_code(user: User, email: str) -> PasswordResetCode | None:
     return (
         PasswordResetCode.objects.filter(user=user, email__iexact=email)
@@ -492,26 +673,25 @@ class RegisterView(generics.CreateAPIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        user = serializer.save()
+        pending_registration = store_registration_session(
+            serializer.build_pending_registration()
+        )
 
         try:
-            create_and_send_login_otp(user)
+            pending_registration = create_and_send_registration_otp(pending_registration)
         except Exception as exc:
             logger.exception("Failed to send registration OTP email: %s", exc)
-            user.delete()
+            delete_registration_session(pending_registration.get('session_id'))
             return Response(
                 {'detail': format_email_delivery_error('Failed to send OTP email.', exc)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
         return Response(
-            {
-                'user': UserSerializer(user).data,
-                **build_otp_challenge_payload(
-                    user,
-                    'Account created. Verify your email first. Staff approval will come after email verification.',
-                ),
-            },
+            build_registration_otp_payload(
+                pending_registration,
+                'Verify your email to finish creating the account. Staff approval will start after email verification.',
+            ),
             status=status.HTTP_201_CREATED,
         )
 
@@ -1302,29 +1482,60 @@ class SendLoginOTPView(APIView):
     throttle_scope = 'otp_send'
 
     def post(self, request):
-        user, challenge_error = resolve_otp_challenge_user(request.data.get('otp_session'))
+        session_context, challenge_error = resolve_otp_session_context(request.data.get('otp_session'))
         if challenge_error:
             return Response(
                 {'detail': challenge_error},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if not user.email:
-            return Response(
-                {'detail': 'No email associated with this account.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        
-        ttl_minutes = int(getattr(settings, 'LOGIN_OTP_CODE_TTL_MINUTES', 15))
-        code_length = int(getattr(settings, 'LOGIN_OTP_CODE_LENGTH', 6))
-        
         config_error = get_email_config_error()
         if config_error:
             return Response(
                 {'detail': config_error},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-        
+
+        if session_context['kind'] == 'registration':
+            state = session_context['state']
+            if not state.get('email'):
+                return Response(
+                    {'detail': 'No email associated with this registration session.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            ttl_minutes = int(getattr(settings, 'EMAIL_VERIFICATION_CODE_TTL_MINUTES', 15))
+            code_length = int(getattr(settings, 'EMAIL_VERIFICATION_CODE_LENGTH', 6))
+
+            try:
+                state = create_and_send_registration_otp(state)
+            except Exception as exc:
+                logger.exception("Failed to send registration OTP email: %s", exc)
+                return Response(
+                    {'detail': format_email_delivery_error('Failed to send OTP email.', exc)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+
+            return Response(
+                {
+                    'message': 'OTP code sent to your email.',
+                    'email': state['email'],
+                    'code_length': code_length,
+                    'expires_in_minutes': ttl_minutes,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        user = session_context['user']
+        if not user.email:
+            return Response(
+                {'detail': 'No email associated with this account.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        ttl_minutes = int(getattr(settings, 'LOGIN_OTP_CODE_TTL_MINUTES', 15))
+        code_length = int(getattr(settings, 'LOGIN_OTP_CODE_LENGTH', 6))
+
         try:
             create_and_send_login_otp(user)
         except Exception as exc:
@@ -1333,7 +1544,7 @@ class SendLoginOTPView(APIView):
                 {'detail': format_email_delivery_error('Failed to send OTP email.', exc)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-        
+
         return Response(
             {
                 'message': 'OTP code sent to your email.',
@@ -1362,12 +1573,74 @@ class VerifyLoginOTPView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        user, challenge_error = resolve_otp_challenge_user(otp_session)
+        session_context, challenge_error = resolve_otp_session_context(otp_session)
         if challenge_error:
             return Response(
                 {'detail': challenge_error},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if session_context['kind'] == 'registration':
+            state = session_context['state']
+            otp_code_hash = str(state.get('otp_code_hash') or '')
+            if not otp_code_hash:
+                return Response(
+                    {'detail': 'No OTP request found. Please request a new code.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            max_attempts = int(getattr(settings, 'EMAIL_VERIFICATION_MAX_ATTEMPTS', 5))
+            attempt_count = int(state.get('otp_attempt_count') or 0)
+            created_at = parse_cached_datetime(state.get('otp_created_at'))
+            used_at = parse_cached_datetime(state.get('otp_used_at'))
+            ttl_minutes = int(getattr(settings, 'EMAIL_VERIFICATION_CODE_TTL_MINUTES', 15))
+
+            if used_at:
+                return Response(
+                    {'detail': 'This OTP code has already been used.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if (
+                created_at is None
+                or timezone.now() > created_at + timedelta(minutes=ttl_minutes)
+                or attempt_count >= max_attempts
+            ):
+                state['otp_used_at'] = timezone.now().isoformat()
+                store_registration_session(state)
+                return Response(
+                    {'detail': 'This OTP code has expired. Request a new code.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if not (otp_code_hash == submitted_code or check_password(submitted_code, otp_code_hash)):
+                state['otp_attempt_count'] = attempt_count + 1
+                if state['otp_attempt_count'] >= max_attempts:
+                    state['otp_used_at'] = timezone.now().isoformat()
+                store_registration_session(state)
+                return Response(
+                    {'detail': 'Invalid OTP code.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            _, registration_error = finalize_pending_registration(state)
+            delete_registration_session(state.get('session_id'))
+            if registration_error:
+                return Response(
+                    {'detail': registration_error},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            return Response(
+                {
+                    'email_verified': True,
+                    'requires_approval': True,
+                    'message': 'Email verified. Wait for account approval before signing in.',
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        user = session_context['user']
 
         otp_code = (
             LoginOTPCode.objects.filter(user=user)
@@ -1463,15 +1736,15 @@ class UpdateEmailView(APIView):
             )
         
         if request.user.is_authenticated:
-            user = request.user
+            session_context = {'kind': 'user', 'user': request.user}
         elif otp_session:
-            user, challenge_error = resolve_otp_challenge_user(otp_session)
+            session_context, challenge_error = resolve_otp_session_context(otp_session)
             if challenge_error:
                 return Response(
                     {'detail': challenge_error},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            if user.email_verified:
+            if session_context['kind'] == 'user' and session_context['user'].email_verified:
                 return Response(
                     {'detail': 'Email already verified. Please login to update.'},
                     status=status.HTTP_403_FORBIDDEN,
@@ -1482,6 +1755,33 @@ class UpdateEmailView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
+        if session_context['kind'] == 'registration':
+            if User.objects.filter(email__iexact=new_email).exists():
+                return Response(
+                    {'detail': 'This email is already in use.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            state = dict(session_context['state'])
+            delete_registration_session(state.get('session_id'))
+            state['email'] = normalize_email_value(new_email)
+            state['otp_code_hash'] = None
+            state['otp_created_at'] = None
+            state['otp_attempt_count'] = 0
+            state['otp_used_at'] = None
+            state.pop('session_id', None)
+            updated_state = store_registration_session(state)
+
+            return Response(
+                {
+                    'message': 'Email updated successfully. Please verify with OTP.',
+                    'email': updated_state['email'],
+                    'otp_session': build_registration_otp_challenge_token(updated_state),
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        user = session_context['user']
         if User.objects.filter(email__iexact=new_email).exclude(pk=user.pk).exists():
             return Response(
                 {'detail': 'This email is already in use.'},

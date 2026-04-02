@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 
 from .models import Notification
@@ -7,6 +8,16 @@ from .registration_rules import get_student_identifier_status, get_teacher_ident
 
 User = get_user_model()
 REMINDER_EMAIL_REQUIRED_MESSAGE = "Email is required so due-date reminders can be sent."
+
+
+class RelativeMediaField(serializers.ImageField):
+    def to_representation(self, value):
+        if not value:
+            return None
+        try:
+            return value.url
+        except ValueError:
+            return None
 
 
 def normalize_unique_email(value, instance=None):
@@ -26,6 +37,8 @@ def normalize_unique_email(value, instance=None):
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for user profile data"""
+
+    avatar = RelativeMediaField(required=False, allow_null=True)
 
     class Meta:
         model = User
@@ -151,13 +164,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         status = get_student_identifier_status(value)
         if not status.available:
             raise serializers.ValidationError(status.message)
-        return value.strip()
+        return value.strip().upper()
 
     def validate_staff_id(self, value):
         status = get_teacher_identifier_status(value)
         if not status.available:
             raise serializers.ValidationError(status.message)
-        return value.strip()
+        return value.strip().upper()
 
     def validate_email(self, value):
         return normalize_unique_email(value)
@@ -189,21 +202,28 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    def build_pending_registration(self) -> dict:
+        if not hasattr(self, 'validated_data'):
+            raise RuntimeError('Call is_valid() before building a pending registration.')
+
+        role = self.validated_data.get('role', 'STUDENT')
+        student_id = self.validated_data.get('student_id') if role == 'STUDENT' else None
+        staff_id = self.validated_data.get('staff_id') if role == 'TEACHER' else None
+
+        return {
+            'role': role,
+            'student_id': student_id,
+            'staff_id': staff_id,
+            'full_name': self.validated_data['full_name'].strip(),
+            'email': self.validated_data['email'],
+            'password_hash': make_password(self.validated_data['password']),
+        }
+
     def create(self, validated_data):
-        validated_data.pop('password_confirm')
-        role = validated_data.pop('role', 'STUDENT')
-        username = validated_data.get('student_id') or validated_data.get('staff_id')
-        user = User.objects.create_user(
-            username=username,
-            student_id=validated_data.get('student_id') if role == 'STUDENT' else None,
-            staff_id=validated_data.get('staff_id') if role == 'TEACHER' else None,
-            password=validated_data['password'],
-            full_name=validated_data['full_name'],
-            email=validated_data.get('email'),
-            role=role,
-            is_active=False,
+        raise NotImplementedError(
+            'RegisterSerializer does not create users directly. '
+            'Use build_pending_registration() and complete OTP verification first.'
         )
-        return user
 
 
 class LoginSerializer(serializers.Serializer):

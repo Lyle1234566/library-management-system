@@ -119,13 +119,39 @@ export function resolveMediaUrl(mediaPath?: string | null): string | null {
   if (!mediaPath) {
     return null;
   }
-  if (mediaPath.startsWith('http://') || mediaPath.startsWith('https://')) {
-    return mediaPath;
+
+  const trimmedPath = mediaPath.trim();
+  if (!trimmedPath) {
+    return null;
   }
-  if (mediaPath.startsWith('/')) {
-    return `${API_ORIGIN}${mediaPath}`;
+
+  const preferredProtocol =
+    (typeof window !== 'undefined' && window.location.protocol === 'https:') ||
+    API_ORIGIN.startsWith('https://')
+      ? 'https:'
+      : null;
+
+  if (trimmedPath.startsWith('http://') || trimmedPath.startsWith('https://')) {
+    try {
+      const parsed = new URL(trimmedPath);
+      if (preferredProtocol && parsed.protocol !== preferredProtocol) {
+        parsed.protocol = preferredProtocol;
+      }
+      return parsed.toString();
+    } catch {
+      return trimmedPath;
+    }
   }
-  return `${API_ORIGIN}/${mediaPath}`;
+
+  if (trimmedPath.startsWith('//')) {
+    return `${preferredProtocol ?? 'https:'}${trimmedPath}`;
+  }
+
+  if (trimmedPath.startsWith('/')) {
+    return `${API_ORIGIN}${trimmedPath}`;
+  }
+
+  return `${API_ORIGIN}/${trimmedPath}`;
 }
 
 export interface Category {

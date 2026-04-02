@@ -15,6 +15,16 @@ from .models import (
 )
 
 
+class RelativeMediaField(serializers.ImageField):
+    def to_representation(self, value):
+        if not value:
+            return None
+        try:
+            return value.url
+        except ValueError:
+            return None
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -22,6 +32,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
+    cover_image = RelativeMediaField(required=False, allow_null=True)
+    cover_back = RelativeMediaField(required=False, allow_null=True)
     categories = CategorySerializer(many=True, read_only=True)
     category_ids = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(),
@@ -428,7 +440,7 @@ class BookReviewSerializer(serializers.ModelSerializer):
             'id': obj.user.id,
             'username': obj.user.username,
             'full_name': obj.user.full_name,
-            'avatar': obj.user.avatar.url if obj.user.avatar else None,
+            'avatar': RelativeMediaField().to_representation(obj.user.avatar),
         }
 
     def create(self, validated_data):

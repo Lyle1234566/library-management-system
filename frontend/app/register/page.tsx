@@ -59,9 +59,9 @@ const REGISTER_HIGHLIGHTS = [
 ];
 
 const RECOVERY_HIGHLIGHTS = [
-  { value: 'Email fix', label: 'Correct the saved address' },
+  { value: 'Email fix', label: 'Correct the staged address' },
   { value: 'OTP resend', label: 'Restart verification' },
-  { value: 'No reset', label: 'Keep the same account record' },
+  { value: 'No reset', label: 'Keep the same verification session' },
 ];
 
 const EMAIL_REQUIRED_MESSAGE = 'Email is required so due-date reminders can be sent.';
@@ -270,6 +270,7 @@ function RegisterPageContent({
   const initialRegisterRole = recoveryMode ? recoveryDetails.role : requestedRole;
   const initialLockedIdentifier =
     initialRegisterRole === 'TEACHER' ? recoveryDetails.staffId : recoveryDetails.studentId;
+  const registerRole = initialRegisterRole;
 
   const [formData, setFormData] = useState<RegisterFormData>(() => ({
     studentId: recoveryMode ? initialLockedIdentifier : '',
@@ -278,7 +279,6 @@ function RegisterPageContent({
     password: '',
     passwordConfirm: '',
   }));
-  const [registerRole, setRegisterRole] = useState<RegisterRole>(initialRegisterRole);
   const [errors, setErrors] = useState<RegisterFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [availabilityState, setAvailabilityState] = useState<AvailabilityState>('idle');
@@ -349,15 +349,6 @@ function RegisterPageContent({
       setAvailabilityState('idle');
       setAvailabilityMessage('');
     }
-  };
-
-  const setRole = (role: RegisterRole) => {
-    if (recoveryMode) return;
-    setRegisterRole(role);
-    setFormData((prev) => ({ ...prev, studentId: '' }));
-    setErrors((prev) => ({ ...prev, studentId: undefined, general: undefined }));
-    setAvailabilityState('idle');
-    setAvailabilityMessage('');
   };
 
   const validateForm = () => {

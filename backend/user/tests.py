@@ -224,7 +224,14 @@ class StudentApprovalPermissionTests(TestCase):
 
 class TeacherRegistrationTests(TestCase):
     def setUp(self):
+        cache.clear()
         self.client = APIClient()
+
+    def extract_code_from_last_email(self) -> str:
+        self.assertTrue(mail.outbox)
+        match = re.search(r'(\d{6})', mail.outbox[-1].body)
+        self.assertIsNotNone(match)
+        return match.group(1)
 
     def test_teacher_can_register_with_faculty_id(self):
         response = self.client.post(
@@ -241,10 +248,11 @@ class TeacherRegistrationTests(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['user']['role'], 'TEACHER')
-        self.assertEqual(response.data['user']['staff_id'], 'T-8801')
-        self.assertFalse(response.data['user']['is_active'])
+        self.assertTrue(response.data['requires_otp'])
+        self.assertEqual(response.data['role'], 'TEACHER')
+        self.assertEqual(response.data['staff_id'], 'T-8801')
         self.assertNotIn('access', response.data)
+        self.assertFalse(get_user_model().objects.filter(username='T-8801').exists())
 
     def test_teacher_registration_requires_faculty_id(self):
         response = self.client.post(
@@ -306,8 +314,8 @@ class TeacherRegistrationTests(TestCase):
         self.assertTrue(response.data['available'])
         self.assertIn('available', response.data['message'].lower())
 
-    def test_teacher_faculty_id_cannot_be_reused(self):
-        create_response = self.client.post(
+    def test_teacher_faculty_id_is_only_taken_after_otp_verification(self):
+        register_response = self.client.post(
             '/api/auth/register/',
             {
                 'role': 'TEACHER',
@@ -319,14 +327,31 @@ class TeacherRegistrationTests(TestCase):
             },
             format='json',
         )
-        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(register_response.status_code, status.HTTP_201_CREATED)
 
         check_response = self.client.get(
             '/api/auth/check-account-identifier/?role=TEACHER&identifier=T-8801'
         )
         self.assertEqual(check_response.status_code, status.HTTP_200_OK)
-        self.assertFalse(check_response.data['available'])
-        self.assertIn('already taken', check_response.data['message'].lower())
+        self.assertTrue(check_response.data['available'])
+
+        verify_response = self.client.post(
+            '/api/auth/login-otp/verify/',
+            {
+                'otp_session': register_response.data['otp_session'],
+                'code': self.extract_code_from_last_email(),
+            },
+            format='json',
+        )
+        self.assertEqual(verify_response.status_code, status.HTTP_200_OK)
+        self.assertTrue(verify_response.data['requires_approval'])
+
+        check_after_verify_response = self.client.get(
+            '/api/auth/check-account-identifier/?role=TEACHER&identifier=T-8801'
+        )
+        self.assertEqual(check_after_verify_response.status_code, status.HTTP_200_OK)
+        self.assertFalse(check_after_verify_response.data['available'])
+        self.assertIn('already taken', check_after_verify_response.data['message'].lower())
 
         second_response = self.client.post(
             '/api/auth/register/',
@@ -346,7 +371,14 @@ class TeacherRegistrationTests(TestCase):
 
 class StudentEnrollmentVerificationTests(TestCase):
     def setUp(self):
+        cache.clear()
         self.client = APIClient()
+
+    def extract_code_from_last_email(self) -> str:
+        self.assertTrue(mail.outbox)
+        match = re.search(r'(\d{6})', mail.outbox[-1].body)
+        self.assertIsNotNone(match)
+        return match.group(1)
 
     def test_enrolled_student_can_register(self):
         EnrollmentRecord.objects.create(
@@ -371,9 +403,119 @@ class StudentEnrollmentVerificationTests(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['user']['role'], 'STUDENT')
-        self.assertEqual(response.data['user']['student_id'], 'S-8801')
-        self.assertFalse(response.data['user']['is_active'])
+        self.assertTrue(response.data['requires_otp'])
+        self.assertEqual(response.data['role'], 'STUDENT')
+        self.assertEqual(response.data['student_id'], 'S-8801')
+        self.assertFalse(get_user_model().objects.filter(student_id='S-8801').exists())
+
+    def test_student_only_appears_in_pending_accounts_after_otp_verification(self):
+        EnrollmentRecord.objects.create(
+            student_id='S-8810',
+            full_name='Student Applicant',
+            school_email='student-applicant@example.com',
+            academic_term='2025-2026',
+            is_currently_enrolled=True,
+        )
+        librarian = get_user_model().objects.create_user(
+            username='pending-review-librarian',
+            password=VALID_TEACHER_PASSWORD,
+            full_name='Pending Review Librarian',
+            staff_id='L-8810',
+            role='LIBRARIAN',
+            is_active=True,
+        )
+
+        register_response = self.client.post(
+            '/api/auth/register/',
+            {
+                'role': 'STUDENT',
+                'student_id': 'S-8810',
+                'full_name': 'Student Applicant',
+                'email': 'student-applicant@example.com',
+                'password': VALID_STUDENT_PASSWORD,
+                'password_confirm': VALID_STUDENT_PASSWORD,
+            },
+            format='json',
+        )
+        self.assertEqual(register_response.status_code, status.HTTP_201_CREATED)
+        self.assertFalse(get_user_model().objects.filter(student_id='S-8810').exists())
+
+        librarian_client = APIClient()
+        librarian_client.force_authenticate(user=librarian)
+        pending_before_verify = librarian_client.get('/api/auth/pending-accounts/')
+        self.assertEqual(pending_before_verify.status_code, status.HTTP_200_OK)
+        self.assertEqual(pending_before_verify.data['results'], [])
+
+        verify_response = self.client.post(
+            '/api/auth/login-otp/verify/',
+            {
+                'otp_session': register_response.data['otp_session'],
+                'code': self.extract_code_from_last_email(),
+            },
+            format='json',
+        )
+        self.assertEqual(verify_response.status_code, status.HTTP_200_OK)
+        self.assertTrue(verify_response.data['requires_approval'])
+
+        created_user = get_user_model().objects.get(student_id='S-8810')
+        self.assertTrue(created_user.email_verified)
+        self.assertFalse(created_user.is_active)
+
+        pending_after_verify = librarian_client.get('/api/auth/pending-accounts/')
+        self.assertEqual(pending_after_verify.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            [account['student_id'] for account in pending_after_verify.data['results']],
+            ['S-8810'],
+        )
+
+    def test_registration_email_recovery_rotates_session_without_creating_account(self):
+        EnrollmentRecord.objects.create(
+            student_id='S-8811',
+            full_name='Student Applicant',
+            school_email='student-applicant@example.com',
+            academic_term='2025-2026',
+            is_currently_enrolled=True,
+        )
+
+        register_response = self.client.post(
+            '/api/auth/register/',
+            {
+                'role': 'STUDENT',
+                'student_id': 'S-8811',
+                'full_name': 'Student Applicant',
+                'email': 'student-applicant@example.com',
+                'password': VALID_STUDENT_PASSWORD,
+                'password_confirm': VALID_STUDENT_PASSWORD,
+            },
+            format='json',
+        )
+        self.assertEqual(register_response.status_code, status.HTTP_201_CREATED)
+
+        update_response = self.client.post(
+            '/api/auth/update-email/',
+            {
+                'otp_session': register_response.data['otp_session'],
+                'email': 'student-applicant-updated@example.com',
+            },
+            format='json',
+        )
+        self.assertEqual(update_response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(update_response.data['otp_session'], register_response.data['otp_session'])
+        self.assertFalse(get_user_model().objects.filter(student_id='S-8811').exists())
+
+        old_session_response = self.client.post(
+            '/api/auth/login-otp/send/',
+            {'otp_session': register_response.data['otp_session']},
+            format='json',
+        )
+        self.assertEqual(old_session_response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        new_session_response = self.client.post(
+            '/api/auth/login-otp/send/',
+            {'otp_session': update_response.data['otp_session']},
+            format='json',
+        )
+        self.assertEqual(new_session_response.status_code, status.HTTP_200_OK)
 
     def test_student_registration_rejects_unknown_student_id(self):
         response = self.client.post(

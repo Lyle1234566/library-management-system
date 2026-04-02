@@ -231,7 +231,7 @@ function LoginPageContent() {
                       </div>
                     ) : registered ? (
                       <div className="rounded-[22px] border border-emerald-400/30 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-100">
-                        Account created. Check your email for the OTP verification step.
+                        Registration started. Check your email for the OTP step to finish creating the account.
                       </div>
                     ) : null}
 

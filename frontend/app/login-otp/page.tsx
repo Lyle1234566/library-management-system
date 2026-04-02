@@ -84,13 +84,13 @@ function LoginOTPContent() {
       flow: verificationFlow,
     });
     setError('');
-    setNotice(
-      emailUpdated
-        ? 'Your email was updated. We can send a fresh OTP to the new address now.'
-        : verificationFlow === 'registration'
+      setNotice(
+        emailUpdated
+          ? 'Your email was updated. We can send a fresh OTP to the new address now.'
+          : verificationFlow === 'registration'
           ? otpSentInitial
-            ? 'Your account was created and we already sent the OTP. Verify your email before approval continues.'
-            : 'Verify your email first. After that, your account will wait for staff approval.'
+            ? 'We already sent the OTP. Verify your email to finish creating the account and start staff approval.'
+            : 'Verify your email first. After that, the account will be created and move to staff approval.'
           : 'We will verify your email before completing sign in.'
     );
   }, [emailUpdated, otpSentInitial, router, searchParams, verificationFlow]);
@@ -199,7 +199,7 @@ function LoginOTPContent() {
               <h2 className="text-2xl font-semibold">Email Verification</h2>
               <p className="text-sm text-white/60">
                 {verificationFlow === 'registration'
-                  ? 'Verify the email address first. Once that is done, the account will stay pending until staff approval.'
+                  ? 'Verify the email address first. Once that is done, the account will be created and wait for staff approval.'
                   : 'Before this account can sign in, we need to confirm that the email address really belongs to the student.'}
               </p>
             </div>

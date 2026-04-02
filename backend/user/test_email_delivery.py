@@ -3,6 +3,7 @@ import smtplib
 from unittest.mock import MagicMock, patch
 
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.test import SimpleTestCase, TestCase
 from django.test.utils import override_settings
 from rest_framework import status
@@ -136,6 +137,7 @@ class EmailBridgeDeliveryTests(SimpleTestCase):
 )
 class ResendRegistrationIntegrationTests(TestCase):
     def setUp(self):
+        cache.clear()
         self.client = APIClient()
 
     @patch('user.email_delivery.request.urlopen')
@@ -157,12 +159,9 @@ class ResendRegistrationIntegrationTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(response.data['requires_otp'])
-        self.assertEqual(response.data['user']['role'], 'TEACHER')
-        self.assertEqual(response.data['user']['staff_id'], 'T-9901')
-
-        user = get_user_model().objects.get(username='T-9901')
-        self.assertFalse(user.email_verified)
-        self.assertFalse(user.is_active)
+        self.assertEqual(response.data['role'], 'TEACHER')
+        self.assertEqual(response.data['staff_id'], 'T-9901')
+        self.assertFalse(get_user_model().objects.filter(username='T-9901').exists())
         self.assertTrue(mock_urlopen.called)
 
     @override_settings(EMAIL_PROVIDER='auto')
@@ -243,6 +242,7 @@ class ResendRegistrationIntegrationTests(TestCase):
 )
 class EmailBridgeRegistrationIntegrationTests(TestCase):
     def setUp(self):
+        cache.clear()
         self.client = APIClient()
 
     @patch('user.email_delivery._send_via_http_bridge')
