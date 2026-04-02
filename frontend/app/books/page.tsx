@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import BookCard from '@/components/BookCard';
 import MovingObjectsLayer from '@/components/MovingObjectsLayer';
 import { booksApi, Book, Category } from '@/lib/api';
+import { API_BASE_URL, API_CONFIGURATION_WARNING } from '@/lib/api-config';
 
 const fallbackBooks: Book[] = [
   {
@@ -86,6 +87,8 @@ function BooksPageContent() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const booksRequestUrl = `${API_BASE_URL}/books/books/`;
+  const categoriesRequestUrl = `${API_BASE_URL}/books/categories/`;
 
   useEffect(() => {
     setQuery(searchValue);
@@ -388,10 +391,24 @@ function BooksPageContent() {
             )}
 
             {error && !loading && (
-              <div className="mb-8 flex justify-center">
-                <span className="rounded-full border border-amber-400/40 bg-amber-500/15 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-200">
-                  Showing sample books (Backend not connected)
-                </span>
+              <div className="mb-8 rounded-3xl border border-amber-400/30 bg-amber-500/10 px-5 py-4 text-left">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-200">
+                  Showing sample books
+                </p>
+                <p className="mt-2 text-sm text-amber-100/90">
+                  Request failed for <span className="font-mono text-[13px]">{booksRequestUrl}</span>
+                </p>
+                <p className="mt-1 text-sm text-amber-100/80">{error}</p>
+                {categoriesError && (
+                  <p className="mt-2 text-sm text-amber-100/80">
+                    Categories request failed for{' '}
+                    <span className="font-mono text-[13px]">{categoriesRequestUrl}</span>:{" "}
+                    {categoriesError}
+                  </p>
+                )}
+                {API_CONFIGURATION_WARNING && (
+                  <p className="mt-2 text-sm text-amber-100/80">{API_CONFIGURATION_WARNING}</p>
+                )}
               </div>
             )}
 

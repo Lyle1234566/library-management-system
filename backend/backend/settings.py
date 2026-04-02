@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import re
 import sys
 from pathlib import Path
 from datetime import timedelta
@@ -90,6 +91,30 @@ def parse_database_url(database_url: str) -> dict[str, str]:
         'PORT': str(parsed.port or '5432'),
         'SSLMODE': query_params.get('sslmode', [''])[0],
     }
+
+
+def build_vercel_origin_regexes(origins: list[str]) -> list[str]:
+    patterns: list[str] = []
+    seen: set[str] = set()
+
+    for origin in origins:
+        hostname = urlparse(origin).hostname or ''
+        if not hostname.endswith('.vercel.app'):
+            continue
+
+        project_host = hostname.removesuffix('.vercel.app')
+        if not project_host:
+            continue
+
+        # Allow the stable Vercel hostname plus deployment-specific aliases for the same project.
+        pattern = rf"^https://{re.escape(project_host)}(?:-[a-z0-9-]+)?\.vercel\.app$"
+        if pattern in seen:
+            continue
+
+        seen.add(pattern)
+        patterns.append(pattern)
+
+    return patterns
 
 
 # Quick-start development settings - unsuitable for production
@@ -330,6 +355,10 @@ CORS_ALLOWED_ORIGINS = get_env_list(
 )
 if ENABLE_PRODUCTION_SECURITY and not get_env_str('CORS_ALLOWED_ORIGINS'):
     raise ImproperlyConfigured('CORS_ALLOWED_ORIGINS must be set when DEBUG is False.')
+CORS_ALLOWED_ORIGIN_REGEXES = get_env_list("CORS_ALLOWED_ORIGIN_REGEXES", [])
+for vercel_pattern in build_vercel_origin_regexes(CORS_ALLOWED_ORIGINS + [LIBRARY_WEB_URL]):
+    if vercel_pattern not in CORS_ALLOWED_ORIGIN_REGEXES:
+        CORS_ALLOWED_ORIGIN_REGEXES.append(vercel_pattern)
 CSRF_TRUSTED_ORIGINS = get_env_list("CSRF_TRUSTED_ORIGINS", CORS_ALLOWED_ORIGINS.copy())
 SECURE_SSL_REDIRECT = get_env_bool('SECURE_SSL_REDIRECT', ENABLE_PRODUCTION_SECURITY)
 SESSION_COOKIE_SECURE = get_env_bool('SESSION_COOKIE_SECURE', ENABLE_PRODUCTION_SECURITY)

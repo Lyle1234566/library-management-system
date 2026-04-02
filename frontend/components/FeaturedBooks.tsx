@@ -3,12 +3,14 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { booksApi, Book } from '@/lib/api';
+import { API_BASE_URL, API_CONFIGURATION_WARNING } from '@/lib/api-config';
 import BookCard from './BookCard';
 
 export default function FeaturedBooks() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const booksRequestUrl = `${API_BASE_URL}/books/books/`;
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -109,10 +111,17 @@ export default function FeaturedBooks() {
 
         {/* Error State with Fallback Data */}
         {error && !loading && (
-          <div className="text-center mb-8 animate-fade-up">
-            <p className="text-[color:var(--accent-strong)] text-sm">
-              Showing sample books (Backend not connected)
+          <div className="mb-8 animate-fade-up rounded-3xl border border-amber-400/30 bg-amber-500/10 px-5 py-4 text-left">
+            <p className="text-[color:var(--accent-strong)] text-sm font-semibold uppercase tracking-[0.2em]">
+              Showing sample books
             </p>
+            <p className="mt-2 text-sm text-amber-100/90">
+              Request failed for <span className="font-mono text-[13px]">{booksRequestUrl}</span>
+            </p>
+            <p className="mt-1 text-sm text-amber-100/80">{error}</p>
+            {API_CONFIGURATION_WARNING && (
+              <p className="mt-2 text-sm text-amber-100/80">{API_CONFIGURATION_WARNING}</p>
+            )}
           </div>
         )}
 

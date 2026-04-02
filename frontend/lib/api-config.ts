@@ -26,6 +26,10 @@ function getConfiguredApiBaseUrl(): string {
 export const API_BASE_URL = getConfiguredApiBaseUrl();
 export const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, '');
 export const HAS_CONFIGURED_API_BASE_URL = Boolean(process.env.NEXT_PUBLIC_API_URL?.trim());
+export const API_CONFIGURATION_WARNING =
+  !HAS_CONFIGURED_API_BASE_URL && process.env.NODE_ENV === 'production'
+    ? 'NEXT_PUBLIC_API_URL is not set in this deployment. Requests are falling back to same-origin /api.'
+    : null;
 
 if (!HAS_CONFIGURED_API_BASE_URL && process.env.NODE_ENV === 'production') {
   console.warn(

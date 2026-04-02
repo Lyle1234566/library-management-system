@@ -1,7 +1,25 @@
 from unittest.mock import MagicMock, patch
 
 from django.db.utils import OperationalError
-from django.test import TestCase
+from django.test import SimpleTestCase, TestCase
+
+from backend.settings import build_vercel_origin_regexes
+
+
+class CorsOriginRegexTests(SimpleTestCase):
+    def test_build_vercel_origin_regexes_allows_same_project_vercel_deployments(self):
+        self.assertEqual(
+            [
+                r'^https://library\-management\-system\-nkj8(?:-[a-z0-9-]+)?\.vercel\.app$',
+            ],
+            build_vercel_origin_regexes(['https://library-management-system-nkj8.vercel.app']),
+        )
+
+    def test_build_vercel_origin_regexes_ignores_non_vercel_origins(self):
+        self.assertEqual(
+            [],
+            build_vercel_origin_regexes(['https://salazar-library-backend.onrender.com']),
+        )
 
 
 class HealthCheckTests(TestCase):
