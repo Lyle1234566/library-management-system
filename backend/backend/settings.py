@@ -184,6 +184,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 
@@ -498,6 +500,22 @@ CLOUDINARY_STORAGE = {
 
 # Update STORAGES to use Cloudinary
 USE_CLOUDINARY = get_env_bool('USE_CLOUDINARY', False)
+
+# Cloudinary Configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': get_env_str('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': get_env_str('CLOUDINARY_API_KEY'),
+    'API_SECRET': get_env_str('CLOUDINARY_API_SECRET'),
+}
+
+USE_CLOUDINARY = get_env_bool('USE_CLOUDINARY', False)
+
+if ENABLE_PRODUCTION_SECURITY and not USE_CLOUDINARY and not get_env_str('MEDIA_ROOT'):
+    raise ImproperlyConfigured(
+        'MEDIA_ROOT must be set when DEBUG is False. Use a persistent path such as a mounted volume.'
+    )
+if not USE_CLOUDINARY:
+    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 
 STORAGES = {
     'default': {
