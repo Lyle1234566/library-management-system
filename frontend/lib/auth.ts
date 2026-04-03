@@ -311,6 +311,32 @@ const normalizeErrorMessage = (response: Response, data: unknown, text: string):
 
 // Auth API
 export const authApi = {
+  async ensureAccessToken(): Promise<{ accessToken: string | null; error: string | null }> {
+    const currentAccessToken = tokenStorage.getAccessToken();
+    if (currentAccessToken) {
+      return { accessToken: currentAccessToken, error: null };
+    }
+
+    if (!tokenStorage.getRefreshToken()) {
+      return { accessToken: null, error: 'Not authenticated' };
+    }
+
+    const refreshResult = await this.refreshToken();
+    if (refreshResult.error) {
+      return {
+        accessToken: null,
+        error: refreshResult.error === 'No refresh token available'
+          ? 'Not authenticated'
+          : refreshResult.error,
+      };
+    }
+
+    return {
+      accessToken: tokenStorage.getAccessToken(),
+      error: tokenStorage.getAccessToken() ? null : 'Not authenticated',
+    };
+  },
+
   // Login user with ID (student or staff)
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
@@ -875,13 +901,12 @@ export const authApi = {
   // Update current user profile
   async updateProfile(payload: UpdateProfilePayload): Promise<AuthResponse> {
     try {
-      const accessToken = tokenStorage.getAccessToken();
-
-      if (!accessToken) {
+      const tokenResult = await this.ensureAccessToken();
+      if (tokenResult.error || !tokenResult.accessToken) {
         return {
           user: null,
           tokens: null,
-          error: 'Not authenticated',
+          error: tokenResult.error ?? 'Not authenticated',
         };
       }
 
@@ -889,7 +914,7 @@ export const authApi = {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${tokenResult.accessToken}`,
           'Accept': 'application/json',
         },
         body: JSON.stringify(payload),
@@ -986,15 +1011,15 @@ export const authApi = {
   // Update profile with avatar upload (multipart/form-data)
   async updateProfileWithAvatar(formData: FormData): Promise<UpdateProfileFormResult> {
     try {
-      const accessToken = tokenStorage.getAccessToken();
-      if (!accessToken) {
-        return { user: null, error: 'Not authenticated' };
+      const tokenResult = await this.ensureAccessToken();
+      if (tokenResult.error || !tokenResult.accessToken) {
+        return { user: null, error: tokenResult.error ?? 'Not authenticated' };
       }
 
       const response = await fetch(`${API_BASE_URL}/auth/profile/`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${tokenResult.accessToken}`,
           'Accept': 'application/json',
         },
         body: formData,
@@ -1184,13 +1209,12 @@ export const authApi = {
   // Get current user profile
   async getProfile(): Promise<AuthResponse> {
     try {
-      const accessToken = tokenStorage.getAccessToken();
-      
-      if (!accessToken) {
+      const tokenResult = await this.ensureAccessToken();
+      if (tokenResult.error || !tokenResult.accessToken) {
         return {
           user: null,
           tokens: null,
-          error: 'Not authenticated',
+          error: tokenResult.error ?? 'Not authenticated',
         };
       }
 
@@ -1198,7 +1222,7 @@ export const authApi = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${tokenResult.accessToken}`,
           'Accept': 'application/json',
         },
       });
@@ -1268,7 +1292,7 @@ export const authApi = {
 
   // Check if user is authenticated
   isAuthenticated(): boolean {
-    return !!tokenStorage.getAccessToken();
+    return !!tokenStorage.getAccessToken() || !!tokenStorage.getRefreshToken();
   },
 };
 
