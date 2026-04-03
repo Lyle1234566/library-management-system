@@ -69,6 +69,7 @@ export interface ApiError {
   staff_id?: string[];
   portal?: string[];
   email?: string[];
+  avatar?: string[];
   password?: string[];
   old_password?: string[];
   new_password?: string[];
@@ -270,6 +271,7 @@ const parseApiError = (error: ApiError): string => {
   if (error.staff_id) return `Staff ID: ${error.staff_id.join(', ')}`;
   if (error.portal) return `Portal: ${error.portal.join(', ')}`;
   if (error.email) return `Email: ${error.email.join(', ')}`;
+  if (error.avatar) return `Profile picture: ${error.avatar.join(', ')}`;
   if (error.password) return `Password: ${error.password.join(', ')}`;
   if (error.old_password) return `Current password: ${error.old_password.join(', ')}`;
   if (error.new_password) return `New password: ${error.new_password.join(', ')}`;

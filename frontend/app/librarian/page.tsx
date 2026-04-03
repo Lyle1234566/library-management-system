@@ -675,6 +675,57 @@ export default function LibrarianDeskPage() {
     return rows.slice(0, 10);
   }, [analyticsBorrowRequests, hideCurrentMonthHistory, currentMonthReference]);
 
+  const oldestBorrowRequestLabel = useMemo(() => {
+    if (borrowRequests.length === 0) return 'Queue is clear';
+    const oldest = [...borrowRequests].sort(
+      (a, b) => toTimestamp(a.requested_at) - toTimestamp(b.requested_at)
+    )[0];
+    return formatDate(oldest?.requested_at);
+  }, [borrowRequests]);
+
+  const renewalExtensionSnapshot = useMemo(() => {
+    if (renewalRequests.length === 0) {
+      return { average: '0', nearestDueDate: 'No active queue' };
+    }
+
+    const totalDays = renewalRequests.reduce(
+      (sum, request) => sum + request.requested_extension_days,
+      0
+    );
+    const nearestDue = [...renewalRequests]
+      .filter((request) => Boolean(request.current_due_date))
+      .sort(
+        (a, b) =>
+          toTimestamp(a.current_due_date ?? a.requested_at) -
+          toTimestamp(b.current_due_date ?? b.requested_at)
+      )[0];
+
+    return {
+      average: (totalDays / renewalRequests.length).toFixed(
+        Number.isInteger(totalDays / renewalRequests.length) ? 0 : 1
+      ),
+      nearestDueDate: nearestDue
+        ? formatDate(nearestDue.current_due_date ?? nearestDue.requested_at)
+        : 'No due dates',
+    };
+  }, [renewalRequests]);
+
+  const latestReturnRequestLabel = useMemo(() => {
+    if (returnRequests.length === 0) return 'No active queue';
+    const latest = [...returnRequests].sort(
+      (a, b) => toTimestamp(b.requested_at) - toTimestamp(a.requested_at)
+    )[0];
+    return formatDate(latest?.requested_at);
+  }, [returnRequests]);
+
+  const currentMonthReturnCount = useMemo(() => {
+    return analyticsBorrowRequests.filter((request) => {
+      if (request.status !== 'RETURNED') return false;
+      const eventDate = request.returned_at ?? request.processed_at ?? request.requested_at;
+      return isInSameMonth(eventDate, currentMonthReference);
+    }).length;
+  }, [analyticsBorrowRequests, currentMonthReference]);
+
   const overdueHistory = useMemo(() => {
     let rows = analyticsBorrowRequests
       .filter(
@@ -4266,86 +4317,171 @@ export default function LibrarianDeskPage() {
             {(resolvedActiveSectionId === 'desk-borrows' ||
               resolvedActiveSectionId === 'desk-renewals' ||
               resolvedActiveSectionId === 'desk-returns') && (
-            <div className="grid gap-6 xl:grid-cols-3 xl:items-start">
+            <div className="space-y-6">
               {/* Borrow Requests */}
               <div
                 id="desk-borrows"
-                className={`h-full scroll-mt-28 rounded-3xl border border-white/15 bg-white/5 backdrop-blur-xl shadow-2xl shadow-black/30 p-5 md:p-6 lg:p-8 transition-all duration-300 hover:bg-white/[0.08] ${
+                className={`relative overflow-hidden scroll-mt-28 rounded-[32px] border border-white/12 bg-[#091321]/95 shadow-2xl shadow-black/30 transition-all duration-300 hover:bg-[#0b1729] ${
                   resolvedActiveSectionId === 'desk-borrows' ? '' : 'hidden'
                 }`}
               >
-              <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="rounded-full bg-emerald-500/20 p-3">
-                    <BookDown className="h-6 w-6 text-emerald-200" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl md:text-2xl font-semibold text-white">Borrow Requests</h2>
-                    <p className="text-white/70">Pending book borrow approvals</p>
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.2),transparent_62%)]" />
+              <div className="relative p-5 md:p-6 lg:p-8">
+              <div className="mb-8 grid gap-5 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] xl:items-start">
+                <div className="rounded-[28px] border border-emerald-300/15 bg-white/[0.04] p-6 shadow-[0_24px_80px_-52px_rgba(16,185,129,0.85)] md:p-7">
+                  <div className="flex flex-wrap items-start gap-4">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-emerald-500/18 text-emerald-100 ring-1 ring-inset ring-emerald-200/15">
+                      <BookDown className="h-7 w-7" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-100/70">
+                        <span>Approval Desk</span>
+                        <span className="h-1 w-1 rounded-full bg-emerald-300/70" />
+                        <span>{borrowRequests.length} active</span>
+                      </div>
+                      <h2 className="mt-3 text-2xl font-semibold text-white md:text-3xl">Borrow Requests</h2>
+                      <p className="mt-3 max-w-3xl text-sm leading-7 text-white/68 md:text-base">
+                        Review pending checkout requests in a wider workspace so the queue,
+                        borrower, and approval actions stay visible without wasting the rest of
+                        the page.
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsBorrowRequestsOpen((prev) => !prev)}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-white hover:bg-white/20 transition-all"
-                  >
-                    {isBorrowRequestsOpen ? 'Hide Borrows' : 'Show Borrows'}
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform duration-200 ${
-                        isBorrowRequestsOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  <button
-                    onClick={() => {
-                      void Promise.all([loadBorrowRequests(), loadBorrowAnalytics()]);
-                    }}
-                    className="group flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white/80 hover:bg-white/10 transition-all"
-                  >
-                    <RefreshCw className="h-4 w-4 group-hover:animate-spin-slow" />
-                    Refresh
-                  </button>
+                <div className="rounded-[28px] border border-white/10 bg-[#0b1729]/88 p-5 shadow-[0_24px_80px_-60px_rgba(15,23,42,1)]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
+                    Queue Controls
+                  </p>
+                  <div className="mt-4 flex flex-col gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsBorrowRequestsOpen((prev) => !prev)}
+                      className="inline-flex w-full items-center justify-between rounded-2xl border border-white/12 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-white/15"
+                    >
+                      <span>{isBorrowRequestsOpen ? 'Collapse queue' : 'Expand queue'}</span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform duration-200 ${
+                          isBorrowRequestsOpen ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    <button
+                      onClick={() => {
+                        void Promise.all([loadBorrowRequests(), loadBorrowAnalytics()]);
+                      }}
+                      className="group inline-flex w-full items-center justify-between rounded-2xl border border-emerald-300/20 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-50 transition-all hover:bg-emerald-500/15"
+                    >
+                      <span>Refresh approvals</span>
+                      <RefreshCw className="h-4 w-4 group-hover:animate-spin-slow" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="mb-6 grid gap-4 md:grid-cols-3">
+                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
+                    Pending Approvals
+                  </p>
+                  <p className="mt-4 text-3xl font-semibold text-white">{borrowRequests.length}</p>
+                  <p className="mt-2 text-sm text-white/58">
+                    Requests ready for a checkout decision.
+                  </p>
+                </div>
+                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
+                    Oldest Request
+                  </p>
+                  <p className="mt-4 text-3xl font-semibold text-white">
+                    {borrowRequests.length === 0 ? 'Clear' : 'Live'}
+                  </p>
+                  <p className="mt-2 text-sm text-white/58">{oldestBorrowRequestLabel}</p>
+                </div>
+                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
+                    Students Waiting
+                  </p>
+                  <p className="mt-4 text-3xl font-semibold text-white">
+                    {
+                      new Set(
+                        borrowRequests.map((request) => formatUserIdentifier(request.user))
+                      ).size
+                    }
+                  </p>
+                  <p className="mt-2 text-sm text-white/58">
+                    Unique borrowers currently in the queue.
+                  </p>
                 </div>
               </div>
 
               {isBorrowRequestsOpen && (
                 <>
               {borrowsState === 'loading' && (
-                <div className="flex items-center justify-center gap-3 py-12 text-white/60">
+                <div className="flex items-center justify-center gap-3 rounded-[28px] border border-white/10 bg-white/[0.04] px-6 py-14 text-white/60">
                   <Loader2 className="h-6 w-6 animate-spin" />
                   Loading borrow requests...
                 </div>
               )}
 
               {borrowsError && (
-                <div className="rounded-2xl bg-rose-500/15 border border-rose-300/30 p-5 text-rose-100 flex items-center gap-3">
+                <div className="flex items-center gap-3 rounded-[28px] border border-rose-300/30 bg-rose-500/15 p-5 text-rose-100">
                   <AlertCircle className="h-5 w-5 flex-shrink-0" />
                   {borrowsError}
                 </div>
               )}
 
               {borrowsState !== 'loading' && borrowRequests.length === 0 && !borrowsError && (
-                <div className="rounded-2xl border border-dashed border-white/25 bg-white/5 p-10 text-center text-white/60">
-                  No pending borrow requests right now.
+                <div className="grid gap-6 rounded-[28px] border border-dashed border-emerald-200/20 bg-[linear-gradient(135deg,rgba(16,185,129,0.08),rgba(255,255,255,0.03))] p-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] lg:p-10">
+                  <div>
+                    <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-emerald-100/80">
+                      <Sparkles className="h-4 w-4" />
+                      Queue Clear
+                    </div>
+                    <h3 className="mt-6 text-2xl font-semibold text-white">
+                      No pending borrow requests right now.
+                    </h3>
+                    <p className="mt-3 max-w-2xl text-sm leading-7 text-white/64 md:text-base">
+                      When a new borrower submits a checkout request, it will appear here with the
+                      student profile, book details, and approval actions lined up for a quick
+                      decision.
+                    </p>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                    <div className="rounded-3xl border border-white/10 bg-[#0b1729]/82 p-5">
+                      <p className="text-xs uppercase tracking-[0.24em] text-white/40">
+                        Oldest request marker
+                      </p>
+                      <p className="mt-3 text-sm font-semibold text-white/80">
+                        {oldestBorrowRequestLabel}
+                      </p>
+                    </div>
+                    <div className="rounded-3xl border border-white/10 bg-[#0b1729]/82 p-5">
+                      <p className="text-xs uppercase tracking-[0.24em] text-white/40">
+                        Ready action
+                      </p>
+                      <div className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-white/80">
+                        Refresh approvals
+                        <ArrowUpRight className="h-4 w-4" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
 
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid gap-5 xl:grid-cols-2 2xl:grid-cols-3">
                 {borrowRequests.map((req) => (
                   <div
                     key={req.id}
-                    className="group rounded-2xl border border-white/15 bg-[#0f1b2f]/80 p-6 shadow-lg shadow-black/20 hover:shadow-xl hover:border-emerald-300/40 transition-all duration-200"
+                    className="group rounded-[28px] border border-white/12 bg-[#0f1b2f]/88 p-6 shadow-lg shadow-black/20 transition-all duration-200 hover:border-emerald-300/40 hover:shadow-[0_24px_70px_-42px_rgba(16,185,129,0.55)]"
                   >
                     <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-start gap-3">
-                        <div className="relative h-16 w-12 flex-shrink-0 overflow-hidden rounded-lg border border-white/10 bg-emerald-500/10 shadow-sm">
+                      <div className="flex items-start gap-4">
+                        <div className="relative h-20 w-14 flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-emerald-500/10 shadow-sm">
                           {getBookCoverUrl(req.book) ? (
                             <Image
                               src={getBookCoverUrl(req.book) as string}
                               alt={req.book.title}
                               fill
-                              sizes="48px"
+                              sizes="56px"
                               className="object-cover"
                               unoptimized
                             />
@@ -4355,18 +4491,22 @@ export default function LibrarianDeskPage() {
                             </div>
                           )}
                         </div>
-                        <div>
-                          <p className="font-semibold text-white line-clamp-2">{req.book.title}</p>
-                          <p className="text-sm text-white/70 mt-0.5">{req.book.author}</p>
+                        <div className="min-w-0">
+                          <p className="line-clamp-2 text-base font-semibold text-white">{req.book.title}</p>
+                          <p className="mt-1 text-sm text-white/66">{req.book.author}</p>
+                          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/55">
+                            <Clock3 className="h-3.5 w-3.5" />
+                            Requested {formatDate(req.requested_at)}
+                          </div>
                         </div>
                       </div>
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusPill[req.status]}`}>
                         {req.status}
                       </span>
                     </div>
-                    <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3">
+                    <div className="mt-5 rounded-[24px] border border-white/10 bg-white/[0.04] p-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-12 w-12 overflow-hidden rounded-2xl border border-white/10 bg-emerald-500/10">
+                        <div className="h-14 w-14 overflow-hidden rounded-2xl border border-white/10 bg-emerald-500/10">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={getRequestUserAvatarUrl(req.user)}
@@ -4385,7 +4525,7 @@ export default function LibrarianDeskPage() {
                       </div>
                     </div>
 
-                    <div className="mt-4 text-sm text-white/70 space-y-1.5">
+                    <div className="hidden mt-4 text-sm text-white/70 space-y-1.5">
                       <div className="flex justify-between">
                         <span className="font-medium">Student:</span>
                         <span>{req.user?.full_name ?? '—'}</span>
@@ -4400,11 +4540,49 @@ export default function LibrarianDeskPage() {
                       </div>
                     </div>
 
+                    <div className="mt-5 grid gap-3 text-sm text-white/68 sm:grid-cols-2">
+                      <div className="rounded-2xl border border-white/8 bg-[#08121f]/78 px-4 py-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                          Student
+                        </p>
+                        <p className="mt-2 font-medium text-white">
+                          {req.user?.full_name ?? 'Unknown student'}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-white/8 bg-[#08121f]/78 px-4 py-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                          Library ID
+                        </p>
+                        <p className="mt-2 font-medium text-white">
+                          {formatUserIdentifier(req.user)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-5 grid gap-3 text-sm text-white/68 sm:grid-cols-2">
+                      <div className="rounded-2xl border border-white/8 bg-[#08121f]/78 px-4 py-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                          Student
+                        </p>
+                        <p className="mt-2 font-medium text-white">
+                          {req.user?.full_name ?? 'Unknown student'}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-white/8 bg-[#08121f]/78 px-4 py-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                          Receipt
+                        </p>
+                        <p className="mt-2 font-medium text-white">
+                          {req.receipt_number ?? 'Pending'}
+                        </p>
+                      </div>
+                    </div>
+
                     <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                       <button
                         disabled={actionBusy === req.id}
                         onClick={() => handleBorrowDecision(req.id, true)}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60 transition-all active:scale-95 shadow-sm sm:flex-1"
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60 transition-all active:scale-95 shadow-sm sm:flex-1"
                       >
                         {actionBusy === req.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -4416,7 +4594,7 @@ export default function LibrarianDeskPage() {
                       <button
                         disabled={actionBusy === req.id}
                         onClick={() => handleBorrowDecision(req.id, false)}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-300/40 px-5 py-2.5 text-sm font-semibold text-rose-100 hover:bg-rose-500/15 disabled:opacity-60 transition-all active:scale-95 sm:flex-1"
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl border border-rose-300/40 px-5 py-3 text-sm font-semibold text-rose-100 hover:bg-rose-500/15 disabled:opacity-60 transition-all active:scale-95 sm:flex-1"
                       >
                         <XCircle className="h-4 w-4" />
                         Reject
@@ -4427,86 +4605,167 @@ export default function LibrarianDeskPage() {
 	              </div>
 	                </>
 	              )}
+              </div>
 	            </div>
 
             <div
               id="desk-renewals"
-              className={`h-full scroll-mt-28 rounded-3xl border border-white/15 bg-white/5 backdrop-blur-xl shadow-2xl shadow-black/30 p-5 md:p-6 lg:p-8 transition-all duration-300 hover:bg-white/[0.08] ${
+              className={`relative overflow-hidden scroll-mt-28 rounded-[32px] border border-white/12 bg-[#091321]/95 shadow-2xl shadow-black/30 transition-all duration-300 hover:bg-[#0b1729] ${
                 resolvedActiveSectionId === 'desk-renewals' ? '' : 'hidden'
               }`}
             >
-              <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="rounded-full bg-emerald-500/20 p-3">
-                    <RefreshCw className="h-6 w-6 text-emerald-200" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl md:text-2xl font-semibold text-white">Renewal Requests</h2>
-                    <p className="text-white/70">Pending due-date extension approvals</p>
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.16),transparent_62%)]" />
+              <div className="relative p-5 md:p-6 lg:p-8">
+              <div className="mb-8 grid gap-5 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] xl:items-start">
+                <div className="rounded-[28px] border border-emerald-300/15 bg-white/[0.04] p-6 shadow-[0_24px_80px_-52px_rgba(34,197,94,0.8)] md:p-7">
+                  <div className="flex flex-wrap items-start gap-4">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-emerald-500/18 text-emerald-100 ring-1 ring-inset ring-emerald-200/15">
+                      <RefreshCw className="h-7 w-7" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-100/70">
+                        <span>Extension Desk</span>
+                        <span className="h-1 w-1 rounded-full bg-emerald-300/70" />
+                        <span>{renewalRequests.length} active</span>
+                      </div>
+                      <h2 className="mt-3 text-2xl font-semibold text-white md:text-3xl">Renewal Requests</h2>
+                      <p className="mt-3 max-w-3xl text-sm leading-7 text-white/68 md:text-base">
+                        Give due-date reviews more room so current dates, projected extensions,
+                        and receipts stay readable instead of being squeezed into a narrow panel.
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsRenewalRequestsOpen((prev) => !prev)}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-white hover:bg-white/20 transition-all"
-                  >
-                    {isRenewalRequestsOpen ? 'Hide Renewals' : 'Show Renewals'}
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform duration-200 ${
-                        isRenewalRequestsOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  <button
-                    onClick={() => {
-                      void Promise.all([loadRenewalRequests(), loadBorrowAnalytics()]);
-                    }}
-                    className="group flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white/80 hover:bg-white/10 transition-all"
-                  >
-                    <RefreshCw className="h-4 w-4 group-hover:animate-spin-slow" />
-                    Refresh
-                  </button>
+                <div className="rounded-[28px] border border-white/10 bg-[#0b1729]/88 p-5 shadow-[0_24px_80px_-60px_rgba(15,23,42,1)]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
+                    Queue Controls
+                  </p>
+                  <div className="mt-4 flex flex-col gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsRenewalRequestsOpen((prev) => !prev)}
+                      className="inline-flex w-full items-center justify-between rounded-2xl border border-white/12 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-white/15"
+                    >
+                      <span>{isRenewalRequestsOpen ? 'Collapse queue' : 'Expand queue'}</span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform duration-200 ${
+                          isRenewalRequestsOpen ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    <button
+                      onClick={() => {
+                        void Promise.all([loadRenewalRequests(), loadBorrowAnalytics()]);
+                      }}
+                      className="group inline-flex w-full items-center justify-between rounded-2xl border border-emerald-300/20 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-50 transition-all hover:bg-emerald-500/15"
+                    >
+                      <span>Refresh renewals</span>
+                      <RefreshCw className="h-4 w-4 group-hover:animate-spin-slow" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="mb-6 grid gap-4 md:grid-cols-3">
+                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
+                    Pending Renewals
+                  </p>
+                  <p className="mt-4 text-3xl font-semibold text-white">{renewalRequests.length}</p>
+                  <p className="mt-2 text-sm text-white/58">
+                    Extension approvals waiting for review.
+                  </p>
+                </div>
+                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
+                    Average Ask
+                  </p>
+                  <p className="mt-4 text-3xl font-semibold text-white">
+                    {renewalExtensionSnapshot.average}d
+                  </p>
+                  <p className="mt-2 text-sm text-white/58">
+                    Typical additional days requested.
+                  </p>
+                </div>
+                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
+                    Nearest Due
+                  </p>
+                  <p className="mt-4 text-3xl font-semibold text-white">
+                    {renewalRequests.length === 0 ? 'Clear' : 'Live'}
+                  </p>
+                  <p className="mt-2 text-sm text-white/58">
+                    {renewalExtensionSnapshot.nearestDueDate}
+                  </p>
                 </div>
               </div>
 
               {isRenewalRequestsOpen && (
                 <>
               {renewalsState === 'loading' && (
-                <div className="flex items-center justify-center gap-3 py-12 text-white/60">
+                <div className="flex items-center justify-center gap-3 rounded-[28px] border border-white/10 bg-white/[0.04] px-6 py-14 text-white/60">
                   <Loader2 className="h-6 w-6 animate-spin" />
                   Loading renewal requests...
                 </div>
               )}
 
               {renewalsError && (
-                <div className="rounded-2xl bg-rose-500/15 border border-rose-300/30 p-5 text-rose-100 flex items-center gap-3">
+                <div className="flex items-center gap-3 rounded-[28px] border border-rose-300/30 bg-rose-500/15 p-5 text-rose-100">
                   <AlertCircle className="h-5 w-5 flex-shrink-0" />
                   {renewalsError}
                 </div>
               )}
 
               {renewalsState !== 'loading' && renewalRequests.length === 0 && !renewalsError && (
-                <div className="rounded-2xl border border-dashed border-white/25 bg-white/5 p-10 text-center text-white/60">
-                  No pending renewal requests at the moment.
+                <div className="grid gap-6 rounded-[28px] border border-dashed border-emerald-200/20 bg-[linear-gradient(135deg,rgba(34,197,94,0.07),rgba(255,255,255,0.03))] p-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] lg:p-10">
+                  <div>
+                    <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-emerald-100/80">
+                      <Sparkles className="h-4 w-4" />
+                      No Extensions Waiting
+                    </div>
+                    <h3 className="mt-6 text-2xl font-semibold text-white">
+                      No pending renewal requests at the moment.
+                    </h3>
+                    <p className="mt-3 max-w-2xl text-sm leading-7 text-white/64 md:text-base">
+                      Incoming extensions will appear here with the current due date, projected
+                      due date, and receipt information visible together for faster review.
+                    </p>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                    <div className="rounded-3xl border border-white/10 bg-[#0b1729]/82 p-5">
+                      <p className="text-xs uppercase tracking-[0.24em] text-white/40">
+                        Average ask
+                      </p>
+                      <p className="mt-3 text-sm font-semibold text-white/80">
+                        {renewalExtensionSnapshot.average} days
+                      </p>
+                    </div>
+                    <div className="rounded-3xl border border-white/10 bg-[#0b1729]/82 p-5">
+                      <p className="text-xs uppercase tracking-[0.24em] text-white/40">
+                        Nearest due marker
+                      </p>
+                      <p className="mt-3 text-sm font-semibold text-white/80">
+                        {renewalExtensionSnapshot.nearestDueDate}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
 
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid gap-5 xl:grid-cols-2 2xl:grid-cols-3">
                 {renewalRequests.map((req) => (
                   <div
                     key={req.id}
-                    className="group rounded-2xl border border-white/15 bg-[#0f1b2f]/80 p-6 shadow-lg shadow-black/20 hover:shadow-xl hover:border-emerald-300/40 transition-all duration-200"
+                    className="group rounded-[28px] border border-white/12 bg-[#0f1b2f]/88 p-6 shadow-lg shadow-black/20 transition-all duration-200 hover:border-emerald-300/40 hover:shadow-[0_24px_70px_-42px_rgba(34,197,94,0.5)]"
                   >
                     <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-start gap-3">
-                        <div className="relative h-16 w-12 flex-shrink-0 overflow-hidden rounded-lg border border-white/10 bg-emerald-500/10 shadow-sm">
+                      <div className="flex items-start gap-4">
+                        <div className="relative h-20 w-14 flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-emerald-500/10 shadow-sm">
                           {getBookCoverUrl(req.book) ? (
                             <Image
                               src={getBookCoverUrl(req.book) as string}
                               alt={req.book.title}
                               fill
-                              sizes="48px"
+                              sizes="56px"
                               className="object-cover"
                               unoptimized
                             />
@@ -4516,18 +4775,22 @@ export default function LibrarianDeskPage() {
                             </div>
                           )}
                         </div>
-                        <div>
-                          <p className="font-semibold text-white line-clamp-2">{req.book.title}</p>
-                          <p className="text-sm text-white/70 mt-0.5">{req.book.author}</p>
+                        <div className="min-w-0">
+                          <p className="line-clamp-2 text-base font-semibold text-white">{req.book.title}</p>
+                          <p className="mt-1 text-sm text-white/66">{req.book.author}</p>
+                          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/55">
+                            <Clock3 className="h-3.5 w-3.5" />
+                            Requested {formatDate(req.requested_at)}
+                          </div>
                         </div>
                       </div>
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold ${renewalStatusPill[req.status]}`}>
                         {req.status}
                       </span>
                     </div>
-                    <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3">
+                    <div className="mt-5 rounded-[24px] border border-white/10 bg-white/[0.04] p-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-12 w-12 overflow-hidden rounded-2xl border border-white/10 bg-emerald-500/10">
+                        <div className="h-14 w-14 overflow-hidden rounded-2xl border border-white/10 bg-emerald-500/10">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={getRequestUserAvatarUrl(req.user)}
@@ -4546,7 +4809,7 @@ export default function LibrarianDeskPage() {
                       </div>
                     </div>
 
-                    <div className="mt-4 text-sm text-white/70 space-y-1.5">
+                    <div className="hidden mt-4 text-sm text-white/70 space-y-1.5">
                       <div className="flex justify-between">
                         <span className="font-medium">Student:</span>
                         <span>{req.user?.full_name ?? '—'}</span>
@@ -4582,11 +4845,47 @@ export default function LibrarianDeskPage() {
                       )}
                     </div>
 
+                    <div className="mt-5 grid gap-3 text-sm text-white/68 sm:grid-cols-2">
+                      <div className="rounded-2xl border border-white/8 bg-[#08121f]/78 px-4 py-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                          Current Due
+                        </p>
+                        <p className="mt-2 font-medium text-white">
+                          {formatDate(req.current_due_date)}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-white/8 bg-[#08121f]/78 px-4 py-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                          Projected Due
+                        </p>
+                        <p className="mt-2 font-medium text-white">
+                          {formatDate(req.projected_due_date)}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-white/8 bg-[#08121f]/78 px-4 py-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                          Extension
+                        </p>
+                        <p className="mt-2 font-medium text-white">
+                          {req.requested_extension_days} day
+                          {req.requested_extension_days === 1 ? '' : 's'}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-white/8 bg-[#08121f]/78 px-4 py-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                          Receipt
+                        </p>
+                        <p className="mt-2 font-medium text-white">
+                          {req.receipt_number ?? 'Pending'}
+                        </p>
+                      </div>
+                    </div>
+
                     <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                       <button
                         disabled={renewalActionBusy === req.id}
                         onClick={() => handleRenewalDecision(req.id, true)}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60 transition-all active:scale-95 shadow-sm sm:flex-1"
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60 transition-all active:scale-95 shadow-sm sm:flex-1"
                       >
                         {renewalActionBusy === req.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -4598,7 +4897,7 @@ export default function LibrarianDeskPage() {
                       <button
                         disabled={renewalActionBusy === req.id}
                         onClick={() => handleRenewalDecision(req.id, false)}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-300/40 px-5 py-2.5 text-sm font-semibold text-rose-100 hover:bg-rose-500/15 disabled:opacity-60 transition-all active:scale-95 sm:flex-1"
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl border border-rose-300/40 px-5 py-3 text-sm font-semibold text-rose-100 hover:bg-rose-500/15 disabled:opacity-60 transition-all active:scale-95 sm:flex-1"
                       >
                         <XCircle className="h-4 w-4" />
                         Reject
@@ -4609,47 +4908,94 @@ export default function LibrarianDeskPage() {
               </div>
                 </>
               )}
+              </div>
             </div>
 
             {/* Return Requests – similar structure */}
             <div
               id="desk-returns"
-              className={`h-full scroll-mt-28 rounded-3xl border border-white/15 bg-white/5 backdrop-blur-xl shadow-2xl shadow-black/30 p-5 md:p-6 lg:p-8 transition-all duration-300 hover:bg-white/[0.08] ${
+              className={`relative overflow-hidden scroll-mt-28 rounded-[32px] border border-white/12 bg-[#091321]/95 shadow-2xl shadow-black/30 transition-all duration-300 hover:bg-[#0b1729] ${
                 resolvedActiveSectionId === 'desk-returns' ? '' : 'hidden'
               }`}
             >
-              <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="rounded-full bg-amber-500/20 p-3">
-                    <BookUp className="h-6 w-6 text-amber-200" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl md:text-2xl font-semibold text-white">Return Requests</h2>
-                    <p className="text-white/70">Pending book return processing</p>
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.18),transparent_62%)]" />
+              <div className="relative p-5 md:p-6 lg:p-8">
+              <div className="mb-8 grid gap-5 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] xl:items-start">
+                <div className="rounded-[28px] border border-amber-300/15 bg-white/[0.04] p-6 shadow-[0_24px_80px_-52px_rgba(245,158,11,0.8)] md:p-7">
+                  <div className="flex flex-wrap items-start gap-4">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-amber-500/18 text-amber-100 ring-1 ring-inset ring-amber-200/15">
+                      <BookUp className="h-7 w-7" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-100/70">
+                        <span>Return Desk</span>
+                        <span className="h-1 w-1 rounded-full bg-amber-300/70" />
+                        <span>{returnRequests.length} active</span>
+                      </div>
+                      <h2 className="mt-3 text-2xl font-semibold text-white md:text-3xl">Return Requests</h2>
+                      <p className="mt-3 max-w-3xl text-sm leading-7 text-white/68 md:text-base">
+                        Handle check-ins and keep recent circulation history close by, so the
+                        active queue and the last completed returns share one clean workspace.
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsReturnRequestsOpen((prev) => !prev)}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-white hover:bg-white/20 transition-all"
-                  >
-                    {isReturnRequestsOpen ? 'Hide Returns' : 'Show Returns'}
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform duration-200 ${
-                        isReturnRequestsOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  <button
-                    onClick={() => {
-                      void Promise.all([loadReturnRequests(), loadBorrowAnalytics()]);
-                    }}
-                    className="group flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white/80 hover:bg-white/10 transition-all"
-                  >
-                    <RefreshCw className="h-4 w-4 group-hover:animate-spin-slow" />
-                    Refresh
-                  </button>
+                <div className="rounded-[28px] border border-white/10 bg-[#0b1729]/88 p-5 shadow-[0_24px_80px_-60px_rgba(15,23,42,1)]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
+                    Queue Controls
+                  </p>
+                  <div className="mt-4 flex flex-col gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsReturnRequestsOpen((prev) => !prev)}
+                      className="inline-flex w-full items-center justify-between rounded-2xl border border-white/12 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-white/15"
+                    >
+                      <span>{isReturnRequestsOpen ? 'Collapse queue' : 'Expand queue'}</span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform duration-200 ${
+                          isReturnRequestsOpen ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    <button
+                      onClick={() => {
+                        void Promise.all([loadReturnRequests(), loadBorrowAnalytics()]);
+                      }}
+                      className="group inline-flex w-full items-center justify-between rounded-2xl border border-amber-300/20 bg-amber-500/10 px-4 py-3 text-sm font-semibold text-amber-50 transition-all hover:bg-amber-500/15"
+                    >
+                      <span>Refresh returns</span>
+                      <RefreshCw className="h-4 w-4 group-hover:animate-spin-slow" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="mb-6 grid gap-4 md:grid-cols-3">
+                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
+                    Pending Returns
+                  </p>
+                  <p className="mt-4 text-3xl font-semibold text-white">{returnRequests.length}</p>
+                  <p className="mt-2 text-sm text-white/58">
+                    Requests waiting to be checked in or confirmed.
+                  </p>
+                </div>
+                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
+                    Latest Intake
+                  </p>
+                  <p className="mt-4 text-3xl font-semibold text-white">
+                    {returnRequests.length === 0 ? 'Quiet' : 'Live'}
+                  </p>
+                  <p className="mt-2 text-sm text-white/58">{latestReturnRequestLabel}</p>
+                </div>
+                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
+                    This Month
+                  </p>
+                  <p className="mt-4 text-3xl font-semibold text-white">{currentMonthReturnCount}</p>
+                  <p className="mt-2 text-sm text-white/58">
+                    Completed returns for {currentMonthLabel}.
+                  </p>
                 </div>
               </div>
 
@@ -4657,40 +5003,71 @@ export default function LibrarianDeskPage() {
               {isReturnRequestsOpen && (
                 <>
               {returnsState === 'loading' && (
-                <div className="flex items-center justify-center gap-3 py-12 text-white/60">
+                <div className="flex items-center justify-center gap-3 rounded-[28px] border border-white/10 bg-white/[0.04] px-6 py-14 text-white/60">
                   <Loader2 className="h-6 w-6 animate-spin" />
                   Loading return requests...
                 </div>
               )}
 
               {returnsError && (
-                <div className="rounded-2xl bg-rose-500/15 border border-rose-300/30 p-5 text-rose-100 flex items-center gap-3">
+                <div className="flex items-center gap-3 rounded-[28px] border border-rose-300/30 bg-rose-500/15 p-5 text-rose-100">
                   <AlertCircle className="h-5 w-5 flex-shrink-0" />
                   {returnsError}
                 </div>
               )}
 
               {returnsState !== 'loading' && returnRequests.length === 0 && !returnsError && (
-                <div className="rounded-2xl border border-dashed border-white/25 bg-white/5 p-10 text-center text-white/60">
-                  No pending return requests at the moment.
+                <div className="grid gap-6 rounded-[28px] border border-dashed border-amber-200/20 bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(255,255,255,0.03))] p-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] lg:p-10">
+                  <div>
+                    <div className="inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-amber-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-amber-100/80">
+                      <Sparkles className="h-4 w-4" />
+                      Queue Clear
+                    </div>
+                    <h3 className="mt-6 text-2xl font-semibold text-white">
+                      No pending return requests at the moment.
+                    </h3>
+                    <p className="mt-3 max-w-2xl text-sm leading-7 text-white/64 md:text-base">
+                      Completed returns will keep filling the history panel below while new check-in
+                      requests appear here with borrower identity and receipt details ready to
+                      process.
+                    </p>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                    <div className="rounded-3xl border border-white/10 bg-[#0b1729]/82 p-5">
+                      <p className="text-xs uppercase tracking-[0.24em] text-white/40">
+                        Latest intake
+                      </p>
+                      <p className="mt-3 text-sm font-semibold text-white/80">
+                        {latestReturnRequestLabel}
+                      </p>
+                    </div>
+                    <div className="rounded-3xl border border-white/10 bg-[#0b1729]/82 p-5">
+                      <p className="text-xs uppercase tracking-[0.24em] text-white/40">
+                        This month
+                      </p>
+                      <p className="mt-3 text-sm font-semibold text-white/80">
+                        {currentMonthReturnCount} completed returns
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
 
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid gap-5 xl:grid-cols-2 2xl:grid-cols-3">
                 {returnRequests.map((req) => (
                   <div
                     key={req.id}
-                    className="group rounded-2xl border border-white/15 bg-[#0f1b2f]/80 p-6 shadow-lg shadow-black/20 hover:shadow-xl hover:border-amber-300/40 transition-all duration-200"
+                    className="group rounded-[28px] border border-white/12 bg-[#0f1b2f]/88 p-6 shadow-lg shadow-black/20 transition-all duration-200 hover:border-amber-300/40 hover:shadow-[0_24px_70px_-42px_rgba(245,158,11,0.5)]"
                   >
                     <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-start gap-3">
-                        <div className="relative h-16 w-12 flex-shrink-0 overflow-hidden rounded-lg border border-white/10 bg-amber-500/10 shadow-sm">
+                      <div className="flex items-start gap-4">
+                        <div className="relative h-20 w-14 flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-amber-500/10 shadow-sm">
                           {getBookCoverUrl(req.book) ? (
                             <Image
                               src={getBookCoverUrl(req.book) as string}
                               alt={req.book.title}
                               fill
-                              sizes="48px"
+                              sizes="56px"
                               className="object-cover"
                               unoptimized
                             />
@@ -4700,18 +5077,22 @@ export default function LibrarianDeskPage() {
                             </div>
                           )}
                         </div>
-                        <div>
-                          <p className="font-semibold text-white line-clamp-2">{req.book.title}</p>
-                          <p className="text-sm text-white/70 mt-0.5">{req.book.author}</p>
+                        <div className="min-w-0">
+                          <p className="line-clamp-2 text-base font-semibold text-white">{req.book.title}</p>
+                          <p className="mt-1 text-sm text-white/66">{req.book.author}</p>
+                          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/55">
+                            <Clock3 className="h-3.5 w-3.5" />
+                            Requested {formatDate(req.requested_at)}
+                          </div>
                         </div>
                       </div>
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold ${returnStatusPill[req.status]}`}>
                         {req.status}
                       </span>
                     </div>
-                    <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3">
+                    <div className="mt-5 rounded-[24px] border border-white/10 bg-white/[0.04] p-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-12 w-12 overflow-hidden rounded-2xl border border-white/10 bg-amber-500/10">
+                        <div className="h-14 w-14 overflow-hidden rounded-2xl border border-white/10 bg-amber-500/10">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={getRequestUserAvatarUrl(req.user)}
@@ -4730,7 +5111,7 @@ export default function LibrarianDeskPage() {
                       </div>
                     </div>
 
-                    <div className="mt-4 text-sm text-white/70 space-y-1.5">
+                    <div className="hidden mt-4 text-sm text-white/70 space-y-1.5">
                       <div className="flex justify-between">
                         <span className="font-medium">Student:</span>
                         <span>{req.user?.full_name ?? '—'}</span>
@@ -4751,11 +5132,30 @@ export default function LibrarianDeskPage() {
                       )}
                     </div>
 
+                    <div className="mt-5 grid gap-3 text-sm text-white/68 sm:grid-cols-2">
+                      <div className="rounded-2xl border border-white/8 bg-[#08121f]/78 px-4 py-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                          Student
+                        </p>
+                        <p className="mt-2 font-medium text-white">
+                          {req.user?.full_name ?? 'Unknown student'}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-white/8 bg-[#08121f]/78 px-4 py-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                          Receipt
+                        </p>
+                        <p className="mt-2 font-medium text-white">
+                          {req.receipt_number ?? 'Pending'}
+                        </p>
+                      </div>
+                    </div>
+
                     <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                       <button
                         disabled={returnActionBusy === req.id}
                         onClick={() => handleReturnDecision(req.id, true)}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60 transition-all active:scale-95 shadow-sm sm:flex-1"
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60 transition-all active:scale-95 shadow-sm sm:flex-1"
                       >
                         {returnActionBusy === req.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -4767,7 +5167,7 @@ export default function LibrarianDeskPage() {
                       <button
                         disabled={returnActionBusy === req.id}
                         onClick={() => handleReturnDecision(req.id, false)}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-300/40 px-5 py-2.5 text-sm font-semibold text-rose-100 hover:bg-rose-500/15 disabled:opacity-60 transition-all active:scale-95 sm:flex-1"
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl border border-rose-300/40 px-5 py-3 text-sm font-semibold text-rose-100 hover:bg-rose-500/15 disabled:opacity-60 transition-all active:scale-95 sm:flex-1"
                       >
                         <XCircle className="h-4 w-4" />
                         Reject
@@ -4777,17 +5177,18 @@ export default function LibrarianDeskPage() {
                 ))}
               </div>
 
-              <div className="mt-8 rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5">
+              <div className="mt-8 rounded-[28px] border border-white/10 bg-[#08121f]/92 p-6 md:p-7">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/45">
                       History
                     </p>
-                    <h3 className="mt-2 text-lg font-semibold text-white">
+                    <h3 className="mt-2 text-xl font-semibold text-white">
                       Return History
                     </h3>
-                    <p className="mt-1 text-sm text-white/60">
-                      Recently completed return transactions.
+                    <p className="mt-2 max-w-2xl text-sm text-white/60">
+                      Recently completed return transactions stay docked below the live queue so
+                      the desk can process current handoffs without losing recent context.
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
@@ -4805,14 +5206,14 @@ export default function LibrarianDeskPage() {
                     </button>
                   </div>
                 </div>
-                <div className="mt-4 space-y-3">
+                <div className="mt-5 space-y-3">
                   {analyticsState === 'loading' && (
-                    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-6 text-center text-sm text-white/55">
+                    <div className="rounded-[24px] border border-white/10 bg-white/5 px-4 py-7 text-center text-sm text-white/55">
                       Loading return history...
                     </div>
                   )}
                   {analyticsState !== 'loading' && returnHistory.length === 0 && (
-                    <div className="rounded-2xl border border-dashed border-white/10 bg-white/5 px-4 py-6 text-center text-sm text-white/55">
+                    <div className="rounded-[24px] border border-dashed border-white/10 bg-white/5 px-4 py-7 text-center text-sm text-white/55">
                       No return history available yet.
                     </div>
                   )}
@@ -4820,7 +5221,7 @@ export default function LibrarianDeskPage() {
                     returnHistory.map((request) => (
                       <div
                         key={request.id}
-                        className="rounded-2xl border border-white/10 bg-[#0f1b2f]/70 p-4"
+                        className="rounded-[24px] border border-white/10 bg-[#0f1b2f]/70 p-5"
                       >
                         <div className="flex flex-wrap items-center justify-between gap-3">
                           <div>
@@ -4840,7 +5241,7 @@ export default function LibrarianDeskPage() {
                             Returned
                           </span>
                         </div>
-                        <div className="mt-3 grid gap-3 text-xs text-white/60 sm:grid-cols-4">
+                        <div className="mt-4 grid gap-3 text-xs text-white/60 sm:grid-cols-2 xl:grid-cols-4">
                           <div>
                             <p className="uppercase tracking-[0.2em] text-white/40">
                               Returned
@@ -4879,7 +5280,7 @@ export default function LibrarianDeskPage() {
                       </div>
                     ))}
                 </div>
-                <p className="mt-3 text-xs text-white/45">
+                <p className="mt-4 text-xs text-white/45">
                   {hideCurrentMonthHistory
                     ? `Current month hidden (${currentMonthLabel}). Showing the 10 most recent older records.`
                     : 'Showing the 10 most recent return records.'}
@@ -4887,6 +5288,7 @@ export default function LibrarianDeskPage() {
               </div>
                 </>
               )}
+              </div>
             </div>
             </div>
             )}

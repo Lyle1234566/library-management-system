@@ -474,6 +474,15 @@ STATIC_ROOT = Path(get_env_str('STATIC_ROOT', str(BASE_DIR / 'staticfiles')))
 MEDIA_URL = get_env_str('MEDIA_URL', '/media/')
 MEDIA_ROOT = Path(get_env_str('MEDIA_ROOT', str(BASE_DIR / 'media')))
 SERVE_MEDIA_FILES = get_env_bool('SERVE_MEDIA_FILES', DEBUG)
+PROFILE_AVATAR_MAX_BYTES = get_env_int('PROFILE_AVATAR_MAX_BYTES', 5 * 1024 * 1024)
+DATA_UPLOAD_MAX_MEMORY_SIZE = get_env_int(
+    'DATA_UPLOAD_MAX_MEMORY_SIZE',
+    PROFILE_AVATAR_MAX_BYTES + (1024 * 1024),
+)
+FILE_UPLOAD_MAX_MEMORY_SIZE = get_env_int(
+    'FILE_UPLOAD_MAX_MEMORY_SIZE',
+    PROFILE_AVATAR_MAX_BYTES,
+)
 if ENABLE_PRODUCTION_SECURITY and not get_env_str('MEDIA_ROOT'):
     raise ImproperlyConfigured(
         'MEDIA_ROOT must be set when DEBUG is False. Use a persistent path such as a mounted volume.'

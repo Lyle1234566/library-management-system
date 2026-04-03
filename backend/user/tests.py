@@ -1143,6 +1143,38 @@ class ProfileUpdateSecurityTests(TestCase):
         self.student.refresh_from_db()
         self.assertTrue(bool(self.student.avatar))
 
+    def test_student_avatar_upload_rejects_files_over_limit(self):
+        media_root = Path(__file__).resolve().parents[1] / 'test_media_profile_avatar_too_large'
+        shutil.rmtree(media_root, ignore_errors=True)
+        media_root.mkdir(parents=True, exist_ok=True)
+        self.addCleanup(lambda: shutil.rmtree(media_root, ignore_errors=True))
+        self.client.force_authenticate(user=self.student)
+
+        oversized_avatar = SimpleUploadedFile(
+            'profile-too-large.gif',
+            base64.b64decode('R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=')
+            + (b'0' * (5 * 1024 * 1024 + 1)),
+            content_type='image/gif',
+        )
+
+        with override_settings(
+            MEDIA_ROOT=media_root,
+            PROFILE_AVATAR_MAX_BYTES=5 * 1024 * 1024,
+            DATA_UPLOAD_MAX_MEMORY_SIZE=7 * 1024 * 1024,
+        ):
+            response = self.client.patch(
+                '/api/auth/profile/',
+                {
+                    'full_name': self.student.full_name,
+                    'avatar': oversized_avatar,
+                },
+                format='multipart',
+            )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('avatar', response.data)
+        self.assertIn('5 MB or smaller', response.data['avatar'][0])
+
 
 @override_settings(
     EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',

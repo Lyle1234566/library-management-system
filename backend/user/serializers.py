@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
@@ -11,6 +12,8 @@ from .registration_rules import get_student_identifier_status, get_teacher_ident
 User = get_user_model()
 REMINDER_EMAIL_REQUIRED_MESSAGE = "Email is required so due-date reminders can be sent."
 logger = logging.getLogger(__name__)
+PROFILE_AVATAR_MAX_BYTES = getattr(settings, 'PROFILE_AVATAR_MAX_BYTES', 5 * 1024 * 1024)
+PROFILE_AVATAR_MAX_MB = max(1, PROFILE_AVATAR_MAX_BYTES // (1024 * 1024))
 
 
 class RelativeMediaField(serializers.ImageField):
@@ -73,6 +76,17 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate_email(self, value):
         return normalize_unique_email(value, instance=self.instance)
+
+    def validate_avatar(self, value):
+        if value is None:
+            return value
+
+        if getattr(value, 'size', 0) > PROFILE_AVATAR_MAX_BYTES:
+            raise serializers.ValidationError(
+                f"Profile picture must be {PROFILE_AVATAR_MAX_MB} MB or smaller."
+            )
+
+        return value
 
     def validate(self, attrs):
         role = attrs.get('role', getattr(self.instance, 'role', None))
