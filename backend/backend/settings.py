@@ -184,6 +184,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
     'cloudinary',
 ]
 
@@ -485,6 +486,8 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = get_env_int(
     PROFILE_AVATAR_MAX_BYTES,
 )
 
+
+
 # Cloudinary Configuration
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': get_env_str('CLOUDINARY_CLOUD_NAME'),
@@ -500,21 +503,11 @@ if ENABLE_PRODUCTION_SECURITY and not USE_CLOUDINARY and not get_env_str('MEDIA_
     )
 if not USE_CLOUDINARY:
     MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
-}
-
-# Update STORAGES to use Cloudinary
-
-}
-
-
-    raise ImproperlyConfigured(
-        'MEDIA_ROOT must be set when DEBUG is False. Use a persistent path such as a mounted volume.'
-    )
-    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
-
 STORAGES = {
     'default': {
         'BACKEND': (
+            'cloudinary_storage.storage.MediaCloudinaryStorage'
+            if USE_CLOUDINARY
             else 'django.core.files.storage.FileSystemStorage'
         ),
     },
