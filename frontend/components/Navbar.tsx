@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState, useRef, useEffect, type MouseEvent } from 'react';
+import { useState, useRef, useEffect, type MouseEvent as ReactMouseEvent } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { notificationsApi, resolveMediaUrl } from '@/lib/api';
 import { subscribeToUnreadCountUpdated } from '@/lib/notificationEvents';
@@ -81,7 +81,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
 
   // Close profile dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: globalThis.MouseEvent) => {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setIsProfileOpen(false);
       }
@@ -144,7 +144,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
     });
   };
 
-  const handleNavLinkClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavLinkClick = (event: ReactMouseEvent<HTMLAnchorElement>, href: string) => {
     setIsMenuOpen(false);
     setIsProfileOpen(false);
 
