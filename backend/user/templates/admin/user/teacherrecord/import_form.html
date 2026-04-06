@@ -1,0 +1,45 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a>
+  &rsaquo; <a href="{{ changelist_url }}">{{ opts.verbose_name_plural|capfirst }}</a>
+  &rsaquo; Import
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <fieldset class="module aligned">
+      <h2>Upload teacher records file</h2>
+      <div class="form-row">
+        {{ form.file.errors }}
+        <div>{{ form.file.label_tag }} {{ form.file }}</div>
+        {% if form.file.help_text %}<div class="help">{{ form.file.help_text }}</div>{% endif %}
+      </div>
+    </fieldset>
+    <div class="submit-row">
+      <input type="submit" value="Import records" class="default">
+      <a href="{{ changelist_url }}" class="button">Back to records</a>
+    </div>
+  </form>
+
+  <div class="module">
+    <h2>Accepted files</h2>
+    <p>Upload a CSV or Excel (.xlsx) file. Recommended headers include Faculty ID, Full Name, School Email, Department, Active For Registration, and Notes. PDF is not supported for bulk import.</p>
+    <p><strong>Recommended columns:</strong> {{ template_columns|join:", " }}</p>
+  </div>
+
+  <div class="module">
+    <h2>Current summary</h2>
+    <ul>
+      <li>Total records: {{ summary.total_records }}</li>
+      <li>Active for registration: {{ summary.active_records }}</li>
+      <li>Inactive records: {{ summary.inactive_records }}</li>
+      <li>Last updated: {{ summary.last_updated_at|default:"-" }}</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

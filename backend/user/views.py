@@ -35,6 +35,7 @@ from .models import (
     LoginOTPCode,
 )
 from .registration_rules import get_identifier_status
+from .teacher_import import TeacherImportError, get_teacher_summary, import_teacher_file
 
 from .serializers import (
     UserSerializer,
@@ -923,6 +924,40 @@ class EnrollmentImportView(APIView):
         return Response(
             {
                 'message': 'Enrollment records uploaded successfully.',
+                'created_count': result.created_count,
+                'updated_count': result.updated_count,
+                'skipped_count': result.skipped_count,
+                'skipped_rows': result.skipped_rows,
+                **summary,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class TeacherRecordImportView(APIView):
+    permission_classes = [IsAuthenticated, CanManageEnrollmentRecords]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request):
+        return Response(get_teacher_summary(), status=status.HTTP_200_OK)
+
+    def post(self, request):
+        upload = request.FILES.get('file') or request.FILES.get('csv')
+        if upload is None:
+            return Response(
+                {'detail': 'CSV or Excel file is required.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            result = import_teacher_file(upload)
+        except TeacherImportError as exc:
+            return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        summary = get_teacher_summary()
+        return Response(
+            {
+                'message': 'Teacher records uploaded successfully.',
                 'created_count': result.created_count,
                 'updated_count': result.updated_count,
                 'skipped_count': result.skipped_count,

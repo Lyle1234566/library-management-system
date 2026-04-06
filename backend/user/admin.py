@@ -14,8 +14,19 @@ from .enrollment_import import (
     get_enrollment_summary,
     import_enrollment_file,
 )
-from .forms import CustomUserChangeForm, CustomUserCreationForm, EnrollmentImportAdminForm
+from .forms import (
+    CustomUserChangeForm,
+    CustomUserCreationForm,
+    EnrollmentImportAdminForm,
+    TeacherImportAdminForm,
+)
 from .models import ContactMessage, EnrollmentRecord, Notification, TeacherRecord, User
+from .teacher_import import (
+    TEACHER_TEMPLATE_COLUMNS,
+    TeacherImportError,
+    get_teacher_summary,
+    import_teacher_file,
+)
 
 
 class UserAdmin(BaseUserAdmin):
@@ -201,6 +212,7 @@ class EnrollmentRecordAdmin(admin.ModelAdmin):
 
 @admin.register(TeacherRecord)
 class TeacherRecordAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/user/teacherrecord/change_list.html'
     list_display = (
         'staff_id',
         'full_name',
@@ -213,6 +225,59 @@ class TeacherRecordAdmin(admin.ModelAdmin):
     search_fields = ('staff_id', 'full_name', 'school_email', 'department')
     ordering = ('staff_id',)
     readonly_fields = ('created_at', 'updated_at')
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                'import/',
+                self.admin_site.admin_view(self.import_view),
+                name='user_teacherrecord_import',
+            )
+        ]
+        return custom_urls + urls
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        if self.has_add_permission(request):
+            extra_context['teacher_import_url'] = reverse('admin:user_teacherrecord_import')
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def import_view(self, request):
+        if not self.has_add_permission(request):
+            raise PermissionDenied
+
+        form = TeacherImportAdminForm(request.POST or None, request.FILES or None)
+        changelist_url = reverse('admin:user_teacherrecord_changelist')
+
+        if request.method == 'POST' and form.is_valid():
+            try:
+                result = import_teacher_file(form.cleaned_data['file'])
+            except TeacherImportError as exc:
+                form.add_error('file', str(exc))
+            else:
+                messages.success(
+                    request,
+                    (
+                        'Teacher records imported successfully. '
+                        f'Created: {result.created_count}, updated: {result.updated_count}, '
+                        f'skipped: {result.skipped_count}.'
+                    ),
+                )
+                for skipped_row in result.skipped_rows:
+                    messages.warning(request, skipped_row)
+                return redirect(changelist_url)
+
+        context = {
+            **self.admin_site.each_context(request),
+            'opts': self.model._meta,
+            'title': 'Import teacher records',
+            'form': form,
+            'summary': get_teacher_summary(),
+            'template_columns': TEACHER_TEMPLATE_COLUMNS,
+            'changelist_url': changelist_url,
+        }
+        return TemplateResponse(request, 'admin/user/teacherrecord/import_form.html', context)
 
 
 @admin.register(Notification)

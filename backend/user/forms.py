@@ -35,3 +35,17 @@ class EnrollmentImportAdminForm(forms.Form):
         if suffix not in {'.csv', '.xlsx'}:
             raise forms.ValidationError('Upload a CSV or Excel (.xlsx) file.')
         return uploaded_file
+
+
+class TeacherImportAdminForm(forms.Form):
+    file = forms.FileField(
+        label='Teacher records file',
+        help_text='Upload a CSV or Excel (.xlsx) file with teacher records. PDF is not supported for bulk import.',
+    )
+
+    def clean_file(self):
+        uploaded_file = self.cleaned_data['file']
+        suffix = Path(uploaded_file.name or '').suffix.lower()
+        if suffix not in {'.csv', '.xlsx'}:
+            raise forms.ValidationError('Upload a CSV or Excel (.xlsx) file.')
+        return uploaded_file
