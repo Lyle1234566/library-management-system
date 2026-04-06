@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type MouseEvent } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { notificationsApi, resolveMediaUrl } from '@/lib/api';
 import { subscribeToUnreadCountUpdated } from '@/lib/notificationEvents';
@@ -137,6 +137,25 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
     setIsMenuOpen(false);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleNavLinkClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    setIsMenuOpen(false);
+    setIsProfileOpen(false);
+
+    if (pathname !== href) {
+      return;
+    }
+
+    event.preventDefault();
+    scrollToTop();
+  };
+
   const avatarUrl = user?.avatar ? resolveMediaUrl(user.avatar) : null;
   const defaultAvatarUrl = '/student-avatar.svg';
   const dropdownPanelClasses = isDark
@@ -223,6 +242,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                 href={item.href}
                 className={getNavLinkClasses(item.href)}
                 aria-current={isNavItemActive(item.href) ? 'page' : undefined}
+                onClick={(event) => handleNavLinkClick(event, item.href)}
               >
                 <span>{item.label}</span>
                 <span className={`pointer-events-none absolute inset-x-4 -bottom-px h-px rounded-full transition-all duration-300 ${getNavIndicatorClasses(item.href)}`} />
@@ -431,7 +451,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                     href={item.href}
                     className={getNavLinkClasses(item.href, true)}
                     aria-current={isNavItemActive(item.href) ? 'page' : undefined}
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={(event) => handleNavLinkClick(event, item.href)}
                   >
                     <span>{item.label}</span>
                     <span className={`text-xs font-semibold uppercase tracking-[0.24em] ${isNavItemActive(item.href) ? (isDark ? 'text-sky-200/80' : 'text-sky-600/80') : (isDark ? 'text-white/30' : 'text-ink-muted/50')}`}>

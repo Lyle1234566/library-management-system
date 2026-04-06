@@ -2,13 +2,26 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import type { MouseEvent } from 'react';
 
 export default function Footer() {
+  const pathname = usePathname();
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
+  };
+
+  const handleQuickLinkClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname !== href) {
+      return;
+    }
+
+    event.preventDefault();
+    scrollToTop();
   };
 
   return (
@@ -42,6 +55,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/books"
+                  onClick={(event) => handleQuickLinkClick(event, '/books')}
                   className="text-white/70 hover:text-[color:var(--accent)] transition-colors"
                 >
                   Browse Books
@@ -50,6 +64,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/about"
+                  onClick={(event) => handleQuickLinkClick(event, '/about')}
                   className="text-white/70 hover:text-[color:var(--accent)] transition-colors"
                 >
                   About Us
@@ -58,6 +73,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/features"
+                  onClick={(event) => handleQuickLinkClick(event, '/features')}
                   className="text-white/70 hover:text-[color:var(--accent)] transition-colors"
                 >
                   Features
@@ -66,6 +82,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/contact"
+                  onClick={(event) => handleQuickLinkClick(event, '/contact')}
                   className="text-white/70 hover:text-[color:var(--accent)] transition-colors"
                 >
                   Contact
@@ -74,6 +91,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/faq"
+                  onClick={(event) => handleQuickLinkClick(event, '/faq')}
                   className="text-white/70 hover:text-[color:var(--accent)] transition-colors"
                 >
                   FAQ
