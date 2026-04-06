@@ -173,15 +173,18 @@ function MetricCard({ icon: Icon, label, value, caption, tone }: MetricCardProps
   const compactValue = typeof value === 'string' && value.length > 12;
 
   return (
-    <div className="group rounded-[1.7rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.045)_0%,rgba(255,255,255,0.025)_100%)] p-5 transition duration-300 hover:-translate-y-1 hover:border-white/16 hover:bg-white/[0.07]">
-      <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${toneStyle.icon}`}>
-        <Icon className="h-5 w-5" />
+    <div className="group relative overflow-hidden rounded-[1.8rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-6 transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="relative">
+        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 ${toneStyle.icon}`}>
+          <Icon className="h-5.5 w-5.5" />
+        </div>
+        <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.28em] text-white/50 transition-colors group-hover:text-white/70">{label}</p>
+        <p className={`mt-3.5 font-bold transition-all duration-300 ${compactValue ? 'text-2xl' : 'text-4xl'} ${toneStyle.value} group-hover:scale-105`}>
+          {value}
+        </p>
+        <p className="mt-3 text-sm leading-6 text-white/60 transition-colors group-hover:text-white/75">{caption}</p>
       </div>
-      <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.26em] text-white/44">{label}</p>
-      <p className={`mt-3 font-semibold ${compactValue ? 'text-xl' : 'text-3xl'} ${toneStyle.value}`}>
-        {value}
-      </p>
-      <p className="mt-2 text-sm leading-6 text-white/58">{caption}</p>
     </div>
   );
 }
@@ -574,59 +577,70 @@ export default function StaffDeskPage() {
             <div className="absolute left-1/2 top-[42rem] h-[22rem] w-[22rem] -translate-x-1/2 rounded-full bg-violet-500/8 blur-3xl" />
           </div>
 
-          <section className="relative overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_34%),radial-gradient(circle_at_82%_18%,rgba(251,191,36,0.16),transparent_24%),linear-gradient(180deg,#07101d_0%,#0a1730_100%)]">
+          <section className="relative overflow-hidden border-b border-white/10 bg-[radial-gradient(ellipse_at_top_left,rgba(56,189,248,0.22),transparent_42%),radial-gradient(ellipse_at_85%_15%,rgba(251,191,36,0.20),transparent_32%),radial-gradient(circle_at_50%_100%,rgba(139,92,246,0.12),transparent_50%),linear-gradient(180deg,#07101d_0%,#0a1730_100%)]">
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-40" />
             <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
               <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
                 <div className="animate-fade-up">
-                  <p className="text-xs uppercase tracking-[0.38em] text-sky-200/72">Front Desk Operations</p>
-                  <h1 className="mt-5 text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-[3.35rem]">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-gradient-to-r from-sky-500/10 to-violet-500/10 px-4 py-1.5 backdrop-blur-sm">
+                    <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-sky-400" />
+                    <p className="text-xs font-semibold uppercase tracking-[0.32em] text-sky-200/90">Daily Operations</p>
+                  </div>
+                  <h1 className="mt-6 bg-gradient-to-br from-white via-white to-white/70 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl lg:text-[3.5rem] lg:leading-[1.1]">
                     {staffLabel}
                   </h1>
-                  <p className="mt-4 max-w-3xl text-sm leading-7 text-white/70 sm:text-base">
+                  <p className="mt-5 max-w-3xl text-base leading-7 text-white/75 sm:text-lg">
                     {staffSubtitle}
                   </p>
 
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 text-sm font-semibold text-white/82">
-                      <BadgeCheck className="h-4 w-4 text-sky-200" />
-                      {roleLabel}
+                  <div className="mt-7 flex flex-wrap gap-3">
+                    <span className="group inline-flex items-center gap-2.5 rounded-full border border-emerald-400/20 bg-gradient-to-r from-emerald-500/10 to-sky-500/10 px-5 py-2.5 backdrop-blur-sm transition-all hover:border-emerald-400/30 hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]">
+                      <BadgeCheck className="h-4.5 w-4.5 text-emerald-300 transition-transform group-hover:scale-110" />
+                      <span className="text-sm font-semibold text-white">{roleLabel}</span>
                     </span>
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 text-sm text-white/68">
-                      <Sparkles className="h-4 w-4 text-amber-200" />
-                      {deskPulseLabel}
+                    <span className="group inline-flex items-center gap-2.5 rounded-full border border-amber-400/20 bg-gradient-to-r from-amber-500/10 to-orange-500/10 px-5 py-2.5 backdrop-blur-sm transition-all hover:border-amber-400/30 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)]">
+                      <Sparkles className="h-4.5 w-4.5 text-amber-300 transition-transform group-hover:rotate-12" />
+                      <span className="text-sm font-medium text-white/90">{deskPulseLabel}</span>
                     </span>
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 text-sm text-white/68">
-                      <Clock3 className="h-4 w-4 text-sky-200" />
-                      {totalQueue} item{totalQueue === 1 ? '' : 's'} in live queue
+                    <span className="group inline-flex items-center gap-2.5 rounded-full border border-sky-400/20 bg-gradient-to-r from-sky-500/10 to-violet-500/10 px-5 py-2.5 backdrop-blur-sm transition-all hover:border-sky-400/30 hover:shadow-[0_0_20px_rgba(56,189,248,0.15)]">
+                      <Clock3 className="h-4.5 w-4.5 text-sky-300 transition-transform group-hover:scale-110" />
+                      <span className="text-sm font-medium text-white/90">
+                        {totalQueue} item{totalQueue === 1 ? '' : 's'} in queue
+                      </span>
                     </span>
                   </div>
                 </div>
 
-                <div className={`${panelClassName} animate-fade-up p-6 sm:p-7`}>
-                  <p className="text-xs uppercase tracking-[0.3em] text-white/42">Live shift pulse</p>
-                  <div className="mt-5 flex items-end justify-between gap-4">
-                    <div>
-                      <p className="text-5xl font-semibold tracking-tight text-white sm:text-6xl">{totalQueue}</p>
-                      <p className="mt-3 max-w-xs text-sm leading-6 text-white/60">
-                        Open requests waiting across borrow, return, and renewal lanes.
-                      </p>
+                <div className={`${panelClassName} animate-fade-up p-6 sm:p-8 relative overflow-hidden`}>
+                  <div className="absolute top-0 right-0 h-32 w-32 bg-gradient-to-br from-sky-500/20 to-transparent blur-3xl" />
+                  <div className="absolute bottom-0 left-0 h-32 w-32 bg-gradient-to-tr from-violet-500/20 to-transparent blur-3xl" />
+                  <div className="relative">
+                    <p className="text-xs font-bold uppercase tracking-[0.32em] text-white/50">Live Shift Pulse</p>
+                    <div className="mt-6 flex items-end justify-between gap-6">
+                      <div>
+                        <p className="bg-gradient-to-br from-white via-white to-white/80 bg-clip-text text-6xl font-bold tracking-tight text-transparent sm:text-7xl">{totalQueue}</p>
+                        <p className="mt-4 max-w-xs text-sm leading-6 text-white/70">
+                          Open requests across borrow, return, and renewal lanes.
+                        </p>
+                      </div>
+                      <div className="group rounded-[1.5rem] border border-white/12 bg-gradient-to-br from-rose-500/10 to-orange-500/10 px-5 py-4 text-right backdrop-blur-sm transition-all hover:border-rose-400/30 hover:shadow-[0_0_25px_rgba(251,113,133,0.2)]">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.26em] text-rose-200/70">On Watch</p>
+                        <p className="mt-2.5 text-xl font-bold text-white transition-transform group-hover:scale-110">{overdueRequests.length} overdue</p>
+                      </div>
                     </div>
-                    <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.05] px-4 py-3 text-right">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/42">On watch</p>
-                      <p className="mt-2 text-base font-semibold text-white">{overdueRequests.length} overdue</p>
-                    </div>
-                  </div>
 
-                  <div className="mt-6 rounded-[1.6rem] border border-sky-300/16 bg-[linear-gradient(135deg,rgba(56,189,248,0.12),rgba(255,255,255,0.04))] px-5 py-4">
-                    <div className="flex items-start gap-3">
-                      <div className="mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-400/14 text-sky-100">
-                        <CircleAlert className="h-4.5 w-4.5" />
+                  <div className="relative mt-7 overflow-hidden rounded-[1.7rem] border border-sky-300/20 bg-gradient-to-br from-sky-500/15 via-sky-500/10 to-violet-500/10 px-6 py-5 backdrop-blur-sm">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.15),transparent_60%)]" />
+                    <div className="relative flex items-start gap-4">
+                      <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sky-400/20 text-sky-100 shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-transform hover:scale-110">
+                        <CircleAlert className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-100/70">Next best move</p>
-                        <p className="mt-2 text-sm leading-6 text-white/82">{nextBestMove}</p>
+                        <p className="text-xs font-bold uppercase tracking-[0.26em] text-sky-100/80">Next Best Move</p>
+                        <p className="mt-3 text-sm leading-7 text-white/90">{nextBestMove}</p>
                       </div>
                     </div>
+                  </div>
                   </div>
                 </div>
               </div>
