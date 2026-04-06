@@ -36,6 +36,14 @@ from .serializers import (
     ReturnRequestSerializer,
     BookReviewSerializer,
 )
+from .email_notifications import (
+    send_borrow_approved_email,
+    send_borrow_rejected_email,
+    send_due_date_reminder_email,
+    send_renewal_approved_email,
+    send_renewal_rejected_email,
+    send_return_approved_email,
+)
 
 
 User = get_user_model()
@@ -1142,6 +1150,13 @@ class BorrowRequestViewSet(viewsets.ReadOnlyModelViewSet):
         borrow_request = self.get_object()
         try:
             borrow_request.approve(processed_by=request.user)
+            # Send email notification
+            try:
+                send_borrow_approved_email(borrow_request.user, borrow_request.book, borrow_request)
+            except Exception as e:
+                # Log error but don't fail the request
+                import logging
+                logging.getLogger(__name__).error(f"Failed to send borrow approved email: {e}")
         except ValueError as exc:
             return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1167,6 +1182,13 @@ class BorrowRequestViewSet(viewsets.ReadOnlyModelViewSet):
         borrow_request = self.get_object()
         try:
             borrow_request.reject(processed_by=request.user)
+            # Send email notification
+            try:
+                send_borrow_rejected_email(borrow_request.user, borrow_request.book, borrow_request)
+            except Exception as e:
+                # Log error but don't fail the request
+                import logging
+                logging.getLogger(__name__).error(f"Failed to send borrow rejected email: {e}")
         except ValueError as exc:
             return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1304,6 +1326,17 @@ class ReturnRequestViewSet(viewsets.ReadOnlyModelViewSet):
         return_request = self.get_object()
         try:
             return_request.approve(processed_by=request.user)
+            # Send email notification
+            try:
+                send_return_approved_email(
+                    return_request.borrow_request.user,
+                    return_request.borrow_request.book,
+                    return_request
+                )
+            except Exception as e:
+                # Log error but don't fail the request
+                import logging
+                logging.getLogger(__name__).error(f"Failed to send return approved email: {e}")
         except ValueError as exc:
             return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1369,6 +1402,18 @@ class RenewalRequestViewSet(viewsets.ReadOnlyModelViewSet):
         renewal_request = self.get_object()
         try:
             renewal_request.approve(processed_by=request.user)
+            # Send email notification
+            try:
+                send_renewal_approved_email(
+                    renewal_request.borrow_request.user,
+                    renewal_request.borrow_request.book,
+                    renewal_request.borrow_request,
+                    renewal_request
+                )
+            except Exception as e:
+                # Log error but don't fail the request
+                import logging
+                logging.getLogger(__name__).error(f"Failed to send renewal approved email: {e}")
         except ValueError as exc:
             return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1394,6 +1439,17 @@ class RenewalRequestViewSet(viewsets.ReadOnlyModelViewSet):
         renewal_request = self.get_object()
         try:
             renewal_request.reject(processed_by=request.user)
+            # Send email notification
+            try:
+                send_renewal_rejected_email(
+                    renewal_request.borrow_request.user,
+                    renewal_request.borrow_request.book,
+                    renewal_request
+                )
+            except Exception as e:
+                # Log error but don't fail the request
+                import logging
+                logging.getLogger(__name__).error(f"Failed to send renewal rejected email: {e}")
         except ValueError as exc:
             return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
