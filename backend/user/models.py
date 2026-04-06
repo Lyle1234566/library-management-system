@@ -213,6 +213,37 @@ class EnrollmentRecord(models.Model):
         super().save(*args, **kwargs)
 
 
+class TeacherRecord(models.Model):
+    staff_id = models.CharField(
+        "Faculty ID",
+        max_length=20,
+        unique=True,
+        help_text='Official faculty ID from the teacher records list.',
+    )
+    full_name = models.CharField(max_length=100, blank=True)
+    school_email = models.EmailField(blank=True)
+    department = models.CharField(max_length=120, blank=True)
+    is_active_for_registration = models.BooleanField(default=True)
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['staff_id']
+        verbose_name = 'Teacher record'
+        verbose_name_plural = 'Teacher records'
+
+    def __str__(self) -> str:
+        return f"{self.staff_id} - {self.full_name or 'Teacher record'}"
+
+    def save(self, *args, **kwargs):
+        self.staff_id = (self.staff_id or '').strip().upper()
+        self.full_name = (self.full_name or '').strip()
+        self.school_email = (self.school_email or '').strip().lower()
+        self.department = (self.department or '').strip()
+        super().save(*args, **kwargs)
+
+
 class PasswordResetCode(models.Model):
     """
     Short-lived reset code sent to a user's email address.

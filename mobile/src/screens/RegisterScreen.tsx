@@ -104,7 +104,7 @@ export const RegisterScreen = ({ navigation, route }: Props) => {
   const screenSubtitle = recoveryMode
     ? "Correct the saved email address before we resend the verification code."
     : registerRole === "TEACHER"
-      ? "Create your faculty library account."
+      ? "Create your faculty library account using a Faculty ID from the teacher records."
       : "Create your student library account.";
   const passwordRequirements = getPasswordRequirements(form.password);
   const passwordsMatch = Boolean(form.passwordConfirm && form.password === form.passwordConfirm);
@@ -324,7 +324,9 @@ export const RegisterScreen = ({ navigation, route }: Props) => {
     if (studentIdAvailable === false) {
       return studentIdStatusMessage || `${idLabel} is unavailable.`;
     }
-    return " ";
+    return registerRole === "TEACHER"
+      ? "Use a Faculty ID that already exists in teacher records."
+      : "Use a Student ID that exists in current enrollment records.";
   })();
 
   const helperCopy = recoveryMode

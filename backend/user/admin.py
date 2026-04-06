@@ -15,7 +15,7 @@ from .enrollment_import import (
     import_enrollment_file,
 )
 from .forms import CustomUserChangeForm, CustomUserCreationForm, EnrollmentImportAdminForm
-from .models import ContactMessage, EnrollmentRecord, Notification, User
+from .models import ContactMessage, EnrollmentRecord, Notification, TeacherRecord, User
 
 
 class UserAdmin(BaseUserAdmin):
@@ -197,6 +197,22 @@ class EnrollmentRecordAdmin(admin.ModelAdmin):
             'changelist_url': changelist_url,
         }
         return TemplateResponse(request, 'admin/user/enrollmentrecord/import_form.html', context)
+
+
+@admin.register(TeacherRecord)
+class TeacherRecordAdmin(admin.ModelAdmin):
+    list_display = (
+        'staff_id',
+        'full_name',
+        'school_email',
+        'department',
+        'is_active_for_registration',
+        'updated_at',
+    )
+    list_filter = ('is_active_for_registration', 'department')
+    search_fields = ('staff_id', 'full_name', 'school_email', 'department')
+    ordering = ('staff_id',)
+    readonly_fields = ('created_at', 'updated_at')
 
 
 @admin.register(Notification)

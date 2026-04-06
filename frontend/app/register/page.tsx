@@ -286,8 +286,9 @@ function RegisterPageContent({
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
-  const idLabel = 'ID';
-  const idPlaceholder = 'Enter your ID';
+  const idLabel = registerRole === 'TEACHER' ? 'Faculty ID' : 'Student ID';
+  const idPlaceholder =
+    registerRole === 'TEACHER' ? 'Enter your faculty ID' : 'Enter your student ID';
   const passwordRequirements = getPasswordRequirements(formData.password);
   const passwordHasValue = formData.password.length > 0;
   const passwordsMatch =
@@ -678,7 +679,9 @@ function RegisterPageContent({
 
                   {!recoveryMode ? (
                     <div className="mt-5 rounded-[20px] border border-sky-400/30 bg-sky-500/15 px-3.5 py-2.5 text-xs text-sky-100">
-                      Your account type will be automatically detected based on your ID.
+                      {registerRole === 'TEACHER'
+                        ? 'Use a Faculty ID that already exists in the teacher records.'
+                        : 'Use a Student ID that exists in the current enrollment records.'}
                     </div>
                   ) : (
                     <div className="mt-5 rounded-[20px] border border-sky-400/30 bg-sky-500/15 px-3.5 py-2.5 text-xs text-sky-100">
@@ -706,7 +709,10 @@ function RegisterPageContent({
                       helper={
                         recoveryMode
                           ? 'This identifier is locked to the existing registration.'
-                          : availabilityMessage || 'Use the ID assigned by the school.'
+                          : availabilityMessage ||
+                            (registerRole === 'TEACHER'
+                              ? 'Use the faculty ID listed in the teacher records.'
+                              : 'Use the student ID assigned by the school.')
                       }
                       rightSlot={
                         !recoveryMode && availabilityState !== 'idle' ? (
