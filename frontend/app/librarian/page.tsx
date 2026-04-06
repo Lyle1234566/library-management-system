@@ -3670,59 +3670,67 @@ export default function LibrarianDeskPage() {
                           Contact Messages
                         </h2>
                         <p className="mt-2 max-w-2xl text-sm text-white/65">
-                          Review website messages, capture internal notes, and move each inquiry from
-                          new to resolved without leaving the desk.
+                          Read user messages, add librarian notes, and update the status in one place.
                         </p>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => void loadContactMessages()}
-                        className="inline-flex items-center gap-2 rounded-2xl border border-sky-300/15 bg-sky-400/10 px-4 py-2.5 text-sm font-semibold text-sky-50 transition hover:bg-sky-400/15"
-                      >
-                        <RefreshCw className="h-4 w-4" />
-                        Refresh inbox
-                      </button>
+                      <div className="flex flex-wrap items-center gap-3">
+                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white/70">
+                          Read, note, then update the message status.
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => void loadContactMessages()}
+                          className="inline-flex items-center gap-2 rounded-2xl border border-sky-300/15 bg-sky-400/10 px-4 py-2.5 text-sm font-semibold text-sky-50 transition hover:bg-sky-400/15"
+                        >
+                          <RefreshCw className="h-4 w-4" />
+                          Refresh inbox
+                        </button>
+                      </div>
                     </div>
 
-                    <div className="mt-6 grid gap-4 md:grid-cols-4">
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Total</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">{contactMessages.length}</p>
+                    <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                      <div className="rounded-2xl border border-white/10 bg-[#101c30]/80 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">Total</p>
+                        <p className="mt-2 text-3xl font-semibold text-white">{contactMessages.length}</p>
+                        <p className="mt-1 text-xs text-white/45">All submitted messages</p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">New</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">
+                      <div className="rounded-2xl border border-amber-300/15 bg-amber-400/5 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">New</p>
+                        <p className="mt-2 text-3xl font-semibold text-white">
                           {contactMessages.filter((message) => message.status === 'NEW').length}
                         </p>
+                        <p className="mt-1 text-xs text-white/45">Waiting for handling</p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">In Progress</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">
+                      <div className="rounded-2xl border border-sky-300/15 bg-sky-400/5 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">In Progress</p>
+                        <p className="mt-2 text-3xl font-semibold text-white">
                           {contactMessages.filter((message) => message.status === 'IN_PROGRESS').length}
                         </p>
+                        <p className="mt-1 text-xs text-white/45">Currently being reviewed</p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Resolved</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">
+                      <div className="rounded-2xl border border-emerald-300/15 bg-emerald-500/5 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">Resolved</p>
+                        <p className="mt-2 text-3xl font-semibold text-white">
                           {contactMessages.filter((message) => message.status === 'RESOLVED').length}
                         </p>
+                        <p className="mt-1 text-xs text-white/45">Finished concerns</p>
                       </div>
                     </div>
 
-                    <div className="mt-6 rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5">
+                    <div className="mt-6 space-y-4">
                       {contactMessagesSuccess && (
-                        <div className="mb-4 rounded-2xl border border-emerald-400/35 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-100">
+                        <div className="rounded-2xl border border-emerald-400/35 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-100">
                           {contactMessagesSuccess}
                         </div>
                       )}
                       {contactMessagesError && (
-                        <div className="mb-4 rounded-2xl border border-rose-400/35 bg-rose-500/15 px-4 py-3 text-sm text-rose-100">
+                        <div className="rounded-2xl border border-rose-400/35 bg-rose-500/15 px-4 py-3 text-sm text-rose-100">
                           {contactMessagesError}
                         </div>
                       )}
 
                       {contactMessagesState === 'loading' && (
-                        <div className="py-10 text-center text-sm text-white/55">
+                        <div className="rounded-3xl border border-white/10 bg-[#101c30]/80 px-4 py-10 text-center text-sm text-white/55">
                           Loading contact messages...
                         </div>
                       )}
@@ -3730,7 +3738,7 @@ export default function LibrarianDeskPage() {
                       {contactMessagesState !== 'loading' &&
                         contactMessages.length === 0 &&
                         !contactMessagesError && (
-                          <div className="py-10 text-center text-sm text-white/55">
+                          <div className="rounded-3xl border border-dashed border-white/10 bg-[#101c30]/80 px-4 py-10 text-center text-sm text-white/55">
                             No contact messages have been submitted yet.
                           </div>
                         )}
@@ -3748,12 +3756,12 @@ export default function LibrarianDeskPage() {
                             return (
                               <article
                                 key={message.id}
-                                className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+                                className="rounded-3xl border border-white/10 bg-[#101c30]/82 p-5"
                               >
                                 <div className="flex flex-wrap items-start justify-between gap-4">
                                   <div className="min-w-0 flex-1">
                                     <div className="flex flex-wrap items-center gap-2">
-                                      <p className="text-lg font-semibold text-white">
+                                      <p className="text-xl font-semibold text-white">
                                         {message.subject || 'No subject provided'}
                                       </p>
                                       <span
@@ -3762,33 +3770,50 @@ export default function LibrarianDeskPage() {
                                         {message.status.replace('_', ' ')}
                                       </span>
                                     </div>
-                                    <p className="mt-2 text-sm text-white/65">
-                                      From {message.name} ({message.email})
-                                    </p>
-                                    <p className="mt-1 text-xs uppercase tracking-[0.2em] text-white/40">
-                                      Received {formatDate(message.created_at)}
-                                    </p>
+                                    <div className="mt-3 grid gap-3 text-sm text-white/70 md:grid-cols-2">
+                                      <p>
+                                        <span className="text-white/45">From:</span> {message.name}
+                                      </p>
+                                      <p>
+                                        <span className="text-white/45">Email:</span> {message.email}
+                                      </p>
+                                      <p>
+                                        <span className="text-white/45">Received:</span>{' '}
+                                        {formatDate(message.created_at)}
+                                      </p>
+                                      <p>
+                                        <span className="text-white/45">Handled by:</span>{' '}
+                                        {handledByLabel}
+                                      </p>
+                                    </div>
                                   </div>
                                   <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/70">
-                                    <p>Handled by: {handledByLabel}</p>
-                                    <p className="mt-1">
-                                      Last update:{' '}
+                                    <p className="text-white/45">Last update</p>
+                                    <p className="mt-1 font-medium text-white">
                                       {message.handled_at ? formatDate(message.handled_at) : 'Not yet handled'}
                                     </p>
                                   </div>
                                 </div>
 
-                                <div className="mt-4 rounded-2xl border border-white/10 bg-[#091221]/75 px-4 py-4 text-sm leading-7 text-white/80">
-                                  {message.message}
+                                <div className="mt-4 rounded-2xl border border-white/10 bg-[#0b1729]/70 px-4 py-4">
+                                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/40">
+                                    User Message
+                                  </p>
+                                  <p className="mt-3 text-sm leading-7 text-white/85">
+                                    {message.message}
+                                  </p>
                                 </div>
 
-                                <div className="mt-4">
+                                <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                                   <label
                                     htmlFor={`contact-notes-${message.id}`}
                                     className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50"
                                   >
-                                    Internal Notes
+                                    Librarian Notes
                                   </label>
+                                  <p className="mt-2 text-sm text-white/55">
+                                    Only staff can see these notes.
+                                  </p>
                                   <textarea
                                     id={`contact-notes-${message.id}`}
                                     rows={3}
@@ -3796,19 +3821,19 @@ export default function LibrarianDeskPage() {
                                     onChange={(event) =>
                                       updateContactMessageDraft(message.id, event.target.value)
                                     }
-                                    className="mt-2 w-full rounded-2xl border border-white/12 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-white/35 focus:border-sky-300/35 focus:outline-none focus:ring-2 focus:ring-sky-300/20"
+                                    className="mt-3 w-full rounded-2xl border border-white/12 bg-[#0b1729]/70 px-4 py-3 text-sm text-white placeholder-white/35 focus:border-sky-300/35 focus:outline-none focus:ring-2 focus:ring-sky-300/20"
                                     placeholder="Add handling notes, follow-up details, or resolution notes."
                                   />
                                 </div>
 
-                                <div className="mt-4 flex flex-wrap gap-3">
+                                <div className="mt-4 flex flex-wrap items-center gap-3">
                                   <button
                                     type="button"
                                     disabled={contactActionBusyId === message.id}
                                     onClick={() => void handleContactMessageAction(message.id)}
-                                    className="rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-sm font-semibold text-white transition hover:border-white/25 hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-60"
+                                    className="rounded-2xl border border-white/15 bg-white/[0.05] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-white/25 hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-60"
                                   >
-                                    Save Notes
+                                    Save notes
                                   </button>
                                   <button
                                     type="button"
@@ -3816,11 +3841,11 @@ export default function LibrarianDeskPage() {
                                     onClick={() =>
                                       void handleContactMessageAction(message.id, 'IN_PROGRESS')
                                     }
-                                    className="rounded-full border border-sky-300/25 bg-sky-400/10 px-4 py-2 text-sm font-semibold text-sky-100 transition hover:bg-sky-400/15 disabled:cursor-not-allowed disabled:opacity-60"
+                                    className="rounded-2xl border border-sky-300/25 bg-sky-400/10 px-4 py-2.5 text-sm font-semibold text-sky-100 transition hover:bg-sky-400/15 disabled:cursor-not-allowed disabled:opacity-60"
                                   >
                                     {contactActionBusyId === message.id && message.status !== 'RESOLVED'
                                       ? 'Updating...'
-                                      : 'Mark In Progress'}
+                                      : 'Set to in progress'}
                                   </button>
                                   <button
                                     type="button"
@@ -3828,11 +3853,11 @@ export default function LibrarianDeskPage() {
                                     onClick={() =>
                                       void handleContactMessageAction(message.id, 'RESOLVED')
                                     }
-                                    className="rounded-full border border-emerald-300/25 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-500/15 disabled:cursor-not-allowed disabled:opacity-60"
+                                    className="rounded-2xl border border-emerald-300/25 bg-emerald-500/10 px-4 py-2.5 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-500/15 disabled:cursor-not-allowed disabled:opacity-60"
                                   >
                                     {contactActionBusyId === message.id && message.status === 'RESOLVED'
                                       ? 'Updating...'
-                                      : 'Resolve'}
+                                      : 'Mark resolved'}
                                   </button>
                                 </div>
                               </article>
@@ -3841,25 +3866,30 @@ export default function LibrarianDeskPage() {
                         </div>
                       )}
 
-                      <div className="mt-6 flex flex-wrap gap-3 text-sm">
-                        <a
-                          href={adminLinks.contactMessages}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white/80 transition hover:border-sky-300/20 hover:bg-sky-400/10"
-                        >
-                          Open Django admin inbox
-                          <ArrowUpRight className="h-4 w-4" />
-                        </a>
-                        <a
-                          href={adminLinks.notifications}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white/80 transition hover:border-sky-300/20 hover:bg-sky-400/10"
-                        >
-                          Open notification records
-                          <ArrowUpRight className="h-4 w-4" />
-                        </a>
+                      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">
+                          Admin Shortcuts
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-3 text-sm">
+                          <a
+                            href={adminLinks.contactMessages}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white/80 transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                          >
+                            Open Django admin inbox
+                            <ArrowUpRight className="h-4 w-4" />
+                          </a>
+                          <a
+                            href={adminLinks.notifications}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white/80 transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                          >
+                            Open notification records
+                            <ArrowUpRight className="h-4 w-4" />
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </section>
