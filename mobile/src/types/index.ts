@@ -74,6 +74,17 @@ export interface Book {
   has_pending_return_request?: boolean;
 }
 
+export interface BookRecommendation {
+  book: Book;
+  reason: string;
+}
+
+export interface PersonalizedBookRecommendations {
+  for_you: BookRecommendation[];
+  popular_now: BookRecommendation[];
+  based_on_history: boolean;
+}
+
 export interface BorrowRequestUser {
   id: number;
   student_id: string | null;

@@ -25,6 +25,8 @@ import {
   rejectRenewalRequest,
   approveReturnRequest,
   rejectReturnRequest,
+  contactApi,
+  ContactMessageRecord,
   resolveMediaUrl,
 } from '@/lib/api';
 
@@ -68,6 +70,9 @@ type SectionState = 'idle' | 'loading' | 'error';
 type FinePaymentDraft = {
   paymentReference: string;
   notes: string;
+};
+type ContactMessageDraft = {
+  internalNotes: string;
 };
 type DashboardNavItem = {
   id: string;
@@ -119,6 +124,12 @@ const fineStatusPill: Record<FinePayment['status'], string> = {
   PENDING: 'bg-rose-500/20 text-rose-100 border border-rose-300/30',
   PAID: 'bg-emerald-500/20 text-emerald-100 border border-emerald-300/30',
   WAIVED: 'bg-amber-500/20 text-amber-100 border border-amber-300/30',
+};
+
+const contactStatusPill: Record<ContactMessageRecord['status'], string> = {
+  NEW: 'bg-amber-500/20 text-amber-100 border border-amber-300/30',
+  IN_PROGRESS: 'bg-sky-500/20 text-sky-100 border border-sky-300/30',
+  RESOLVED: 'bg-emerald-500/20 text-emerald-100 border border-emerald-300/30',
 };
 
 const formatDate = (dateString?: string | null) => {
@@ -298,6 +309,7 @@ export default function LibrarianDeskPage() {
   const [renewalRequests, setRenewalRequests] = useState<RenewalRequest[]>([]);
   const [finePayments, setFinePayments] = useState<FinePayment[]>([]);
   const [finePaymentHistory, setFinePaymentHistory] = useState<FinePayment[]>([]);
+  const [contactMessages, setContactMessages] = useState<ContactMessageRecord[]>([]);
   const [notifications, setNotifications] = useState<NotificationRecord[]>([]);
   const [analyticsBorrowRequests, setAnalyticsBorrowRequests] = useState<BorrowRequest[]>([]);
   const [catalogBooks, setCatalogBooks] = useState<ApiBook[]>([]);
@@ -308,6 +320,7 @@ export default function LibrarianDeskPage() {
   const [returnsState, setReturnsState] = useState<SectionState>('idle');
   const [renewalsState, setRenewalsState] = useState<SectionState>('idle');
   const [finePaymentsState, setFinePaymentsState] = useState<SectionState>('idle');
+  const [contactMessagesState, setContactMessagesState] = useState<SectionState>('idle');
   const [notificationsState, setNotificationsState] = useState<SectionState>('idle');
   const [analyticsState, setAnalyticsState] = useState<SectionState>('idle');
   const [inventoryState, setInventoryState] = useState<SectionState>('idle');
@@ -319,6 +332,8 @@ export default function LibrarianDeskPage() {
   const [renewalsError, setRenewalsError] = useState<string | null>(null);
   const [finePaymentsError, setFinePaymentsError] = useState<string | null>(null);
   const [finePaymentsSuccess, setFinePaymentsSuccess] = useState<string | null>(null);
+  const [contactMessagesError, setContactMessagesError] = useState<string | null>(null);
+  const [contactMessagesSuccess, setContactMessagesSuccess] = useState<string | null>(null);
   const [notificationsError, setNotificationsError] = useState<string | null>(null);
   const [analyticsError, setAnalyticsError] = useState<string | null>(null);
   const [inventoryError, setInventoryError] = useState<string | null>(null);
@@ -330,6 +345,7 @@ export default function LibrarianDeskPage() {
   const [renewalActionBusy, setRenewalActionBusy] = useState<number | null>(null);
   const [fineActionBusyId, setFineActionBusyId] = useState<number | null>(null);
   const [fineActionType, setFineActionType] = useState<'paid' | 'waived' | null>(null);
+  const [contactActionBusyId, setContactActionBusyId] = useState<number | null>(null);
   const [notificationActionBusy, setNotificationActionBusy] = useState(false);
   const [studentActionBusy, setStudentActionBusy] = useState<number | null>(null);
   const [editingBookId, setEditingBookId] = useState<number | null>(null);
@@ -364,6 +380,7 @@ export default function LibrarianDeskPage() {
   const [categoryError, setCategoryError] = useState<string | null>(null);
   const [categorySuccess, setCategorySuccess] = useState<string | null>(null);
   const [finePaymentDrafts, setFinePaymentDrafts] = useState<Record<number, FinePaymentDraft>>({});
+  const [contactMessageDrafts, setContactMessageDrafts] = useState<Record<number, ContactMessageDraft>>({});
   const [notificationUnreadCount, setNotificationUnreadCount] = useState(0);
   const [bookEditForm, setBookEditForm] = useState({
     title: '',
@@ -389,6 +406,9 @@ export default function LibrarianDeskPage() {
     [user]
   );
   const canManageFinePayments = useMemo(() => {
+    return Boolean(user && (user.role === 'ADMIN' || user.role === 'LIBRARIAN' || hasStaffDeskAccess(user)));
+  }, [user]);
+  const canManageContactMessages = useMemo(() => {
     return Boolean(user && (user.role === 'ADMIN' || user.role === 'LIBRARIAN' || hasStaffDeskAccess(user)));
   }, [user]);
   const roleLabel = useMemo(() => formatRoleLabel(user?.role), [user?.role]);
@@ -427,6 +447,7 @@ export default function LibrarianDeskPage() {
       (sum, book) => sum + (book.copies_total ?? book.copies_available),
       0
     );
+    const openContactCount = contactMessages.filter((message) => message.status !== 'RESOLVED').length;
 
     const groups: DashboardNavGroup[] = [
       {
@@ -549,6 +570,16 @@ export default function LibrarianDeskPage() {
           icon: BellRing,
           badge: String(notificationUnreadCount),
         },
+        ...(canManageContactMessages
+          ? [
+              {
+                id: 'desk-contact',
+                label: 'Contact Inbox',
+                icon: MessageSquare,
+                badge: String(openContactCount),
+              },
+            ]
+          : []),
       ],
     });
 
@@ -558,9 +589,11 @@ export default function LibrarianDeskPage() {
     borrowRequests.length,
     canApproveStudents,
     canManageBooks,
+    canManageContactMessages,
     canManageFinePayments,
     catalogBooks,
     categories.length,
+    contactMessages,
     finePayments.length,
     notificationUnreadCount,
     pendingStudents.length,
@@ -850,10 +883,28 @@ export default function LibrarianDeskPage() {
         .map((book) => {
           const totalCopies = book.copies_total ?? book.copies_available;
           const inUse = Math.max(0, totalCopies - book.copies_available);
+          const copyPreview = (book.copy_preview ?? []).slice(0, 3);
+          const barcodePreview = copyPreview
+            .map((copy) => copy.barcode?.trim())
+            .filter((barcode): barcode is string => Boolean(barcode));
+          const locationPreview =
+            copyPreview
+              .map((copy) =>
+                [copy.location_room, copy.location_shelf]
+                  .map((value) => value?.trim())
+                  .filter(Boolean)
+                  .join(' / ')
+              )
+              .find(Boolean) ??
+            book.location_shelf?.trim() ??
+            'Unassigned';
           return {
             ...book,
             totalCopies,
             inUse,
+            copyPreview,
+            barcodePreview,
+            locationPreview,
             utilization:
               totalCopies > 0 ? Math.round((inUse / totalCopies) * 100) : 0,
           };
@@ -907,7 +958,7 @@ export default function LibrarianDeskPage() {
       case 'desk-fines':
         return 'Record payments, waive charges, and verify fine references.';
       case 'desk-contact':
-        return 'Open the admin inbox and keep communication workflows organized.';
+        return 'Review website messages, add notes, and update response status in one place.';
       case 'desk-notifications':
         return 'Review your in-app alerts and clear unread desk activity.';
       default:
@@ -1325,6 +1376,42 @@ export default function LibrarianDeskPage() {
     setFinePaymentsState('idle');
   }, [canManageFinePayments]);
 
+  const loadContactMessages = useCallback(async () => {
+    if (!canManageContactMessages) {
+      setContactMessages([]);
+      setContactMessagesError(null);
+      setContactMessagesState('idle');
+      return;
+    }
+
+    setContactMessagesState('loading');
+    const response = await contactApi.getMessages(undefined, 100);
+    if (response.error || !response.data) {
+      setContactMessagesError(response.error ?? 'Unable to load contact messages.');
+      setContactMessages([]);
+      setContactMessagesState('error');
+      return;
+    }
+
+    const messages = response.data;
+    setContactMessagesError(null);
+    setContactMessages(
+      [...messages].sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      )
+    );
+    setContactMessageDrafts((prev) => {
+      const next: Record<number, ContactMessageDraft> = {};
+      messages.forEach((message) => {
+        next[message.id] = {
+          internalNotes: prev[message.id]?.internalNotes ?? message.internal_notes ?? '',
+        };
+      });
+      return next;
+    });
+    setContactMessagesState('idle');
+  }, [canManageContactMessages]);
+
   const loadCategories = useCallback(async () => {
     if (!canManageBooks) return;
     setCategoriesState('loading');
@@ -1469,6 +1556,7 @@ export default function LibrarianDeskPage() {
         loadRenewalRequests(),
         loadReturnRequests(),
         ...(canManageFinePayments ? [loadFinePayments()] : []),
+        ...(canManageContactMessages ? [loadContactMessages()] : []),
         loadBorrowAnalytics(),
         ...(canManageBooks ? [loadCatalogBooks()] : []),
         ...(canManageBooks ? [loadCategories()] : []),
@@ -1479,12 +1567,14 @@ export default function LibrarianDeskPage() {
     user,
     canApproveStudents,
     canManageBooks,
+    canManageContactMessages,
     canManageFinePayments,
     loadPendingStudents,
     loadBorrowRequests,
     loadRenewalRequests,
     loadReturnRequests,
     loadFinePayments,
+    loadContactMessages,
     loadBorrowAnalytics,
     loadCatalogBooks,
     loadCategories,
@@ -1644,6 +1734,51 @@ export default function LibrarianDeskPage() {
         [field]: value,
       },
     }));
+  };
+
+  const updateContactMessageDraft = (messageId: number, internalNotes: string) => {
+    setContactMessageDrafts((prev) => ({
+      ...prev,
+      [messageId]: {
+        internalNotes,
+      },
+    }));
+  };
+
+  const handleContactMessageAction = async (
+    messageId: number,
+    status?: ContactMessageRecord['status']
+  ) => {
+    if (!canManageContactMessages) return;
+
+    setContactActionBusyId(messageId);
+    setContactMessagesError(null);
+    setContactMessagesSuccess(null);
+
+    const draft = contactMessageDrafts[messageId] ?? { internalNotes: '' };
+    const response = await contactApi.updateMessage(messageId, {
+      status,
+      internal_notes: draft.internalNotes.trim(),
+    });
+
+    if (response.error || !response.data?.contact_message) {
+      setContactMessagesError(response.error ?? 'Unable to update contact message.');
+      setContactActionBusyId(null);
+      return;
+    }
+
+    const nextMessage = response.data.contact_message;
+    setContactMessages((prev) =>
+      prev.map((message) => (message.id === messageId ? nextMessage : message))
+    );
+    setContactMessageDrafts((prev) => ({
+      ...prev,
+      [messageId]: {
+        internalNotes: nextMessage.internal_notes ?? '',
+      },
+    }));
+    setContactMessagesSuccess(response.data.message ?? 'Contact message updated.');
+    setContactActionBusyId(null);
   };
 
   const handleFinePaymentAction = async (paymentId: number, action: 'paid' | 'waived') => {
@@ -2891,6 +3026,18 @@ export default function LibrarianDeskPage() {
                                   <div className="min-w-0">
                                     <p className="truncate font-semibold text-white">{book.title}</p>
                                     <p className="truncate text-xs text-white/55">{book.author}</p>
+                                    <p className="mt-1 truncate text-[11px] text-sky-100/65">
+                                      Shelf: {book.locationPreview}
+                                    </p>
+                                    <p className="mt-1 truncate text-[11px] text-white/45">
+                                      {book.barcodePreview.length > 0
+                                        ? `Barcodes: ${book.barcodePreview.join(', ')}${
+                                            book.copyPreview.length > book.barcodePreview.length
+                                              ? ' ...'
+                                              : ''
+                                          }`
+                                        : 'No copy barcode preview available yet.'}
+                                    </p>
                                   </div>
                                   <p className="text-sm text-white/75">{book.totalCopies}</p>
                                   <p className="text-sm text-white/75">{book.inUse}</p>
@@ -3523,52 +3670,197 @@ export default function LibrarianDeskPage() {
                           Contact Messages
                         </h2>
                         <p className="mt-2 max-w-2xl text-sm text-white/65">
-                          Contact messages are currently managed from Django admin. Use the quick links below to open the inbox and related notification records.
+                          Review website messages, capture internal notes, and move each inquiry from
+                          new to resolved without leaving the desk.
                         </p>
                       </div>
-                      <a
-                        href={adminLinks.contactMessages}
-                        target="_blank"
-                        rel="noreferrer"
+                      <button
+                        type="button"
+                        onClick={() => void loadContactMessages()}
                         className="inline-flex items-center gap-2 rounded-2xl border border-sky-300/15 bg-sky-400/10 px-4 py-2.5 text-sm font-semibold text-sky-50 transition hover:bg-sky-400/15"
                       >
-                        Open contact inbox
-                        <ArrowUpRight className="h-4 w-4" />
-                      </a>
+                        <RefreshCw className="h-4 w-4" />
+                        Refresh inbox
+                      </button>
                     </div>
 
-                    <div className="mt-6 grid gap-4 md:grid-cols-2">
-                      <a
-                        href={adminLinks.contactMessages}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5 transition hover:border-sky-300/20 hover:bg-sky-400/10"
-                      >
-                        <div className="flex items-center justify-between gap-3">
-                          <MessageSquare className="h-5 w-5 text-sky-100" />
-                          <ArrowUpRight className="h-4 w-4 text-white/55" />
-                        </div>
-                        <h3 className="mt-4 text-lg font-semibold text-white">Contact Messages</h3>
-                        <p className="mt-2 text-sm text-white/60">
-                          Open the admin inbox to review website messages, subjects, and sender details.
+                    <div className="mt-6 grid gap-4 md:grid-cols-4">
+                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
+                        <p className="text-sm text-white/55">Total</p>
+                        <p className="mt-3 text-3xl font-semibold text-white">{contactMessages.length}</p>
+                      </div>
+                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
+                        <p className="text-sm text-white/55">New</p>
+                        <p className="mt-3 text-3xl font-semibold text-white">
+                          {contactMessages.filter((message) => message.status === 'NEW').length}
                         </p>
-                      </a>
+                      </div>
+                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
+                        <p className="text-sm text-white/55">In Progress</p>
+                        <p className="mt-3 text-3xl font-semibold text-white">
+                          {contactMessages.filter((message) => message.status === 'IN_PROGRESS').length}
+                        </p>
+                      </div>
+                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
+                        <p className="text-sm text-white/55">Resolved</p>
+                        <p className="mt-3 text-3xl font-semibold text-white">
+                          {contactMessages.filter((message) => message.status === 'RESOLVED').length}
+                        </p>
+                      </div>
+                    </div>
 
-                      <a
-                        href={adminLinks.notifications}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5 transition hover:border-sky-300/20 hover:bg-sky-400/10"
-                      >
-                        <div className="flex items-center justify-between gap-3">
-                          <BellRing className="h-5 w-5 text-sky-100" />
-                          <ArrowUpRight className="h-4 w-4 text-white/55" />
+                    <div className="mt-6 rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5">
+                      {contactMessagesSuccess && (
+                        <div className="mb-4 rounded-2xl border border-emerald-400/35 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-100">
+                          {contactMessagesSuccess}
                         </div>
-                        <h3 className="mt-4 text-lg font-semibold text-white">Notification Records</h3>
-                        <p className="mt-2 text-sm text-white/60">
-                          Open stored system notifications in Django admin for deeper record review.
-                        </p>
-                      </a>
+                      )}
+                      {contactMessagesError && (
+                        <div className="mb-4 rounded-2xl border border-rose-400/35 bg-rose-500/15 px-4 py-3 text-sm text-rose-100">
+                          {contactMessagesError}
+                        </div>
+                      )}
+
+                      {contactMessagesState === 'loading' && (
+                        <div className="py-10 text-center text-sm text-white/55">
+                          Loading contact messages...
+                        </div>
+                      )}
+
+                      {contactMessagesState !== 'loading' &&
+                        contactMessages.length === 0 &&
+                        !contactMessagesError && (
+                          <div className="py-10 text-center text-sm text-white/55">
+                            No contact messages have been submitted yet.
+                          </div>
+                        )}
+
+                      {contactMessagesState !== 'loading' && contactMessages.length > 0 && (
+                        <div className="space-y-4">
+                          {contactMessages.map((message) => {
+                            const draft = contactMessageDrafts[message.id] ?? {
+                              internalNotes: message.internal_notes ?? '',
+                            };
+                            const handledByLabel =
+                              message.handled_by?.full_name ??
+                              (message.status === 'NEW' ? 'Unassigned' : 'Desk staff');
+
+                            return (
+                              <article
+                                key={message.id}
+                                className="rounded-3xl border border-white/10 bg-white/[0.03] p-5"
+                              >
+                                <div className="flex flex-wrap items-start justify-between gap-4">
+                                  <div className="min-w-0 flex-1">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                      <p className="text-lg font-semibold text-white">
+                                        {message.subject || 'No subject provided'}
+                                      </p>
+                                      <span
+                                        className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${contactStatusPill[message.status]}`}
+                                      >
+                                        {message.status.replace('_', ' ')}
+                                      </span>
+                                    </div>
+                                    <p className="mt-2 text-sm text-white/65">
+                                      From {message.name} ({message.email})
+                                    </p>
+                                    <p className="mt-1 text-xs uppercase tracking-[0.2em] text-white/40">
+                                      Received {formatDate(message.created_at)}
+                                    </p>
+                                  </div>
+                                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/70">
+                                    <p>Handled by: {handledByLabel}</p>
+                                    <p className="mt-1">
+                                      Last update:{' '}
+                                      {message.handled_at ? formatDate(message.handled_at) : 'Not yet handled'}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="mt-4 rounded-2xl border border-white/10 bg-[#091221]/75 px-4 py-4 text-sm leading-7 text-white/80">
+                                  {message.message}
+                                </div>
+
+                                <div className="mt-4">
+                                  <label
+                                    htmlFor={`contact-notes-${message.id}`}
+                                    className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50"
+                                  >
+                                    Internal Notes
+                                  </label>
+                                  <textarea
+                                    id={`contact-notes-${message.id}`}
+                                    rows={3}
+                                    value={draft.internalNotes}
+                                    onChange={(event) =>
+                                      updateContactMessageDraft(message.id, event.target.value)
+                                    }
+                                    className="mt-2 w-full rounded-2xl border border-white/12 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-white/35 focus:border-sky-300/35 focus:outline-none focus:ring-2 focus:ring-sky-300/20"
+                                    placeholder="Add handling notes, follow-up details, or resolution notes."
+                                  />
+                                </div>
+
+                                <div className="mt-4 flex flex-wrap gap-3">
+                                  <button
+                                    type="button"
+                                    disabled={contactActionBusyId === message.id}
+                                    onClick={() => void handleContactMessageAction(message.id)}
+                                    className="rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-sm font-semibold text-white transition hover:border-white/25 hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-60"
+                                  >
+                                    Save Notes
+                                  </button>
+                                  <button
+                                    type="button"
+                                    disabled={contactActionBusyId === message.id}
+                                    onClick={() =>
+                                      void handleContactMessageAction(message.id, 'IN_PROGRESS')
+                                    }
+                                    className="rounded-full border border-sky-300/25 bg-sky-400/10 px-4 py-2 text-sm font-semibold text-sky-100 transition hover:bg-sky-400/15 disabled:cursor-not-allowed disabled:opacity-60"
+                                  >
+                                    {contactActionBusyId === message.id && message.status !== 'RESOLVED'
+                                      ? 'Updating...'
+                                      : 'Mark In Progress'}
+                                  </button>
+                                  <button
+                                    type="button"
+                                    disabled={contactActionBusyId === message.id}
+                                    onClick={() =>
+                                      void handleContactMessageAction(message.id, 'RESOLVED')
+                                    }
+                                    className="rounded-full border border-emerald-300/25 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-500/15 disabled:cursor-not-allowed disabled:opacity-60"
+                                  >
+                                    {contactActionBusyId === message.id && message.status === 'RESOLVED'
+                                      ? 'Updating...'
+                                      : 'Resolve'}
+                                  </button>
+                                </div>
+                              </article>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      <div className="mt-6 flex flex-wrap gap-3 text-sm">
+                        <a
+                          href={adminLinks.contactMessages}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white/80 transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                        >
+                          Open Django admin inbox
+                          <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                        <a
+                          href={adminLinks.notifications}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white/80 transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                        >
+                          Open notification records
+                          <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                      </div>
                     </div>
                   </section>
                 )}

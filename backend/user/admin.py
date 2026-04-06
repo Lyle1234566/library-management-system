@@ -105,7 +105,23 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(ContactMessage)
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'email',
+        'subject',
+        'status',
+        'handled_by',
+        'handled_at',
+        'created_at',
+    )
+    list_filter = ('status', 'created_at', 'handled_at')
+    search_fields = ('name', 'email', 'subject', 'message', 'internal_notes')
+    readonly_fields = ('user', 'created_at', 'handled_at')
+    ordering = ('-created_at',)
 
 
 @admin.register(EnrollmentRecord)

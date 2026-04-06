@@ -9,73 +9,6 @@ import MovingObjectsLayer from '@/components/MovingObjectsLayer';
 import { booksApi, Book, Category } from '@/lib/api';
 import { API_BASE_URL, API_CONFIGURATION_WARNING } from '@/lib/api-config';
 
-const fallbackBooks: Book[] = [
-  {
-    id: 1,
-    title: 'The Great Gatsby',
-    author: 'F. Scott Fitzgerald',
-    isbn: '9780743273565',
-    published_date: '1925-04-10',
-    genre: 'Classic',
-    cover_image: null,
-    cover_back: null,
-    copies_total: 3,
-    copies_available: 3,
-    available: true,
-    is_borrowed_by_user: false,
-    has_pending_borrow_request: false,
-    has_pending_return_request: false,
-  },
-  {
-    id: 2,
-    title: 'To Kill a Mockingbird',
-    author: 'Harper Lee',
-    isbn: '9780061120084',
-    published_date: '1960-07-11',
-    genre: 'Fiction',
-    cover_image: null,
-    cover_back: null,
-    copies_total: 2,
-    copies_available: 2,
-    available: true,
-    is_borrowed_by_user: false,
-    has_pending_borrow_request: false,
-    has_pending_return_request: false,
-  },
-  {
-    id: 3,
-    title: '1984',
-    author: 'George Orwell',
-    isbn: '9780451524935',
-    published_date: '1949-06-08',
-    genre: 'Dystopian',
-    cover_image: null,
-    cover_back: null,
-    copies_total: 3,
-    copies_available: 0,
-    available: false,
-    is_borrowed_by_user: false,
-    has_pending_borrow_request: false,
-    has_pending_return_request: false,
-  },
-  {
-    id: 4,
-    title: 'Pride and Prejudice',
-    author: 'Jane Austen',
-    isbn: '9780141439518',
-    published_date: '1813-01-28',
-    genre: 'Romance',
-    cover_image: null,
-    cover_back: null,
-    copies_total: 4,
-    copies_available: 4,
-    available: true,
-    is_borrowed_by_user: false,
-    has_pending_borrow_request: false,
-    has_pending_return_request: false,
-  },
-];
-
 function BooksPageContent() {
   const searchParams = useSearchParams();
   const searchValue = searchParams.get('search') ?? '';
@@ -107,7 +40,7 @@ function BooksPageContent() {
 
       if (response.error || !response.data) {
         setError(response.error ?? 'Unable to load books');
-        setBooks(fallbackBooks);
+        setBooks([]);
       } else {
         setError(null);
         setBooks(response.data);
@@ -393,7 +326,7 @@ function BooksPageContent() {
             {error && !loading && (
               <div className="mb-8 rounded-3xl border border-amber-400/30 bg-amber-500/10 px-5 py-4 text-left">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-200">
-                  Showing sample books
+                  Live catalog unavailable
                 </p>
                 <p className="mt-2 text-sm text-amber-100/90">
                   Request failed for <span className="font-mono text-[13px]">{booksRequestUrl}</span>
@@ -415,10 +348,12 @@ function BooksPageContent() {
             {!loading && filteredBooks.length === 0 && (
               <div className="rounded-3xl border border-white/12 bg-white/6 px-6 py-14 text-center shadow-[0_20px_36px_rgba(2,6,23,0.45)] backdrop-blur-xl">
                 <h2 className="text-2xl font-semibold text-white">
-                  No books matched your search
+                  {error ? 'Catalog unavailable' : 'No books matched your search'}
                 </h2>
                 <p className="text-white/70 mt-2">
-                  Try a different title, author, or category.
+                  {error
+                    ? 'Check the backend connection or API configuration, then refresh this page.'
+                    : 'Try a different title, author, or category.'}
                 </p>
               </div>
             )}

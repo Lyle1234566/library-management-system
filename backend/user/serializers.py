@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 
-from .models import Notification
+from .models import ContactMessage, Notification
 from .registration_rules import get_student_identifier_status, get_teacher_identifier_status
 
 User = get_user_model()
@@ -354,6 +354,53 @@ class ContactMessageSerializer(serializers.Serializer):
 
     def validate_email(self, value: str) -> str:
         return value.lower()
+
+
+class ContactMessageManagementSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    handled_by = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ContactMessage
+        fields = (
+            'id',
+            'user',
+            'name',
+            'email',
+            'subject',
+            'message',
+            'status',
+            'internal_notes',
+            'handled_by',
+            'handled_at',
+            'created_at',
+        )
+        read_only_fields = fields
+
+    def _user_summary(self, user):
+        if not user:
+            return None
+        return {
+            'id': user.id,
+            'student_id': user.student_id,
+            'staff_id': getattr(user, 'staff_id', None),
+            'full_name': user.full_name,
+            'role': user.role,
+        }
+
+    def get_user(self, obj):
+        return self._user_summary(obj.user)
+
+    def get_handled_by(self, obj):
+        return self._user_summary(obj.handled_by)
+
+
+class ContactMessageWorkflowSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(
+        choices=ContactMessage.STATUS_CHOICES,
+        required=False,
+    )
+    internal_notes = serializers.CharField(required=False, allow_blank=True)
 
 
 class NotificationSerializer(serializers.ModelSerializer):

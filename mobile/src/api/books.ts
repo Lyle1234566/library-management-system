@@ -5,9 +5,11 @@ import {
   Category,
   FinePayment,
   FineSummary,
+  PersonalizedBookRecommendations,
   ReportingFrequency,
   Reservation,
   ReturnRequest,
+  BookRecommendation,
 } from "../types";
 import { apiRequest } from "../lib/http";
 
@@ -133,6 +135,28 @@ export const booksApi = {
     });
     if (result.error || !result.data) {
       return { data: null, error: result.error ?? "Unable to load book details." };
+    }
+    return result;
+  },
+
+  async getSimilarBooks(id: number): Promise<ApiResult<BookRecommendation[]>> {
+    const result = await apiRequest<{ results?: BookRecommendation[] }>(`/books/books/${id}/recommendations/`, {
+      method: "GET",
+      auth: true,
+    });
+    if (result.error) {
+      return { data: null, error: result.error ?? "Unable to load similar books." };
+    }
+    return { data: result.data?.results ?? [], error: null };
+  },
+
+  async getRecommendations(): Promise<ApiResult<PersonalizedBookRecommendations>> {
+    const result = await apiRequest<PersonalizedBookRecommendations>("/books/books/recommendations/", {
+      method: "GET",
+      auth: true,
+    });
+    if (result.error || !result.data) {
+      return { data: null, error: result.error ?? "Unable to load recommendations." };
     }
     return result;
   },

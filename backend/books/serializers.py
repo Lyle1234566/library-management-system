@@ -35,6 +35,31 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
+class BookCopyPreviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookCopy
+        fields = (
+            'id',
+            'barcode',
+            'status',
+            'location_room',
+            'location_shelf',
+            'is_reference_only',
+        )
+        read_only_fields = fields
+
+
+def can_view_copy_preview(request) -> bool:
+    user = getattr(request, 'user', None)
+    if not user or not user.is_authenticated:
+        return False
+    return bool(
+        getattr(user, 'is_superuser', False)
+        or getattr(user, 'role', None) in {'ADMIN', 'LIBRARIAN', 'STAFF'}
+        or getattr(user, 'has_working_student_access', lambda: False)()
+    )
+
+
 class BookSerializer(serializers.ModelSerializer):
     cover_image = RelativeMediaField(required=False, allow_null=True)
     cover_back = RelativeMediaField(required=False, allow_null=True)
@@ -55,6 +80,7 @@ class BookSerializer(serializers.ModelSerializer):
     average_rating = serializers.SerializerMethodField()
     review_count = serializers.SerializerMethodField()
     user_review = serializers.SerializerMethodField()
+    copy_preview = serializers.SerializerMethodField()
 
     class Meta:
         model = Book
@@ -143,6 +169,21 @@ class BookSerializer(serializers.ModelSerializer):
                 'review_text': review.review_text,
             }
         return None
+
+    def get_copy_preview(self, obj):
+        request = self.context.get('request')
+        if not request or not can_view_copy_preview(request):
+            return []
+
+        copies = list(obj.copies.all())
+        copies.sort(
+            key=lambda copy: (
+                0 if copy.status == BookCopy.STATUS_AVAILABLE else 1,
+                copy.barcode or '',
+                copy.pk,
+            )
+        )
+        return BookCopyPreviewSerializer(copies[:5], many=True).data
 
 
 class BorrowRequestSerializer(serializers.ModelSerializer):

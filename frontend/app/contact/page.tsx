@@ -21,7 +21,7 @@ const librarianDetails = [
 const contactHighlights = [
   {
     label: 'Email',
-    value: 'support@salazarlibrary.com',
+    value: 'SalazarLibrary@gmail.com',
     helper: 'We reply within 1 business day.',
     icon: (
       <svg className="h-5 w-5 text-sky-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -36,7 +36,7 @@ const contactHighlights = [
   },
   {
     label: 'Call',
-    value: '+1 (555) 123-4567',
+    value: '+63 9696123641',
     helper: 'Mon-Fri, 8:00 AM - 5:00 PM',
     icon: (
       <svg className="h-5 w-5 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,6 +82,7 @@ const contactHighlights = [
   },
 ];
 
+const LIBRARIAN_NAME = 'EDITHA A. LABORATE LPT R...I';
 const CONTACT_FEATURE_PHOTO = '/contact-librarian.jpg';
 const CONTACT_FEATURE_FALLBACK = '/librarian-illustration.svg';
 
@@ -233,7 +234,7 @@ export default function ContactPage() {
                     <div className="space-y-3">
                       <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/50">Meet your librarian</p>
                       <div>
-                        <h3 className="text-[2rem] font-semibold tracking-[-0.02em] text-white">Ms. Maria Santos</h3>
+                        <h3 className="text-[2rem] font-semibold tracking-[-0.02em] text-white">{LIBRARIAN_NAME}</h3>
                         <p className="mt-2 text-sm font-medium uppercase tracking-[0.18em] text-sky-100/80">Senior Librarian</p>
                       </div>
                     </div>

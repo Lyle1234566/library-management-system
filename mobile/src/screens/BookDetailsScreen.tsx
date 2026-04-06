@@ -18,7 +18,7 @@ import { resolveMediaUrl } from "../config/api";
 import { RootStackParamList } from "../navigation/RootNavigator";
 import { webTheme } from "../theme/webTheme";
 import { canBorrowAsPatron } from "../utils/roles";
-import { Book } from "../types";
+import { Book, BookRecommendation } from "../types";
 
 type Props = NativeStackScreenProps<RootStackParamList, "BookDetails">;
 type BorrowPickerKey = "course" | "year" | null;
@@ -127,7 +127,7 @@ const formatDateInput = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-export const BookDetailsScreen = ({ route }: Props) => {
+export const BookDetailsScreen = ({ route, navigation }: Props) => {
   const { user } = useAuth();
   const { bookId } = route.params;
   const [book, setBook] = useState<Book | null>(null);
@@ -135,6 +135,9 @@ export const BookDetailsScreen = ({ route }: Props) => {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [similarBooks, setSimilarBooks] = useState<BookRecommendation[]>([]);
+  const [similarLoading, setSimilarLoading] = useState(false);
+  const [similarError, setSimilarError] = useState<string | null>(null);
   const [teacherReportingFrequency, setTeacherReportingFrequency] = useState<"WEEKLY" | "MONTHLY">("MONTHLY");
   const [studentBorrowDays, setStudentBorrowDays] = useState<7 | 14>(14);
   const [studentBorrowForm, setStudentBorrowForm] = useState({
@@ -151,7 +154,14 @@ export const BookDetailsScreen = ({ route }: Props) => {
     const load = async () => {
       setLoading(true);
       setError(null);
-      const result = await booksApi.getBookById(bookId);
+      setSimilarLoading(true);
+      setSimilarError(null);
+
+      const [result, similarResult] = await Promise.all([
+        booksApi.getBookById(bookId),
+        booksApi.getSimilarBooks(bookId),
+      ]);
+
       if (!mounted) return;
       if (result.error || !result.data) {
         setError(result.error ?? "Unable to load book details.");
@@ -159,7 +169,15 @@ export const BookDetailsScreen = ({ route }: Props) => {
       } else {
         setBook(result.data);
       }
+      if (similarResult.error) {
+        setSimilarError(similarResult.error ?? "Unable to load similar books.");
+        setSimilarBooks([]);
+      } else {
+        setSimilarError(null);
+        setSimilarBooks(similarResult.data ?? []);
+      }
       setLoading(false);
+      setSimilarLoading(false);
     };
     void load();
     return () => {
@@ -446,6 +464,49 @@ export const BookDetailsScreen = ({ route }: Props) => {
               </View>
             ))}
           </View>
+        </View>
+
+        <View style={styles.sectionCard}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionTextWrap}>
+              <Text style={styles.sectionEyebrow}>Recommendations</Text>
+              <Text style={styles.sectionTitle}>Similar Books</Text>
+            </View>
+            <View style={styles.sectionBadge}>
+              <Text style={styles.sectionBadgeText}>{similarBooks.length} picks</Text>
+            </View>
+          </View>
+          <Text style={styles.sectionCopy}>
+            Related titles based on this book's categories, author, and current circulation trends.
+          </Text>
+
+          {similarLoading ? (
+            <View style={styles.inlineLoadingWrap}>
+              <ActivityIndicator size="small" color={webTheme.colors.accentCoolStrong} />
+              <Text style={styles.inlineLoadingText}>Loading similar books...</Text>
+            </View>
+          ) : similarError ? (
+            <View style={styles.errorBox}>
+              <Text style={styles.errorText}>{similarError}</Text>
+            </View>
+          ) : similarBooks.length === 0 ? (
+            <Text style={styles.emptyText}>No similar books are available for this title yet.</Text>
+          ) : (
+            <View style={styles.recommendationStack}>
+              {similarBooks.slice(0, 4).map((item) => (
+                <Pressable
+                  key={`similar-${item.book.id}`}
+                  style={styles.recommendationCard}
+                  onPress={() => navigation.push("BookDetails", { bookId: item.book.id })}
+                >
+                  <Text style={styles.recommendationEyebrow}>Suggested next read</Text>
+                  <Text style={styles.recommendationTitle}>{item.book.title}</Text>
+                  <Text style={styles.recommendationAuthor}>{item.book.author}</Text>
+                  <Text style={styles.recommendationReason}>{item.reason}</Text>
+                </Pressable>
+              ))}
+            </View>
+          )}
         </View>
 
         {!!error && (
@@ -1082,6 +1143,55 @@ const styles = StyleSheet.create({
   },
   actionTextDisabled: {
     color: "rgba(232,241,255,0.58)",
+  },
+  recommendationStack: {
+    gap: 8,
+  },
+  recommendationCard: {
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "rgba(125,211,252,0.22)",
+    backgroundColor: "rgba(14,165,233,0.14)",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    gap: 4,
+  },
+  recommendationEyebrow: {
+    color: "#7dd3fc",
+    fontSize: 10,
+    textTransform: "uppercase",
+    letterSpacing: 1.1,
+    fontWeight: "800",
+  },
+  recommendationTitle: {
+    color: webTheme.colors.darkInk,
+    fontSize: 15,
+    fontWeight: "800",
+  },
+  recommendationAuthor: {
+    color: "rgba(232,241,255,0.76)",
+    fontSize: 12,
+    fontWeight: "700",
+  },
+  recommendationReason: {
+    color: "rgba(232,241,255,0.68)",
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  inlineLoadingWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingVertical: 4,
+  },
+  inlineLoadingText: {
+    color: webTheme.colors.darkInkMuted,
+    fontSize: 12,
+  },
+  emptyText: {
+    color: webTheme.colors.darkInkMuted,
+    fontSize: 12,
+    lineHeight: 18,
   },
   loadingWrap: {
     flex: 1,

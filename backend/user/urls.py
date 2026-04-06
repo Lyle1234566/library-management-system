@@ -14,6 +14,7 @@ from .views import (
     PasswordResetVerifyView,
     PasswordResetConfirmView,
     ContactMessageView,
+    ContactMessageDetailView,
     PendingAccountsView,
     PendingStudentsView,
     ApproveAccountView,
@@ -59,6 +60,7 @@ urlpatterns = [
 
     # Contact form
     path('contact/', ContactMessageView.as_view(), name='contact_message'),
+    path('contact/<int:message_id>/', ContactMessageDetailView.as_view(), name='contact_message_detail'),
     
     # Utility endpoints
     path('check-account-identifier/', CheckAccountIdentifierView.as_view(), name='check_account_identifier'),

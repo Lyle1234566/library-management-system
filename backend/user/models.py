@@ -258,11 +258,30 @@ class PasswordResetCode(models.Model):
 class ContactMessage(models.Model):
     """Stores contact form submissions."""
 
+    STATUS_NEW = 'NEW'
+    STATUS_IN_PROGRESS = 'IN_PROGRESS'
+    STATUS_RESOLVED = 'RESOLVED'
+    STATUS_CHOICES = (
+        (STATUS_NEW, 'New'),
+        (STATUS_IN_PROGRESS, 'In progress'),
+        (STATUS_RESOLVED, 'Resolved'),
+    )
+
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='contact_messages')
     name = models.CharField(max_length=120)
     email = models.EmailField()
     subject = models.CharField(max_length=200, blank=True)
     message = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_NEW)
+    handled_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='handled_contact_messages',
+    )
+    handled_at = models.DateTimeField(blank=True, null=True)
+    internal_notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -270,6 +289,13 @@ class ContactMessage(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} ({self.email})"
+
+    def save(self, *args, **kwargs):
+        self.name = (self.name or '').strip()
+        self.email = (self.email or '').strip().lower()
+        self.subject = (self.subject or '').strip()
+        self.internal_notes = (self.internal_notes or '').strip()
+        super().save(*args, **kwargs)
 
 
 class Notification(models.Model):

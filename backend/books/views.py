@@ -221,7 +221,7 @@ def get_books_catalog_queryset():
         BorrowRequest.STATUS_APPROVED,
         BorrowRequest.STATUS_RETURNED,
     ]
-    return Book.objects.all().prefetch_related('categories').annotate(
+    return Book.objects.all().prefetch_related('categories', 'copies').annotate(
         copies_total=Count('copies', distinct=True),
         copies_available_count=Count(
             'copies',
@@ -750,7 +750,15 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
     permission_classes = [CanManageBooks]
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title', 'author', 'isbn']
+    search_fields = [
+        'title',
+        'author',
+        'isbn',
+        'location_shelf',
+        'copies__barcode',
+        'copies__location_room',
+        'copies__location_shelf',
+    ]
 
     def get_queryset(self):
         queryset = get_books_catalog_queryset()

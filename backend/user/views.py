@@ -11,6 +11,7 @@ from django.core.signing import BadSignature, SignatureExpired
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -45,6 +46,8 @@ from .serializers import (
     PasswordResetVerifySerializer,
     PasswordResetConfirmSerializer,
     ContactMessageSerializer,
+    ContactMessageManagementSerializer,
+    ContactMessageWorkflowSerializer,
     NotificationSerializer,
 )
 
@@ -65,6 +68,20 @@ PORTAL_ROLE_MAP = {
 }
 REGISTRABLE_ACCOUNT_ROLES = {'STUDENT', 'TEACHER'}
 PENDING_ACCOUNT_ROLES = {'STUDENT', 'TEACHER'}
+CONTACT_MESSAGE_MANAGER_ROLES = {'LIBRARIAN', 'ADMIN', 'STAFF'}
+
+
+def can_manage_contact_messages(user) -> bool:
+    if not user or not user.is_authenticated:
+        return False
+    if getattr(user, 'role', None) in CONTACT_MESSAGE_MANAGER_ROLES:
+        return True
+    return bool(getattr(user, 'has_working_student_access', lambda: False)())
+
+
+class CanManageContactMessages(BasePermission):
+    def has_permission(self, request, view):
+        return can_manage_contact_messages(request.user)
 
 
 def format_email_delivery_error(message_prefix: str, exc: Exception) -> str:
@@ -1322,8 +1339,34 @@ class ContactMessageView(APIView):
     Accept contact form submissions.
     """
 
-    permission_classes = [AllowAny]
     throttle_scope = 'contact'
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [CanManageContactMessages()]
+        return [AllowAny()]
+
+    def get(self, request):
+        queryset = ContactMessage.objects.select_related('user', 'handled_by').all()
+        status_filter = str(request.query_params.get('status') or '').strip().upper()
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+
+        limit = None
+        limit_raw = request.query_params.get('limit')
+        if limit_raw:
+            try:
+                limit = max(1, min(int(limit_raw), 100))
+            except (TypeError, ValueError):
+                return Response(
+                    {'detail': 'limit must be an integer between 1 and 100.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        if limit is not None:
+            queryset = queryset[:limit]
+
+        serializer = ContactMessageManagementSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = ContactMessageSerializer(data=request.data)
@@ -1341,6 +1384,63 @@ class ContactMessageView(APIView):
         return Response(
             {'message': 'Thanks! Your message has been received.'},
             status=status.HTTP_201_CREATED,
+        )
+
+
+class ContactMessageDetailView(APIView):
+    permission_classes = [CanManageContactMessages]
+
+    def patch(self, request, message_id):
+        contact_message = get_object_or_404(
+            ContactMessage.objects.select_related('user', 'handled_by'),
+            pk=message_id,
+        )
+        serializer = ContactMessageWorkflowSerializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        update_fields: list[str] = []
+        validated = serializer.validated_data
+
+        if 'status' in validated and validated['status'] != contact_message.status:
+            contact_message.status = validated['status']
+            update_fields.append('status')
+
+            if validated['status'] != ContactMessage.STATUS_NEW:
+                contact_message.handled_by = request.user
+                contact_message.handled_at = timezone.now()
+                update_fields.extend(['handled_by', 'handled_at'])
+
+        if 'internal_notes' in validated:
+            internal_notes = (validated['internal_notes'] or '').strip()
+            if internal_notes != contact_message.internal_notes:
+                contact_message.internal_notes = internal_notes
+                update_fields.append('internal_notes')
+                if contact_message.handled_by_id is None:
+                    contact_message.handled_by = request.user
+                    update_fields.append('handled_by')
+                if contact_message.handled_at is None:
+                    contact_message.handled_at = timezone.now()
+                    update_fields.append('handled_at')
+
+        if not update_fields:
+            response_serializer = ContactMessageManagementSerializer(contact_message)
+            return Response(
+                {
+                    'message': 'No changes were applied.',
+                    'contact_message': response_serializer.data,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        deduped_fields = list(dict.fromkeys(update_fields))
+        contact_message.save(update_fields=deduped_fields)
+        response_serializer = ContactMessageManagementSerializer(contact_message)
+        return Response(
+            {
+                'message': 'Contact message updated.',
+                'contact_message': response_serializer.data,
+            },
+            status=status.HTTP_200_OK,
         )
 
 

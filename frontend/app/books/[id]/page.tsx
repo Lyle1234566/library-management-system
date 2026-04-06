@@ -12,6 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import {
   booksApi,
   Book,
+  BorrowRequest,
   BookRecommendation,
   BookReview,
   ReportingFrequency,
@@ -374,6 +375,7 @@ export default function BookDetailsPage() {
   const [recommendationsLoading, setRecommendationsLoading] = useState(false);
   const [recommendationsError, setRecommendationsError] = useState<string | null>(null);
   const [showBorrowSlip, setShowBorrowSlip] = useState(false);
+  const [latestProcessedBorrowRequest, setLatestProcessedBorrowRequest] = useState<BorrowRequest | null>(null);
   const [borrowSlipData, setBorrowSlipData] = useState<{
     studentName: string;
     studentId: string;
@@ -454,6 +456,48 @@ export default function BookDetailsPage() {
 
     void fetchRecommendations();
   }, [bookId]);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const fetchLatestProcessedBorrow = async () => {
+      if (!bookId || Number.isNaN(bookId) || !isAuthenticated || !canBorrowAsPatron(user)) {
+        setLatestProcessedBorrowRequest(null);
+        return;
+      }
+
+      const response = await booksApi.getBorrowRequests();
+      if (!isActive) {
+        return;
+      }
+
+      if (response.error || !response.data) {
+        setLatestProcessedBorrowRequest(null);
+        return;
+      }
+
+      const latestMatch =
+        response.data
+          .filter(
+            (request) =>
+              request.book.id === bookId &&
+              (request.status === 'APPROVED' || request.status === 'RETURNED')
+          )
+          .sort((a, b) => {
+            const aTime = new Date(a.processed_at ?? a.requested_at).getTime();
+            const bTime = new Date(b.processed_at ?? b.requested_at).getTime();
+            return bTime - aTime;
+          })[0] ?? null;
+
+      setLatestProcessedBorrowRequest(latestMatch);
+    };
+
+    void fetchLatestProcessedBorrow();
+
+    return () => {
+      isActive = false;
+    };
+  }, [bookId, isAuthenticated, user]);
 
   // Get user's existing review
   const userReview = reviews.find((r) => user && r.user.id === user.id);
@@ -909,6 +953,13 @@ export default function BookDetailsPage() {
   const isTeacher = user?.role === 'TEACHER';
   const canUseBorrowingActions = canBorrowAsPatron(user);
   const isStudentBorrower = canUseBorrowingActions && !isTeacher;
+  const librarianVerificationName = latestProcessedBorrowRequest?.processed_by?.full_name ?? '';
+  const librarianVerificationDate = latestProcessedBorrowRequest?.processed_at
+    ? formatDate(latestProcessedBorrowRequest.processed_at)
+    : '';
+  const librarianVerificationPlaceholder = latestProcessedBorrowRequest
+    ? 'Recorded from latest approved borrow'
+    : 'Filled after librarian approval';
   const isBorrowDisabled =
     borrowSubmitting || authLoading || (isAuthenticated && !canUseBorrowingActions);
   const canRequestReturn = Boolean(book && isBorrowedByUser && !hasPendingReturnRequest);
@@ -2130,10 +2181,10 @@ export default function BookDetailsPage() {
                         Librarian Name
                       </label>
                       <input
-                        value=""
+                        value={librarianVerificationName}
                         readOnly
-                        className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/40"
-                        placeholder="For staff use"
+                        className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/70"
+                        placeholder={librarianVerificationPlaceholder}
                       />
                     </div>
                     <div>
@@ -2141,10 +2192,10 @@ export default function BookDetailsPage() {
                         Librarian Signature
                       </label>
                       <input
-                        value=""
+                        value={librarianVerificationName}
                         readOnly
-                        className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/40"
-                        placeholder="For staff use"
+                        className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/70"
+                        placeholder={librarianVerificationPlaceholder}
                       />
                     </div>
                     <div>
@@ -2152,10 +2203,10 @@ export default function BookDetailsPage() {
                         Date Approved
                       </label>
                       <input
-                        value=""
+                        value={librarianVerificationDate}
                         readOnly
-                        className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/40"
-                        placeholder="For staff use"
+                        className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/70"
+                        placeholder={librarianVerificationPlaceholder}
                       />
                     </div>
                   </div>
@@ -2288,6 +2339,9 @@ export default function BookDetailsPage() {
                 callNumber={borrowSlipData.callNumber}
                 dateBorrowed={borrowSlipData.dateBorrowed}
                 dueDate={borrowSlipData.dueDate}
+                receiptNumber={latestProcessedBorrowRequest?.receipt_number}
+                librarianName={librarianVerificationName}
+                approvedDate={librarianVerificationDate}
               />
             </div>
           </div>

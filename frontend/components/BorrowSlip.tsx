@@ -9,6 +9,9 @@ interface BorrowSlipProps {
   callNumber: string;
   dateBorrowed: string;
   dueDate: string;
+  receiptNumber?: string | null;
+  librarianName?: string | null;
+  approvedDate?: string | null;
 }
 
 const formatValue = (value: string, fallback = 'Not provided') => {
@@ -40,6 +43,9 @@ export default function BorrowSlip({
   callNumber,
   dateBorrowed,
   dueDate,
+  receiptNumber,
+  librarianName,
+  approvedDate,
 }: BorrowSlipProps) {
   const handlePrint = () => {
     window.print();
@@ -53,6 +59,9 @@ export default function BorrowSlip({
   const displayCallNumber = formatValue(callNumber, 'To be assigned');
   const displayDateBorrowed = formatValue(dateBorrowed);
   const displayDueDate = formatValue(dueDate);
+  const displayReceiptNumber = formatValue(receiptNumber ?? '', 'Pending librarian approval');
+  const displayLibrarianName = formatValue(librarianName ?? '', 'Pending librarian approval');
+  const displayApprovedDate = formatValue(approvedDate ?? '', 'Pending librarian approval');
 
   return (
     <>
@@ -163,6 +172,7 @@ export default function BorrowSlip({
                 <DetailRow label="Book Title" value={displayBookTitle} />
                 <DetailRow label="Author" value={displayAuthor} />
                 <DetailRow label="Call Number / Accession No." value={displayCallNumber} />
+                <DetailRow label="Receipt Number" value={displayReceiptNumber} />
               </dl>
 
               <div className="mt-8 rounded-2xl border border-slate-300 bg-slate-50 px-4 py-4">
@@ -191,6 +201,9 @@ export default function BorrowSlip({
                 <div className="h-14 border-b border-slate-900" />
                 <p className="mt-3 text-center text-sm font-semibold text-slate-800">
                   Librarian Signature
+                </p>
+                <p className="mt-2 text-center text-xs text-slate-500">
+                  {displayLibrarianName} | {displayApprovedDate}
                 </p>
               </div>
             </div>

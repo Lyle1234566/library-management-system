@@ -16,7 +16,7 @@ import { notificationsApi } from "../api/notifications";
 import { useAuth } from "../auth/AuthContext";
 import { AppTabParamList, RootStackParamList } from "../navigation/RootNavigator";
 import { webTheme } from "../theme/webTheme";
-import { BorrowRequest } from "../types";
+import { BorrowRequest, PersonalizedBookRecommendations } from "../types";
 import { canOpenLibrarianDesk, getRoleLabel, hasStaffDeskAccess } from "../utils/roles";
 
 type ChartSeriesPoint = {
@@ -53,6 +53,10 @@ export const DashboardScreen = () => {
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
   const [analyticsError, setAnalyticsError] = useState<string | null>(null);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [recommendations, setRecommendations] = useState<PersonalizedBookRecommendations | null>(null);
+  const [recommendationsLoading, setRecommendationsLoading] = useState(false);
+  const [recommendationsError, setRecommendationsError] = useState<string | null>(null);
+  const showPatronRecommendations = Boolean(user && !isLibrarianDesk && !showStaffDesk);
 
   const loadUnreadNotifications = useCallback(async () => {
     if (!user) return;
@@ -110,6 +114,36 @@ export const DashboardScreen = () => {
   useEffect(() => {
     void loadUnreadNotifications();
   }, [loadUnreadNotifications]);
+
+  const loadRecommendations = useCallback(async () => {
+    if (!showPatronRecommendations) {
+      setRecommendations(null);
+      setRecommendationsLoading(false);
+      setRecommendationsError(null);
+      return;
+    }
+
+    setRecommendationsLoading(true);
+    const result = await booksApi.getRecommendations();
+    if (result.error || !result.data) {
+      setRecommendationsError(result.error ?? "Unable to load recommendations.");
+      setRecommendations({
+        for_you: [],
+        popular_now: [],
+        based_on_history: false,
+      });
+      setRecommendationsLoading(false);
+      return;
+    }
+
+    setRecommendationsError(null);
+    setRecommendations(result.data);
+    setRecommendationsLoading(false);
+  }, [showPatronRecommendations]);
+
+  useEffect(() => {
+    void loadRecommendations();
+  }, [loadRecommendations]);
 
   const mostBorrowedBooks = useMemo(() => {
     const counts = new Map<number, { id: number; title: string; count: number }>();
@@ -500,6 +534,71 @@ export const DashboardScreen = () => {
               ) : null}
             </View>
           </View>
+
+          {showPatronRecommendations ? (
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHeader}>
+                <View style={styles.sectionTextWrap}>
+                  <Text style={styles.sectionEyebrow}>Recommendations</Text>
+                  <Text style={styles.sectionTitle}>Suggested for You</Text>
+                </View>
+                <Pressable
+                  style={styles.refreshButton}
+                  onPress={() => void loadRecommendations()}
+                >
+                  <Text style={styles.refreshButtonText}>Refresh</Text>
+                </Pressable>
+              </View>
+
+              {recommendationsLoading ? (
+                <View style={styles.loadingWrap}>
+                  <ActivityIndicator size="small" color={webTheme.colors.accentCoolStrong} />
+                  <Text style={styles.loadingText}>Loading recommendations...</Text>
+                </View>
+              ) : recommendationsError ? (
+                <View style={styles.errorBox}>
+                  <Text style={styles.errorText}>{recommendationsError}</Text>
+                </View>
+              ) : (
+                <View style={styles.recommendationList}>
+                  {(recommendations?.for_you ?? []).slice(0, 3).map((item) => (
+                    <Pressable
+                      key={`for-you-${item.book.id}`}
+                      style={styles.recommendationCard}
+                      onPress={() => navigation.navigate("BookDetails", { bookId: item.book.id })}
+                    >
+                      <Text style={styles.recommendationEyebrow}>
+                        {recommendations?.based_on_history ? "Based on your history" : "For you"}
+                      </Text>
+                      <Text style={styles.recommendationTitle}>{item.book.title}</Text>
+                      <Text style={styles.recommendationAuthor}>{item.book.author}</Text>
+                      <Text style={styles.recommendationReason}>{item.reason}</Text>
+                    </Pressable>
+                  ))}
+
+                  {(recommendations?.popular_now ?? []).slice(0, 2).map((item) => (
+                    <Pressable
+                      key={`popular-${item.book.id}`}
+                      style={styles.recommendationCardSecondary}
+                      onPress={() => navigation.navigate("BookDetails", { bookId: item.book.id })}
+                    >
+                      <Text style={styles.recommendationEyebrow}>Popular now</Text>
+                      <Text style={styles.recommendationTitle}>{item.book.title}</Text>
+                      <Text style={styles.recommendationAuthor}>{item.book.author}</Text>
+                      <Text style={styles.recommendationReason}>{item.reason}</Text>
+                    </Pressable>
+                  ))}
+
+                  {(recommendations?.for_you ?? []).length === 0 &&
+                  (recommendations?.popular_now ?? []).length === 0 ? (
+                    <Text style={styles.emptyText}>
+                      Borrow or return a few titles to improve your recommendation feed.
+                    </Text>
+                  ) : null}
+                </View>
+              )}
+            </View>
+          ) : null}
 
           {isLibrarianDesk ? (
             <View style={styles.sectionCard}>
@@ -1305,6 +1404,54 @@ const styles = StyleSheet.create({
   listEmpty: {
     color: webTheme.colors.darkInkMuted,
     fontSize: 12,
+  },
+  recommendationList: {
+    gap: 8,
+  },
+  recommendationCard: {
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "rgba(125,211,252,0.22)",
+    backgroundColor: "rgba(14,165,233,0.14)",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    gap: 4,
+  },
+  recommendationCardSecondary: {
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "rgba(251,191,36,0.22)",
+    backgroundColor: "rgba(245,158,11,0.12)",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    gap: 4,
+  },
+  recommendationEyebrow: {
+    color: "#7dd3fc",
+    fontSize: 10,
+    textTransform: "uppercase",
+    letterSpacing: 1.1,
+    fontWeight: "800",
+  },
+  recommendationTitle: {
+    color: webTheme.colors.darkInk,
+    fontSize: 15,
+    fontWeight: "800",
+  },
+  recommendationAuthor: {
+    color: "rgba(232,241,255,0.76)",
+    fontSize: 12,
+    fontWeight: "700",
+  },
+  recommendationReason: {
+    color: "rgba(232,241,255,0.68)",
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  emptyText: {
+    color: webTheme.colors.darkInkMuted,
+    fontSize: 12,
+    lineHeight: 18,
   },
   roleRow: {
     alignSelf: "flex-start",

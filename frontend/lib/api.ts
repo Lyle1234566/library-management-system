@@ -162,6 +162,15 @@ export interface Category {
 export type UserRole = 'STUDENT' | 'TEACHER' | 'LIBRARIAN' | 'WORKING' | 'ADMIN' | 'STAFF';
 export type ReportingFrequency = 'NONE' | 'WEEKLY' | 'MONTHLY';
 
+export interface BookCopyPreview {
+  id: number;
+  barcode: string;
+  status: 'AVAILABLE' | 'BORROWED' | 'MAINTENANCE';
+  location_room?: string;
+  location_shelf?: string;
+  is_reference_only: boolean;
+}
+
 export interface Book {
   id: number;
   title: string;
@@ -181,6 +190,7 @@ export interface Book {
   is_borrowed_by_user?: boolean;
   has_pending_borrow_request?: boolean;
   has_pending_return_request?: boolean;
+  copy_preview?: BookCopyPreview[];
   average_rating?: number;
   review_count?: number;
   user_review?: {
@@ -404,6 +414,22 @@ export interface ContactMessagePayload {
   message: string;
 }
 
+export type ContactMessageStatus = 'NEW' | 'IN_PROGRESS' | 'RESOLVED';
+
+export interface ContactMessageRecord {
+  id: number;
+  user: BorrowRequestUser | null;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  status: ContactMessageStatus;
+  internal_notes: string;
+  handled_by: BorrowRequestUser | null;
+  handled_at: string | null;
+  created_at: string;
+}
+
 export interface PublicLibraryStats {
   books_cataloged: number;
   active_students: number;
@@ -414,6 +440,11 @@ export interface PublicLibraryStats {
 interface FinePaymentActionResponse {
   message: string;
   fine_payment: FinePayment;
+}
+
+interface ContactMessageWorkflowResponse {
+  message: string;
+  contact_message: ContactMessageRecord;
 }
 
 export async function approveBorrowRequest(id: number): Promise<ApiResponse<BorrowRequest>> {
@@ -1222,6 +1253,54 @@ export const contactApi = {
         body: JSON.stringify(payload),
       });
       const { data, text } = await parseJsonResponse<{ message: string }>(response);
+      if (!response.ok) {
+        return { data: null, error: normalizeErrorMessage(response, data, text) };
+      }
+      if (data === null) {
+        return { data: null, error: 'Unexpected response from server.' };
+      }
+      return { data, error: null };
+    } catch (error) {
+      return { data: null, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  },
+
+  async getMessages(status?: ContactMessageStatus, limit = 50): Promise<ApiResponse<ContactMessageRecord[]>> {
+    try {
+      const query = new URLSearchParams();
+      if (status) {
+        query.set('status', status);
+      }
+      query.set('limit', String(limit));
+
+      const response = await fetchWithAuthRetry(`${API_BASE_URL}/auth/contact/?${query.toString()}`, {
+        method: 'GET',
+        headers: buildHeaders(),
+      });
+      const { data, text } = await parseJsonResponse<ContactMessageRecord[]>(response);
+      if (!response.ok) {
+        return { data: null, error: normalizeErrorMessage(response, data, text) };
+      }
+      if (data === null) {
+        return { data: null, error: 'Unexpected response from server.' };
+      }
+      return { data, error: null };
+    } catch (error) {
+      return { data: null, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  },
+
+  async updateMessage(
+    id: number,
+    payload: { status?: ContactMessageStatus; internal_notes?: string }
+  ): Promise<ApiResponse<ContactMessageWorkflowResponse>> {
+    try {
+      const response = await fetchWithAuthRetry(`${API_BASE_URL}/auth/contact/${id}/`, {
+        method: 'PATCH',
+        headers: buildHeaders(),
+        body: JSON.stringify(payload),
+      });
+      const { data, text } = await parseJsonResponse<ContactMessageWorkflowResponse>(response);
       if (!response.ok) {
         return { data: null, error: normalizeErrorMessage(response, data, text) };
       }
