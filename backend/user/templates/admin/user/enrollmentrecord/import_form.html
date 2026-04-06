@@ -1,0 +1,51 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a>
+  &rsaquo; <a href="{{ changelist_url }}">{{ opts.verbose_name_plural|capfirst }}</a>
+  &rsaquo; Import
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <fieldset class="module aligned">
+      <h2>Upload enrollment file</h2>
+      <div class="form-row">
+        {{ form.file.errors }}
+        <div>{{ form.file.label_tag }} {{ form.file }}</div>
+        {% if form.file.help_text %}<div class="help">{{ form.file.help_text }}</div>{% endif %}
+      </div>
+      <div class="form-row">
+        {{ form.academic_term.errors }}
+        <div>{{ form.academic_term.label_tag }} {{ form.academic_term }}</div>
+        {% if form.academic_term.help_text %}<div class="help">{{ form.academic_term.help_text }}</div>{% endif %}
+      </div>
+    </fieldset>
+    <div class="submit-row">
+      <input type="submit" value="Import records" class="default">
+      <a href="{{ changelist_url }}" class="button">Back to records</a>
+    </div>
+  </form>
+
+  <div class="module">
+    <h2>Accepted files</h2>
+    <p>Upload a CSV or Excel (.xlsx) file. The importer also accepts human-friendly headers like Student ID, Full Name, School Email, Program, Year Level, Academic Term, Currently Enrolled, and Notes.</p>
+    <p><strong>Recommended columns:</strong> {{ template_columns|join:", " }}</p>
+  </div>
+
+  <div class="module">
+    <h2>Current summary</h2>
+    <ul>
+      <li>Total records: {{ summary.total_records }}</li>
+      <li>Currently enrolled: {{ summary.active_records }}</li>
+      <li>Inactive records: {{ summary.inactive_records }}</li>
+      <li>Latest academic term: {{ summary.latest_term|default:"-" }}</li>
+      <li>Last updated: {{ summary.last_updated_at|default:"-" }}</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

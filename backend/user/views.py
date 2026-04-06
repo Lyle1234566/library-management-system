@@ -24,7 +24,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
-from .enrollment_import import EnrollmentImportError, get_enrollment_summary, import_enrollment_csv_file
+from .enrollment_import import EnrollmentImportError, get_enrollment_summary, import_enrollment_file
 from .email_delivery import get_email_config_error, send_email_message
 from .models import (
     PasswordResetCode,
@@ -898,7 +898,7 @@ class EnrollmentImportView(APIView):
         fallback_term = str(request.data.get('academic_term') or '').strip()
 
         try:
-            result = import_enrollment_csv_file(upload, fallback_term=fallback_term)
+            result = import_enrollment_file(upload, fallback_term=fallback_term)
         except EnrollmentImportError as exc:
             return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 

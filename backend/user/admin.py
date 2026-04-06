@@ -1,10 +1,22 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
+from django.template.response import TemplateResponse
+from django.urls import path, reverse
 from django.utils.html import format_html_join
 
-from .forms import CustomUserChangeForm, CustomUserCreationForm
-from .models import ContactMessage, EnrollmentRecord, Notification, User
 from books.models import BorrowRequest
+
+from .enrollment_import import (
+    ENROLLMENT_TEMPLATE_COLUMNS,
+    EnrollmentImportError,
+    get_enrollment_summary,
+    import_enrollment_file,
+)
+from .forms import CustomUserChangeForm, CustomUserCreationForm, EnrollmentImportAdminForm
+from .models import ContactMessage, EnrollmentRecord, Notification, User
+
 
 class UserAdmin(BaseUserAdmin):
     form = CustomUserChangeForm
@@ -24,7 +36,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('role', 'is_working_student', 'is_active', 'is_staff', 'date_joined')
     search_fields = ('username', 'student_id', 'staff_id', 'email', 'full_name')
     ordering = ('-date_joined',)
-    
+
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (
@@ -45,24 +57,27 @@ class UserAdmin(BaseUserAdmin):
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important Dates', {'fields': ('last_login', 'date_joined')}),
     )
-    
+
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': (
-                'username',
-                'student_id',
-                'staff_id',
-                'email',
-                'full_name',
-                'role',
-                'is_working_student',
-                'password1',
-                'password2',
-            ),
-        }),
+        (
+            None,
+            {
+                'classes': ('wide',),
+                'fields': (
+                    'username',
+                    'student_id',
+                    'staff_id',
+                    'email',
+                    'full_name',
+                    'role',
+                    'is_working_student',
+                    'password1',
+                    'password2',
+                ),
+            },
+        ),
     )
-    
+
     readonly_fields = ('date_joined', 'last_login', 'borrow_receipts')
     filter_horizontal = ('groups', 'user_permissions')
 
@@ -88,12 +103,14 @@ class UserAdmin(BaseUserAdmin):
     class Media:
         js = ('user/admin-user-role.js',)
 
+
 admin.site.register(User, UserAdmin)
 admin.site.register(ContactMessage)
 
 
 @admin.register(EnrollmentRecord)
 class EnrollmentRecordAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/user/enrollmentrecord/change_list.html'
     list_display = (
         'student_id',
         'full_name',
@@ -108,6 +125,62 @@ class EnrollmentRecordAdmin(admin.ModelAdmin):
     search_fields = ('student_id', 'full_name', 'school_email', 'program')
     ordering = ('student_id',)
     readonly_fields = ('created_at', 'updated_at')
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                'import/',
+                self.admin_site.admin_view(self.import_view),
+                name='user_enrollmentrecord_import',
+            )
+        ]
+        return custom_urls + urls
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        if self.has_add_permission(request):
+            extra_context['enrollment_import_url'] = reverse('admin:user_enrollmentrecord_import')
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def import_view(self, request):
+        if not self.has_add_permission(request):
+            raise PermissionDenied
+
+        form = EnrollmentImportAdminForm(request.POST or None, request.FILES or None)
+        changelist_url = reverse('admin:user_enrollmentrecord_changelist')
+
+        if request.method == 'POST' and form.is_valid():
+            try:
+                result = import_enrollment_file(
+                    form.cleaned_data['file'],
+                    fallback_term=form.cleaned_data['academic_term'],
+                )
+            except EnrollmentImportError as exc:
+                form.add_error('file', str(exc))
+            else:
+                messages.success(
+                    request,
+                    (
+                        'Enrollment records imported successfully. '
+                        f'Created: {result.created_count}, updated: {result.updated_count}, '
+                        f'skipped: {result.skipped_count}.'
+                    ),
+                )
+                for skipped_row in result.skipped_rows:
+                    messages.warning(request, skipped_row)
+                return redirect(changelist_url)
+
+        context = {
+            **self.admin_site.each_context(request),
+            'opts': self.model._meta,
+            'title': 'Import enrollment records',
+            'form': form,
+            'summary': get_enrollment_summary(),
+            'template_columns': ENROLLMENT_TEMPLATE_COLUMNS,
+            'changelist_url': changelist_url,
+        }
+        return TemplateResponse(request, 'admin/user/enrollmentrecord/import_form.html', context)
 
 
 @admin.register(Notification)

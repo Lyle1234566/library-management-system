@@ -1,4 +1,5 @@
 import base64
+from io import BytesIO
 import re
 import shutil
 from datetime import timedelta
@@ -10,9 +11,10 @@ from django.core.cache import cache
 from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import IntegrityError, transaction
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
+from openpyxl import Workbook
 from rest_framework import status
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -1606,3 +1608,65 @@ class LogoutBlacklistTests(TestCase):
             format='json',
         )
         self.assertNotEqual(refresh_response.status_code, status.HTTP_200_OK)
+
+class EnrollmentRecordAdminImportTests(TestCase):
+    def setUp(self):
+        user_model = get_user_model()
+        self.admin_user = user_model.objects.create_superuser(
+            username='enrollment-admin',
+            password='AdminPass123!',
+            full_name='Enrollment Admin',
+            email='admin@example.com',
+        )
+        self.client = Client()
+        self.client.force_login(self.admin_user)
+
+    def build_workbook_upload(self):
+        workbook = Workbook()
+        worksheet = workbook.active
+        worksheet.append(['Student ID', 'Full Name', 'School Email', 'Program', 'Year Level', 'Currently Enrolled'])
+        worksheet.append(['S-5010', 'Excel Student', 'excel.student@example.com', 'BSIT', 3, True])
+        worksheet.append(['S-5020', 'Inactive Student', 'inactive.student@example.com', 'BSCS', 2, False])
+
+        buffer = BytesIO()
+        workbook.save(buffer)
+        workbook.close()
+        return SimpleUploadedFile(
+            'enrollment.xlsx',
+            buffer.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        )
+
+    def test_admin_changelist_shows_import_link(self):
+        response = self.client.get('/admin/user/enrollmentrecord/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '/admin/user/enrollmentrecord/import/')
+
+    def test_admin_can_import_enrollment_xlsx(self):
+        upload = self.build_workbook_upload()
+        response = self.client.post(
+            '/admin/user/enrollmentrecord/import/',
+            {
+                'file': upload,
+                'academic_term': '2025-2026',
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(EnrollmentRecord.objects.filter(academic_term='2025-2026').count(), 2)
+        self.assertTrue(
+            EnrollmentRecord.objects.filter(
+                student_id='S-5010',
+                full_name='Excel Student',
+                is_currently_enrolled=True,
+            ).exists()
+        )
+        self.assertTrue(
+            EnrollmentRecord.objects.filter(
+                student_id='S-5020',
+                full_name='Inactive Student',
+                is_currently_enrolled=False,
+            ).exists()
+        )
+
