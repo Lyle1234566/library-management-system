@@ -1,7 +1,16 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Footer() {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <footer className="bg-[#0b1424] text-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -140,7 +149,7 @@ export default function Footer() {
           <p className="text-white/60 text-sm">
             (c) {new Date().getFullYear()} SCSIT Digital Library. All rights reserved.
           </p>
-          <div className="flex flex-wrap gap-4 sm:gap-6">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <Link
               href="/privacy"
               className="text-white/60 hover:text-[color:var(--accent)] text-sm transition-colors"
@@ -153,6 +162,26 @@ export default function Footer() {
             >
               Terms of Service
             </Link>
+            <button
+              onClick={scrollToTop}
+              className="flex items-center gap-2 text-white/60 hover:text-[color:var(--accent)] text-sm transition-all hover:scale-105"
+              aria-label="Scroll to top"
+            >
+              <span>Back to Top</span>
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 10l7-7m0 0l7 7m-7-7v18"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>

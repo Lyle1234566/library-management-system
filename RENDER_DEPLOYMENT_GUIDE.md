@@ -30,6 +30,28 @@ That means:
 
 Use free Render for demo or evaluation only.
 
+## Easiest Permanent Media Fix
+
+The easiest permanent fix without adding another provider is a Render persistent disk.
+
+Why this is the simplest path:
+
+- The app already uses Django file storage and `MEDIA_ROOT`.
+- You do not need Cloudinary, S3, or any extra account.
+- You only need a mounted disk path and one environment variable change.
+
+Important:
+
+- Render free web services do not provide persistent disk storage.
+- This path requires upgrading the backend service to a paid plan that supports persistent disks.
+
+Suggested disk setup:
+
+- Mount path: `/var/data`
+- Media root env var: `MEDIA_ROOT=/var/data/salazar-library-media`
+
+After the disk is attached, Django will keep uploaded `book_covers/` and `avatars/` on that disk instead of the temporary `/tmp` filesystem.
+
 For the smoothest demo:
 
 - Bootstrap an admin account during deploy with `DJANGO_SUPERUSER_*` environment variables.
@@ -121,7 +143,7 @@ SECRET_KEY=<generate-a-random-value>
 DATABASE_URL=<from-render-postgres>
 USE_X_FORWARDED_PROTO=true
 SERVE_MEDIA_FILES=true
-MEDIA_ROOT=/tmp/salazar-library-media
+MEDIA_ROOT=/var/data/salazar-library-media
 DB_CONN_MAX_AGE=60
 DB_CONN_HEALTH_CHECKS=true
 LIBRARY_WEB_URL=https://your-frontend.vercel.app
