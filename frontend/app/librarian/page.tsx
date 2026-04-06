@@ -469,6 +469,28 @@ export default function LibrarianDeskPage() {
       },
     ];
 
+    groups.push({
+      label: 'Communication',
+      items: [
+        ...(canManageContactMessages
+          ? [
+              {
+                id: 'desk-contact',
+                label: 'Contact Inbox',
+                icon: MessageSquare,
+                badge: String(openContactCount),
+              },
+            ]
+          : []),
+        {
+          id: 'desk-notifications',
+          label: 'Notifications',
+          icon: BellRing,
+          badge: String(notificationUnreadCount),
+        },
+      ],
+    });
+
     if (canManageBooks) {
       groups.push({
         label: 'Library Management',
@@ -560,28 +582,6 @@ export default function LibrarianDeskPage() {
         ],
       });
     }
-
-    groups.push({
-      label: 'Communication',
-      items: [
-        {
-          id: 'desk-notifications',
-          label: 'Notifications',
-          icon: BellRing,
-          badge: String(notificationUnreadCount),
-        },
-        ...(canManageContactMessages
-          ? [
-              {
-                id: 'desk-contact',
-                label: 'Contact Inbox',
-                icon: MessageSquare,
-                badge: String(openContactCount),
-              },
-            ]
-          : []),
-      ],
-    });
 
     return groups;
   }, [
