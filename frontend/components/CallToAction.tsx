@@ -1,6 +1,13 @@
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function CallToAction() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading || isAuthenticated) {
+    return null;
+  }
+
   return (
     <section className="relative overflow-hidden py-24 bg-[#0f1b2f]">
       <div className="absolute inset-0">
