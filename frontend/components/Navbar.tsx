@@ -382,25 +382,27 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                 )}
               </div>
             ) : (
-              /* Not Authenticated - Login and Create Account Buttons */
-              <>
-                <Link
-                  href="/login"
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                    isDark
-                      ? 'text-white/72 hover:bg-white/[0.05] hover:text-sky-200'
-                      : 'text-ink-muted hover:bg-white/80 hover:text-ink'
-                  }`}
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/register"
-                  className="bg-[color:var(--accent)] text-[#1a1b1f] px-4 py-2 rounded-full hover:bg-[color:var(--accent-strong)] transition-colors font-semibold shadow-soft"
-                >
-                  Create Account
-                </Link>
-              </>
+              /* Not Authenticated - Show Login and Create Account */
+              !isAuthenticated && (
+                <>
+                  <Link
+                    href="/login"
+                    className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                      isDark
+                        ? 'text-white/72 hover:bg-white/[0.05] hover:text-sky-200'
+                        : 'text-ink-muted hover:bg-white/80 hover:text-ink'
+                    }`}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="bg-[color:var(--accent)] text-[#1a1b1f] px-4 py-2 rounded-full hover:bg-[color:var(--accent-strong)] transition-colors font-semibold shadow-soft"
+                  >
+                    Create Account
+                  </Link>
+                </>
+              )
             )}
           </div>
 
@@ -540,27 +542,29 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                       </button>
                     </div>
                   ) : (
-                    /* Not Authenticated - Login and Create Account Buttons */
-                    <div className="flex flex-col gap-2">
-                      <Link
-                        href="/login"
-                        className={`rounded-full px-4 py-3 text-center text-sm font-medium transition-all ${
-                          isDark
-                            ? 'border border-white/10 text-white/80 hover:bg-white/[0.06] hover:text-sky-200'
-                            : 'border border-line text-ink-muted hover:bg-[color:var(--surface-muted)] hover:text-ink'
-                        }`}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Sign In
-                      </Link>
-                      <Link
-                        href="/register"
-                        className="bg-[color:var(--accent)] text-[#1a1b1f] px-4 py-3 rounded-full hover:bg-[color:var(--accent-strong)] transition-colors font-semibold text-center shadow-soft"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Create Account
-                      </Link>
-                    </div>
+                    /* Not Authenticated - Show Login and Create Account */
+                    !isAuthenticated && (
+                      <div className="flex flex-col gap-2">
+                        <Link
+                          href="/login"
+                          className={`rounded-full px-4 py-3 text-center text-sm font-medium transition-all ${
+                            isDark
+                              ? 'border border-white/10 text-white/80 hover:bg-white/[0.06] hover:text-sky-200'
+                              : 'border border-line text-ink-muted hover:bg-[color:var(--surface-muted)] hover:text-ink'
+                          }`}
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          Sign In
+                        </Link>
+                        <Link
+                          href="/register"
+                          className="bg-[color:var(--accent)] text-[#1a1b1f] px-4 py-3 rounded-full hover:bg-[color:var(--accent-strong)] transition-colors font-semibold text-center shadow-soft"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          Create Account
+                        </Link>
+                      </div>
+                    )
                   )}
                 </div>
               </div>
