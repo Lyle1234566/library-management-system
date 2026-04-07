@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 const deskItems = [
   {
@@ -23,6 +24,7 @@ const deskItems = [
 
 export default function HeroSection() {
   const [searchQuery, setSearchQuery] = useState('');
+  const { isAuthenticated, isLoading } = useAuth();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,12 +125,14 @@ export default function HeroSection() {
                 </svg>
               </Link>
 
-              <Link
-                href="/register"
-                className="inline-flex items-center justify-center rounded-xl border border-white/20 px-7 py-4 text-white/90 font-medium backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/8 hover:border-white/30 lg:rounded-2xl lg:px-9"
-              >
-                Create Free Account
-              </Link>
+              {!isLoading && !isAuthenticated ? (
+                <Link
+                  href="/register"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/20 px-7 py-4 text-white/90 font-medium backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/8 hover:border-white/30 lg:rounded-2xl lg:px-9"
+                >
+                  Create Free Account
+                </Link>
+              ) : null}
             </div>
 
             <div className="flex flex-wrap gap-x-8 gap-y-4 text-sm text-gray-300/80 animate-fade-up delay-300">
