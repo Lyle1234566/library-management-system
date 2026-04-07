@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BookCard from '@/components/BookCard';
 import MovingObjectsLayer from '@/components/MovingObjectsLayer';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import { booksApi, Book, Category } from '@/lib/api';
 import { API_BASE_URL, API_CONFIGURATION_WARNING } from '@/lib/api-config';
 
@@ -133,7 +134,8 @@ function BooksPageContent() {
   }, [books, query, selectedCategoryId]);
 
   return (
-    <div className="theme-login min-h-screen bg-[#0b1324] text-white">
+    <ProtectedRoute>
+      <div className="theme-login min-h-screen bg-[#0b1324] text-white">
       <Navbar variant="dark" />
       <main className="relative overflow-hidden pt-16">
         <MovingObjectsLayer />
@@ -370,6 +372,7 @@ function BooksPageContent() {
       </main>
       <Footer />
     </div>
+    </ProtectedRoute>
   );
 }
 

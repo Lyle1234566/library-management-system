@@ -14,11 +14,11 @@ type NavbarProps = {
 };
 
 const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Browse Books', href: '/books' },
-  { label: 'Features', href: '/features' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Home', href: '/', requireAuth: false },
+  { label: 'Browse Books', href: '/books', requireAuth: true },
+  { label: 'Features', href: '/features', requireAuth: false },
+  { label: 'About', href: '/about', requireAuth: false },
+  { label: 'Contact', href: '/contact', requireAuth: false },
 ] as const;
 
 export default function Navbar({ variant = 'light' }: NavbarProps) {
@@ -236,7 +236,9 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                 : 'bg-white/88 shadow-[0_12px_30px_rgba(15,23,42,0.06)]'
             }`}
           >
-            {navItems.map((item) => (
+            {navItems
+              .filter((item) => !item.requireAuth || isAuthenticated)
+              .map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -380,25 +382,13 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                 )}
               </div>
             ) : (
-              /* Not Authenticated - Login/Register Buttons */
-            <>
-            <Link
+              /* Not Authenticated - Login Button Only */
+              <Link
                 href="/login"
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                  isDark
-                    ? 'text-white/72 hover:bg-white/[0.05] hover:text-sky-200'
-                    : 'text-ink-muted hover:bg-white/80 hover:text-ink'
-                }`}
+                className="bg-[color:var(--accent)] text-[#1a1b1f] px-5 py-2.5 rounded-full hover:bg-[color:var(--accent-strong)] transition-colors font-semibold shadow-soft"
               >
                 Sign In
               </Link>
-              <Link
-                href="/register"
-                className="bg-[color:var(--accent)] text-[#1a1b1f] px-4 py-2 rounded-full hover:bg-[color:var(--accent-strong)] transition-colors font-semibold shadow-soft"
-              >
-                Get Started
-              </Link>
-            </>
             )}
           </div>
 
@@ -445,7 +435,9 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
               }`}
             >
               <div className="flex flex-col gap-2">
-                {navItems.map((item) => (
+                {navItems
+                  .filter((item) => !item.requireAuth || isAuthenticated)
+                  .map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
@@ -536,26 +528,13 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                       </button>
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-2">
-                      <Link
-                        href="/login"
-                        className={`rounded-full px-4 py-3 text-center text-sm font-medium transition-all ${
-                          isDark
-                            ? 'border border-white/10 text-white/80 hover:bg-white/[0.06] hover:text-sky-200'
-                            : 'border border-line text-ink-muted hover:bg-[color:var(--surface-muted)] hover:text-ink'
-                        }`}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Sign In
-                      </Link>
-                      <Link
-                        href="/register"
-                        className="bg-[color:var(--accent)] text-[#1a1b1f] px-4 py-3 rounded-full hover:bg-[color:var(--accent-strong)] transition-colors font-semibold text-center shadow-soft"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Get Started
-                      </Link>
-                    </div>
+                    <Link
+                      href="/login"
+                      className="bg-[color:var(--accent)] text-[#1a1b1f] px-4 py-3 rounded-full hover:bg-[color:var(--accent-strong)] transition-colors font-semibold text-center shadow-soft"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Sign In
+                    </Link>
                   )}
                 </div>
               </div>
