@@ -202,7 +202,7 @@ export default function ProfilePage() {
             <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
               <h1 className="text-3xl font-bold sm:text-4xl">Profile</h1>
               <p className="mt-3 max-w-2xl text-white/75">
-                Edit your account details, review your borrow activity, and keep reminders working from one place.
+                Review your library access, keep your contact details current, and manage account activity from one polished workspace.
               </p>
             </div>
           </section>
@@ -211,57 +211,91 @@ export default function ProfilePage() {
             <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(16,27,45,0.95)_0%,rgba(12,20,35,0.97)_100%)] p-6 shadow-[0_24px_60px_rgba(2,8,23,0.34)] backdrop-blur-xl sm:p-10">
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.02fr_1.38fr]">
                 <div className="space-y-5">
-                  <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[linear-gradient(145deg,rgba(21,34,57,0.98)_0%,rgba(12,21,38,0.94)_100%)] p-6 shadow-[0_18px_50px_rgba(2,8,23,0.28)]">
-                    <div className="space-y-3">
-                      <div className="space-y-3">
-                        <span className="inline-flex items-center rounded-full border border-sky-300/20 bg-sky-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-100">
-                          Account Overview
-                        </span>
-                        <div>
-                          <h2 className="text-2xl font-semibold text-white">
-                            {user?.full_name ?? 'Student'}
-                          </h2>
-                          <p className="mt-1 text-sm text-white/65">
-                            {user?.email ?? 'No email saved for reminders'}
+                  <div className="relative overflow-hidden rounded-[1.9rem] border border-white/10 bg-[linear-gradient(145deg,rgba(21,34,57,0.98)_0%,rgba(10,18,33,0.96)_100%)] p-6 shadow-[0_18px_50px_rgba(2,8,23,0.28)]">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_34%)]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(245,158,11,0.14),transparent_36%)]" />
+                    <div className="relative">
+                      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.18fr)_220px]">
+                        <div className="space-y-4">
+                          <div className="space-y-3">
+                            <span className="inline-flex items-center rounded-full border border-sky-300/20 bg-sky-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-100">
+                              Account Overview
+                            </span>
+                            <div>
+                              <h2 className="text-3xl font-semibold tracking-tight text-white">
+                                {user?.full_name ?? 'Student'}
+                              </h2>
+                              <p className="mt-2 text-sm text-white/65">
+                                {user?.email ?? 'No email saved for reminders'}
+                              </p>
+                            </div>
+                          </div>
+                          <p className="max-w-xl text-sm leading-6 text-white/60">
+                            Your library role, active borrowing status, and access information are organized here for a cleaner and more professional account view.
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/82">
+                              {roleLabel}
+                            </span>
+                            <span className="inline-flex items-center rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-100">
+                              {emailStatusLabel}
+                            </span>
+                            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">
+                              Member since {memberSince}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="rounded-[1.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] p-5 shadow-[0_12px_30px_rgba(2,8,23,0.2)]">
+                          <p className="text-xs uppercase tracking-[0.24em] text-sky-200/70">Primary Role</p>
+                          <p className="mt-3 text-2xl font-semibold text-white">{roleLabel}</p>
+                          <p className="mt-2 text-sm leading-6 text-white/60">
+                            This role controls your sign-in destination and what workspace tools are available.
                           </p>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="mt-6 flex flex-wrap gap-2">
-                      <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/82">
-                        {roleLabel}
-                      </span>
-                      <span className="inline-flex items-center rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-100">
-                        {emailStatusLabel}
-                      </span>
-                      <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">
-                        Member since {memberSince}
-                      </span>
-                    </div>
+                      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                        <div className="rounded-[1.35rem] border border-white/10 bg-white/[0.05] p-4 backdrop-blur-sm">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-xs uppercase tracking-[0.22em] text-white/45">Active Borrows</p>
+                              <p className="mt-2 text-3xl font-semibold text-white">{activeBorrowCount}</p>
+                              <p className="mt-1 text-sm text-white/55">Books currently on your account.</p>
+                            </div>
+                            <span className="rounded-full border border-sky-300/20 bg-sky-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-100">
+                              Live
+                            </span>
+                          </div>
+                        </div>
 
-                    <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                        <p className="text-xs uppercase tracking-[0.22em] text-white/45">Active Borrows</p>
-                        <p className="mt-2 text-3xl font-semibold text-white">{activeBorrowCount}</p>
-                        <p className="mt-1 text-sm text-white/55">Books currently on your account.</p>
-                      </div>
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                        <p className="text-xs uppercase tracking-[0.22em] text-white/45">Pending Requests</p>
-                        <p className="mt-2 text-3xl font-semibold text-white">{pendingRequests.length}</p>
-                        <p className="mt-1 text-sm text-white/55">Requests waiting for approval.</p>
+                        <div className="rounded-[1.35rem] border border-white/10 bg-white/[0.05] p-4 backdrop-blur-sm">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-xs uppercase tracking-[0.22em] text-white/45">Pending Requests</p>
+                              <p className="mt-2 text-3xl font-semibold text-white">{pendingRequests.length}</p>
+                              <p className="mt-1 text-sm text-white/55">Requests waiting for approval.</p>
+                            </div>
+                            <span className="rounded-full border border-amber-300/20 bg-amber-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-100">
+                              Queue
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-[1.75rem] border border-white/10 bg-[#101b2d]/92 p-6 shadow-[0_18px_50px_rgba(2,8,23,0.24)]">
+                <div className="relative overflow-hidden rounded-[1.9rem] border border-white/10 bg-[#101b2d]/92 p-6 shadow-[0_18px_50px_rgba(2,8,23,0.24)]">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.12),transparent_30%)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent_28%)]" />
+                  <div className="relative">
                   <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                       <p className="text-xs uppercase tracking-[0.24em] text-sky-200/70">Editable Profile</p>
                       <h3 className="mt-2 text-2xl font-semibold text-white">Edit Account Details</h3>
                       <p className="mt-2 max-w-2xl text-sm text-white/65">
-                        Users can update their name and email here. Your ID and role stay locked so the account remains consistent.
+                        Update the personal details that can change while keeping your system-assigned access role and account ID protected.
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-3">
@@ -292,15 +326,15 @@ export default function ProfilePage() {
                   </div>
 
                   <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                    <div className="rounded-[1.35rem] border border-sky-300/15 bg-[linear-gradient(180deg,rgba(56,189,248,0.09),rgba(255,255,255,0.03))] p-5">
                       <p className="text-xs uppercase tracking-[0.22em] text-white/45">{displayIdLabel}</p>
-                      <p className="mt-2 text-lg font-semibold text-white">{displayIdValue}</p>
-                      <p className="mt-1 text-sm text-white/55">Locked account identifier.</p>
+                      <p className="mt-3 text-xl font-semibold text-white">{displayIdValue}</p>
+                      <p className="mt-2 text-sm text-white/55">Locked account identifier for library records.</p>
                     </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                    <div className="rounded-[1.35rem] border border-amber-300/15 bg-[linear-gradient(180deg,rgba(251,191,36,0.09),rgba(255,255,255,0.03))] p-5">
                       <p className="text-xs uppercase tracking-[0.22em] text-white/45">Account Role</p>
-                      <p className="mt-2 text-lg font-semibold text-white">{roleLabel}</p>
-                      <p className="mt-1 text-sm text-white/55">Managed by the system and admin approval flow.</p>
+                      <p className="mt-3 text-xl font-semibold text-white">{roleLabel}</p>
+                      <p className="mt-2 text-sm text-white/55">Managed by the system and approval workflow.</p>
                     </div>
                   </div>
 
@@ -316,8 +350,16 @@ export default function ProfilePage() {
                       </div>
                     )}
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div>
+                    <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                      <div className="mb-4">
+                        <p className="text-xs uppercase tracking-[0.24em] text-white/45">Contact Details</p>
+                        <p className="mt-2 text-sm text-white/60">
+                          Keep these details accurate so account notices and recovery flows continue working properly.
+                        </p>
+                      </div>
+
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div>
                         <label htmlFor="profile-full-name" className="block text-sm font-medium text-white/78">
                           Full Name
                         </label>
@@ -336,9 +378,9 @@ export default function ProfilePage() {
                         <p className="mt-2 text-xs text-white/45">
                           This name appears across your account and borrow records.
                         </p>
-                      </div>
+                        </div>
 
-                      <div>
+                        <div>
                         <label htmlFor="profile-email" className="block text-sm font-medium text-white/78">
                           Email Address
                         </label>
@@ -357,10 +399,11 @@ export default function ProfilePage() {
                         <p className="mt-2 text-xs text-white/45">
                           Due-date reminders and password reset messages will be sent here.
                         </p>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4">
+                    <div className="rounded-[1.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] px-5 py-4">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                           <p className="text-sm font-semibold text-white">Editing status</p>
@@ -373,13 +416,14 @@ export default function ProfilePage() {
                         <button
                           type="submit"
                           disabled={!canSaveProfile || profileSubmitting}
-                          className="inline-flex items-center justify-center rounded-xl bg-[color:var(--accent)] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[color:var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-50"
+                          className="inline-flex min-w-[160px] items-center justify-center rounded-xl bg-[color:var(--accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(14,165,233,0.2)] transition-colors hover:bg-[color:var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {profileSubmitting ? 'Saving...' : 'Save Changes'}
                         </button>
                       </div>
                     </div>
                   </form>
+                  </div>
                 </div>
               </div>
 
