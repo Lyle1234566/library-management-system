@@ -215,43 +215,33 @@ export default function ProfilePage() {
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_34%)]" />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(245,158,11,0.14),transparent_36%)]" />
                     <div className="relative">
-                      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.18fr)_220px]">
-                        <div className="space-y-4">
-                          <div className="space-y-3">
-                            <span className="inline-flex items-center rounded-full border border-sky-300/20 bg-sky-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-100">
-                              Account Overview
-                            </span>
-                            <div>
-                              <h2 className="text-3xl font-semibold tracking-tight text-white">
-                                {user?.full_name ?? 'Student'}
-                              </h2>
-                              <p className="mt-2 text-sm text-white/65">
-                                {user?.email ?? 'No email saved for reminders'}
-                              </p>
-                            </div>
-                          </div>
-                          <p className="max-w-xl text-sm leading-6 text-white/60">
-                            Your library role, active borrowing status, and access information are organized here for a cleaner and more professional account view.
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/82">
-                              {roleLabel}
-                            </span>
-                            <span className="inline-flex items-center rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-100">
-                              {emailStatusLabel}
-                            </span>
-                            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">
-                              Member since {memberSince}
-                            </span>
+                      <div className="space-y-4">
+                        <div className="space-y-3">
+                          <span className="inline-flex items-center rounded-full border border-sky-300/20 bg-sky-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-100">
+                            Account Overview
+                          </span>
+                          <div>
+                            <h2 className="text-3xl font-semibold tracking-tight text-white">
+                              {user?.full_name ?? 'Student'}
+                            </h2>
+                            <p className="mt-2 text-sm text-white/65">
+                              {user?.email ?? 'No email saved for reminders'}
+                            </p>
                           </div>
                         </div>
-
-                        <div className="rounded-[1.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] p-5 shadow-[0_12px_30px_rgba(2,8,23,0.2)]">
-                          <p className="text-xs uppercase tracking-[0.24em] text-sky-200/70">Primary Role</p>
-                          <p className="mt-3 text-2xl font-semibold text-white">{roleLabel}</p>
-                          <p className="mt-2 text-sm leading-6 text-white/60">
-                            This role controls your sign-in destination and what workspace tools are available.
-                          </p>
+                        <p className="max-w-xl text-sm leading-6 text-white/60">
+                          Your library role, active borrowing status, and access information are organized here for a cleaner and more professional account view.
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/82">
+                            {roleLabel}
+                          </span>
+                          <span className="inline-flex items-center rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-100">
+                            {emailStatusLabel}
+                          </span>
+                          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">
+                            Member since {memberSince}
+                          </span>
                         </div>
                       </div>
 
