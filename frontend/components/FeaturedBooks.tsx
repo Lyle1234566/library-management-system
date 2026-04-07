@@ -2,17 +2,24 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 import { booksApi, Book } from '@/lib/api';
 import { API_BASE_URL, API_CONFIGURATION_WARNING } from '@/lib/api-config';
 import BookCard from './BookCard';
 
 export default function FeaturedBooks() {
+  const { isAuthenticated } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const booksRequestUrl = `${API_BASE_URL}/books/books/`;
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+
     const fetchBooks = async () => {
       setLoading(true);
       const response = await booksApi.getAll();
@@ -29,7 +36,12 @@ export default function FeaturedBooks() {
     };
 
     fetchBooks();
-  }, []);
+  }, [isAuthenticated]);
+
+  // Don't render anything if user is not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <section className="relative py-24 bg-[#0f1b2f]">
