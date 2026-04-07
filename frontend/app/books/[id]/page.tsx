@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -54,257 +54,26 @@ type CoverState = {
   side: 'front' | 'back';
 };
 
-type BorrowSelectOption = {
-  value: string;
-  label: string;
-  description?: string;
-};
-
-const courseProgramOptions: BorrowSelectOption[] = [
-  {
-    value: 'BS Information Technology',
-    label: 'BS Information Technology',
-    description: 'Computing and software systems',
-  },
-  {
-    value: 'BS Computer Science',
-    label: 'BS Computer Science',
-    description: 'Algorithms, data, and systems',
-  },
-  {
-    value: 'BS Business Administration',
-    label: 'BS Business Administration',
-    description: 'Management and entrepreneurship',
-  },
-  {
-    value: 'BS Accountancy',
-    label: 'BS Accountancy',
-    description: 'Financial analysis and auditing',
-  },
-  {
-    value: 'BS Psychology',
-    label: 'BS Psychology',
-    description: 'Behavioral and social sciences',
-  },
-  {
-    value: 'BS Nursing',
-    label: 'BS Nursing',
-    description: 'Healthcare and clinical practice',
-  },
-  {
-    value: 'BS Education',
-    label: 'BS Education',
-    description: 'Teaching and curriculum design',
-  },
-  {
-    value: 'BS Engineering',
-    label: 'BS Engineering',
-    description: 'Applied science and design',
-  },
-  {
-    value: 'BS Architecture',
-    label: 'BS Architecture',
-    description: 'Built environment and planning',
-  },
-  {
-    value: 'AB Communication',
-    label: 'AB Communication',
-    description: 'Media, writing, and public speaking',
-  },
-  {
-    value: 'AB Political Science',
-    label: 'AB Political Science',
-    description: 'Government, policy, and governance',
-  },
-  {
-    value: 'Other',
-    label: 'Other',
-    description: 'Program not listed above',
-  },
-];
-
-const yearLevelOptions: BorrowSelectOption[] = [
-  {
-    value: '1st Year',
-    label: '1st Year',
-    description: 'Freshman level',
-  },
-  {
-    value: '2nd Year',
-    label: '2nd Year',
-    description: 'Sophomore level',
-  },
-  {
-    value: '3rd Year',
-    label: '3rd Year',
-    description: 'Junior level',
-  },
-  {
-    value: '4th Year',
-    label: '4th Year',
-    description: 'Senior level',
-  },
-];
-
-const conditionOptions: BorrowSelectOption[] = [
-  {
-    value: 'GOOD',
-    label: 'Good',
-    description: 'No visible damage',
-  },
-  {
-    value: 'SLIGHTLY_DAMAGED',
-    label: 'Slightly Damaged',
-    description: 'Minor wear or markings',
-  },
-  {
-    value: 'NEEDS_REPAIR',
-    label: 'Needs Repair',
-    description: 'Requires attention before reuse',
-  },
-];
-
-function BorrowFormSelect({
+function StaticBorrowField({
   value,
-  onChange,
-  options,
-  placeholder,
-  menuLabel,
+  fallback,
+  multiline = false,
 }: {
-  value: string;
-  onChange: (nextValue: string) => void;
-  options: BorrowSelectOption[];
-  placeholder: string;
-  menuLabel: string;
+  value?: string | null;
+  fallback: string;
+  multiline?: boolean;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const selectedOption = options.find((option) => option.value === value);
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    const handlePointerDown = (event: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('pointerdown', handlePointerDown);
-    document.addEventListener('keydown', handleEscape);
-
-    return () => {
-      document.removeEventListener('pointerdown', handlePointerDown);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen]);
+  const trimmedValue = value?.trim() ?? '';
+  const displayValue = trimmedValue || fallback;
+  const textTone = trimmedValue ? 'text-white/70' : 'text-white/40';
 
   return (
-    <div ref={rootRef} className="relative mt-2">
-      <button
-        type="button"
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        onClick={() => setIsOpen((current) => !current)}
-        className={`group relative w-full overflow-hidden rounded-[1.2rem] border px-4 pb-3 pt-3.5 text-left transition-all duration-300 ${
-          isOpen
-            ? 'border-sky-300/80 bg-[linear-gradient(180deg,rgba(56,189,248,0.16),rgba(255,255,255,0.08))] shadow-[0_18px_42px_rgba(14,165,233,0.22)]'
-            : 'border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] hover:border-white/25 hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.11),rgba(255,255,255,0.05))]'
-        }`}
-      >
-        <span className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-        <span
-          className={`block pr-10 text-[15px] font-medium leading-6 ${
-            selectedOption ? 'text-white' : 'text-white/50'
-          }`}
-        >
-          {selectedOption?.label ?? placeholder}
-        </span>
-        <span className="mt-1 block text-[10px] font-semibold uppercase tracking-[0.24em] text-white/35">
-          {selectedOption?.description ?? 'Refined selection menu'}
-        </span>
-        <ChevronDown
-          className={`absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/55 transition-all duration-300 ${
-            isOpen ? 'rotate-180 text-sky-200' : 'group-hover:text-white/75'
-          }`}
-        />
-      </button>
-
-      {isOpen && (
-        <div className="animate-fade-up absolute left-0 right-0 top-[calc(100%+0.7rem)] z-40 overflow-hidden rounded-[1.45rem] border border-sky-300/25 bg-[linear-gradient(180deg,rgba(11,19,36,0.98),rgba(15,27,47,0.96))] shadow-[0_28px_80px_rgba(2,8,23,0.62)] backdrop-blur-xl">
-          <div className="border-b border-white/10 bg-white/[0.04] px-4 py-3">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-sky-100/80">
-                {menuLabel}
-              </p>
-              <span className="rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/45">
-                {options.length} Options
-              </span>
-            </div>
-          </div>
-
-          <div role="listbox" className="max-h-72 overflow-y-auto py-2">
-            {options.map((option) => {
-              const isSelected = option.value === value;
-
-              return (
-                <button
-                  key={option.value}
-                  type="button"
-                  role="option"
-                  aria-selected={isSelected}
-                  onClick={() => {
-                    onChange(option.value);
-                    setIsOpen(false);
-                  }}
-                  className={`group flex w-full items-start gap-3 px-4 py-3 text-left transition-colors duration-200 ${
-                    isSelected ? 'bg-sky-400/12' : 'hover:bg-white/[0.05]'
-                  }`}
-                >
-                  <span
-                    className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full border transition-all ${
-                      isSelected
-                        ? 'border-sky-200 bg-sky-300 shadow-[0_0_16px_rgba(125,211,252,0.55)]'
-                        : 'border-white/20 bg-transparent group-hover:border-sky-200/40'
-                    }`}
-                  />
-                  <span className="min-w-0 flex-1">
-                    <span
-                      className={`block text-sm font-medium ${
-                        isSelected ? 'text-white' : 'text-white/90 group-hover:text-white'
-                      }`}
-                    >
-                      {option.label}
-                    </span>
-                    {option.description ? (
-                      <span
-                        className={`mt-1 block text-[10px] font-semibold uppercase tracking-[0.24em] ${
-                          isSelected ? 'text-sky-100/70' : 'text-white/35'
-                        }`}
-                      >
-                        {option.description}
-                      </span>
-                    ) : null}
-                  </span>
-                  {isSelected ? (
-                    <span className="rounded-full border border-sky-300/25 bg-sky-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-100">
-                      Selected
-                    </span>
-                  ) : null}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
+    <div
+      className={`mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm ${textTone} ${
+        multiline ? 'min-h-[88px] whitespace-pre-wrap' : 'flex min-h-[42px] items-center'
+      }`}
+    >
+      {displayValue}
     </div>
   );
 }
@@ -624,6 +393,17 @@ export default function BookDetailsPage() {
     dueDate.setDate(dueDate.getDate() + borrowDays);
     return formatDateInput(dueDate);
   }, [borrowDays, todayReference]);
+  const studentDisplayName = user?.full_name?.trim() ?? '';
+  const studentDisplayId = user?.student_id?.trim() ?? '';
+  const studentDisplayProgram = user?.program?.trim() ?? '';
+  const studentDisplayYearLevel = user?.year_level?.trim() ?? '';
+  const studentDisplayContactNumber = '';
+  const studentDisplayEmail = user?.email?.trim() ?? '';
+  const studentDisplayCallNumber = book?.location_shelf?.trim() ?? '';
+  const studentDisplayAccessionNumber = '';
+  const studentCourseYear = [studentDisplayProgram, studentDisplayYearLevel]
+    .filter((value) => value.length > 0)
+    .join(' - ');
 
   const handleBorrowRequest = async () => {
     if (!book || borrowSubmitting) {
@@ -682,11 +462,19 @@ export default function BookDetailsPage() {
 
     setStudentBorrowForm((prev) => ({
       ...prev,
-      full_name: user?.full_name ?? prev.full_name,
-      student_id: user?.student_id ?? prev.student_id,
-      email: user?.email ?? prev.email,
-      borrower_signature: user?.full_name ?? prev.borrower_signature,
-      quantity: prev.quantity || '1',
+      full_name: user?.full_name ?? '',
+      student_id: user?.student_id ?? '',
+      course_program: user?.program ?? '',
+      year_level: user?.year_level ?? '',
+      contact_number: '',
+      email: user?.email ?? '',
+      call_number: book.location_shelf ?? '',
+      accession_number: '',
+      quantity: '1',
+      return_date: dueDateInput,
+      borrower_signature: user?.full_name ?? '',
+      condition: '',
+      remarks: '',
       agreementAccepted: false,
     }));
     setShowBorrowModal(true);
@@ -769,14 +557,12 @@ export default function BookDetailsPage() {
       dueDate.setDate(dueDate.getDate() + borrowDays);
       
       setBorrowSlipData({
-        studentName: studentBorrowForm.full_name || user?.full_name || '',
-        studentId: studentBorrowForm.student_id || user?.student_id || '',
-        courseYear: studentBorrowForm.course_program && studentBorrowForm.year_level 
-          ? `${studentBorrowForm.course_program} - ${studentBorrowForm.year_level}`
-          : '',
+        studentName: studentDisplayName,
+        studentId: studentDisplayId,
+        courseYear: studentCourseYear,
         bookTitle: book.title,
         author: book.author || 'Unknown Author',
-        callNumber: studentBorrowForm.call_number || studentBorrowForm.accession_number || 'N/A',
+        callNumber: studentDisplayCallNumber || 'Assigned by library staff',
         dateBorrowed: borrowDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
         dueDate: dueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
       });
@@ -957,9 +743,6 @@ export default function BookDetailsPage() {
   const librarianVerificationDate = latestProcessedBorrowRequest?.processed_at
     ? formatDate(latestProcessedBorrowRequest.processed_at)
     : '';
-  const librarianVerificationPlaceholder = latestProcessedBorrowRequest
-    ? 'Recorded from latest approved borrow'
-    : 'Filled after librarian approval';
   const isBorrowDisabled =
     borrowSubmitting || authLoading || (isAuthenticated && !canUseBorrowingActions);
   const canRequestReturn = Boolean(book && isBorrowedByUser && !hasPendingReturnRequest);
@@ -1910,7 +1693,8 @@ export default function BookDetailsPage() {
                   Library Management System Borrowing Form
                 </h3>
                 <p className="mt-2 text-sm text-white/70">
-                  Complete the student borrowing details below. This helps keep accurate circulation records.
+                  Borrower details are pulled from the signed-in account and library records so
+                  students cannot edit them here.
                 </p>
               </div>
               <div className="max-h-[70vh] space-y-6 overflow-y-auto px-6 py-5">
@@ -1923,13 +1707,9 @@ export default function BookDetailsPage() {
                       <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
                         Full Name
                       </label>
-                      <input
-                        value={studentBorrowForm.full_name}
-                        onChange={(event) =>
-                          handleStudentBorrowFormChange('full_name', event.target.value)
-                        }
-                        className="mt-2 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all"
-                        placeholder="Enter full name"
+                      <StaticBorrowField
+                        value={studentDisplayName}
+                        fallback="Name not available on account"
                       />
                     </div>
                     <div>
@@ -1946,67 +1726,45 @@ export default function BookDetailsPage() {
                       <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
                         Student ID Number
                       </label>
-                      <input
-                        value={studentBorrowForm.student_id}
-                        onChange={(event) =>
-                          handleStudentBorrowFormChange('student_id', event.target.value)
-                        }
-                        className="mt-2 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all"
-                        placeholder="Enter student ID"
+                      <StaticBorrowField
+                        value={studentDisplayId}
+                        fallback="Student ID not available on account"
                       />
                     </div>
                     <div>
                       <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
                         Course or Program
                       </label>
-                      <BorrowFormSelect
-                        value={studentBorrowForm.course_program}
-                        onChange={(nextValue) =>
-                          handleStudentBorrowFormChange('course_program', nextValue)
-                        }
-                        options={courseProgramOptions}
-                        placeholder="Select course/program"
-                        menuLabel="Academic Programs"
+                      <StaticBorrowField
+                        value={studentDisplayProgram}
+                        fallback="Program not available in enrollment record"
                       />
                     </div>
                     <div>
                       <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
                         Year/Level
                       </label>
-                      <BorrowFormSelect
-                        value={studentBorrowForm.year_level}
-                        onChange={(nextValue) =>
-                          handleStudentBorrowFormChange('year_level', nextValue)
-                        }
-                        options={yearLevelOptions}
-                        placeholder="Select year level"
-                        menuLabel="Year Level"
+                      <StaticBorrowField
+                        value={studentDisplayYearLevel}
+                        fallback="Year level not available in enrollment record"
                       />
                     </div>
                     <div>
                       <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
                         Contact Number
                       </label>
-                      <input
-                        value={studentBorrowForm.contact_number}
-                        onChange={(event) =>
-                          handleStudentBorrowFormChange('contact_number', event.target.value)
-                        }
-                        className="mt-2 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all"
-                        placeholder="e.g., 09xx-xxx-xxxx"
+                      <StaticBorrowField
+                        value={studentDisplayContactNumber}
+                        fallback="Not available in account record"
                       />
                     </div>
                     <div>
                       <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
                         Email Address
                       </label>
-                      <input
-                        value={studentBorrowForm.email}
-                        onChange={(event) =>
-                          handleStudentBorrowFormChange('email', event.target.value)
-                        }
-                        className="mt-2 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all"
-                        placeholder="name@example.com"
+                      <StaticBorrowField
+                        value={studentDisplayEmail}
+                        fallback="Email not available on account"
                       />
                     </div>
                   </div>
@@ -2051,26 +1809,18 @@ export default function BookDetailsPage() {
                       <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
                         Call Number
                       </label>
-                      <input
-                        value={studentBorrowForm.call_number}
-                        onChange={(event) =>
-                          handleStudentBorrowFormChange('call_number', event.target.value)
-                        }
-                        className="mt-2 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all"
-                        placeholder="Enter call number"
+                      <StaticBorrowField
+                        value={studentDisplayCallNumber}
+                        fallback="Assigned by library staff"
                       />
                     </div>
                     <div>
                       <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
                         Accession Number
                       </label>
-                      <input
-                        value={studentBorrowForm.accession_number}
-                        onChange={(event) =>
-                          handleStudentBorrowFormChange('accession_number', event.target.value)
-                        }
-                        className="mt-2 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all"
-                        placeholder="Enter accession number"
+                      <StaticBorrowField
+                        value={studentDisplayAccessionNumber}
+                        fallback="Assigned after librarian approval"
                       />
                     </div>
                     <div>
@@ -2119,137 +1869,6 @@ export default function BookDetailsPage() {
 
                 <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">
-                    Borrowing Agreement
-                  </h4>
-                  <p className="mt-3 text-sm text-white/70">
-                    I acknowledge receipt of the book(s) listed above and agree to comply with library
-                    policies. I will return all borrowed materials on or before the due date and accept
-                    responsibility for any loss, damage, or overdue penalties as required by library
-                    regulations.
-                  </p>
-                  <label className="mt-4 flex items-start gap-3 text-sm text-white/80">
-                    <input
-                      type="checkbox"
-                      checked={studentBorrowForm.agreementAccepted}
-                      onChange={(event) =>
-                        handleStudentBorrowFormChange('agreementAccepted', event.target.checked)
-                      }
-                      className="mt-1 h-4 w-4 rounded border-white/40 bg-white/10 text-sky-400 focus:ring-sky-300/40"
-                    />
-                    I agree to the borrowing policies above.
-                  </label>
-                </section>
-
-                <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">
-                    Borrower Confirmation
-                  </h4>
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
-                        Borrower Signature
-                      </label>
-                      <input
-                        value={studentBorrowForm.borrower_signature}
-                        onChange={(event) =>
-                          handleStudentBorrowFormChange('borrower_signature', event.target.value)
-                        }
-                        className="mt-2 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all"
-                        placeholder="Type full name as signature"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
-                        Date Signed
-                      </label>
-                      <input
-                        value={borrowedDateInput}
-                        readOnly
-                        className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/70"
-                      />
-                    </div>
-                  </div>
-                </section>
-
-                <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">
-                    Library Staff Verification
-                  </h4>
-                  <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                    <div>
-                      <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
-                        Librarian Name
-                      </label>
-                      <input
-                        value={librarianVerificationName}
-                        readOnly
-                        className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/70"
-                        placeholder={librarianVerificationPlaceholder}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
-                        Librarian Signature
-                      </label>
-                      <input
-                        value={librarianVerificationName}
-                        readOnly
-                        className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/70"
-                        placeholder={librarianVerificationPlaceholder}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
-                        Date Approved
-                      </label>
-                      <input
-                        value={librarianVerificationDate}
-                        readOnly
-                        className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white/70"
-                        placeholder={librarianVerificationPlaceholder}
-                      />
-                    </div>
-                  </div>
-                </section>
-
-                <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">
-                    Book Condition and Remarks
-                  </h4>
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
-                        Condition Before Borrowing
-                      </label>
-                      <BorrowFormSelect
-                        value={studentBorrowForm.condition}
-                        onChange={(nextValue) =>
-                          handleStudentBorrowFormChange('condition', nextValue)
-                        }
-                        options={conditionOptions}
-                        placeholder="Select condition"
-                        menuLabel="Book condition"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
-                        Remarks or Notes
-                      </label>
-                      <textarea
-                        value={studentBorrowForm.remarks}
-                        onChange={(event) =>
-                          handleStudentBorrowFormChange('remarks', event.target.value)
-                        }
-                        rows={3}
-                        className="mt-2 w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all"
-                        placeholder="Add remarks or special notes"
-                      />
-                    </div>
-                  </div>
-                </section>
-
-                <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">
                     Borrow Duration
                   </h4>
                   <p className="mt-2 text-sm text-white/70">
@@ -2289,6 +1908,29 @@ export default function BookDetailsPage() {
                     ))}
                   </div>
                 </section>
+
+                <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">
+                    Borrowing Agreement
+                  </h4>
+                  <p className="mt-3 text-sm text-white/70">
+                    I acknowledge receipt of the book(s) listed above and agree to comply with library
+                    policies. I will return all borrowed materials on or before the due date and accept
+                    responsibility for any loss, damage, or overdue penalties as required by library
+                    regulations.
+                  </p>
+                  <label className="mt-4 flex items-start gap-3 text-sm text-white/80">
+                    <input
+                      type="checkbox"
+                      checked={studentBorrowForm.agreementAccepted}
+                      onChange={(event) =>
+                        handleStudentBorrowFormChange('agreementAccepted', event.target.checked)
+                      }
+                      className="mt-1 h-4 w-4 rounded border-white/40 bg-white/10 text-sky-400 focus:ring-sky-300/40"
+                    />
+                    I agree to the borrowing policies above.
+                  </label>
+                </section>
               </div>
               <div className="flex flex-col gap-3 border-t border-white/10 px-6 py-4 sm:flex-row">
                 <button
@@ -2299,15 +1941,9 @@ export default function BookDetailsPage() {
                 </button>
                 <button
                   onClick={confirmBorrowRequest}
-                  disabled={
-                    borrowSubmitting ||
-                    !studentBorrowForm.agreementAccepted ||
-                    !studentBorrowForm.borrower_signature.trim()
-                  }
+                  disabled={borrowSubmitting || !studentBorrowForm.agreementAccepted}
                   className={`flex-1 rounded-full px-6 py-3 font-semibold transition-colors ${
-                    borrowSubmitting ||
-                    !studentBorrowForm.agreementAccepted ||
-                    !studentBorrowForm.borrower_signature.trim()
+                    borrowSubmitting || !studentBorrowForm.agreementAccepted
                       ? 'cursor-not-allowed bg-white/10 text-white/40'
                       : 'bg-sky-500 text-white hover:bg-sky-600'
                   }`}

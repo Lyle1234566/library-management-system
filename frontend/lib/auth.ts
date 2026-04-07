@@ -11,6 +11,8 @@ export interface User {
   email_verified?: boolean;
   full_name: string;
   avatar?: string | null;
+  program?: string | null;
+  year_level?: string | null;
   role: 'STUDENT' | 'TEACHER' | 'LIBRARIAN' | 'WORKING' | 'ADMIN' | 'STAFF';
   is_working_student: boolean;
   is_active: boolean;

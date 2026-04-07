@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 
-from .models import ContactMessage, Notification
+from .models import ContactMessage, EnrollmentRecord, Notification
 from .registration_rules import get_student_identifier_status, get_teacher_identifier_status
 
 User = get_user_model()
@@ -46,6 +46,8 @@ class UserSerializer(serializers.ModelSerializer):
     """Serializer for user profile data"""
 
     avatar = RelativeMediaField(required=False, allow_null=True)
+    program = serializers.SerializerMethodField()
+    year_level = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -58,6 +60,8 @@ class UserSerializer(serializers.ModelSerializer):
             'email_verified',
             'full_name',
             'avatar',
+            'program',
+            'year_level',
             'role',
             'is_working_student',
             'is_active',
@@ -72,7 +76,36 @@ class UserSerializer(serializers.ModelSerializer):
             'username',
             'is_working_student',
             'email_verified',
+            'program',
+            'year_level',
         ]
+
+    def _get_enrollment_record(self, obj):
+        student_id = (obj.student_id or '').strip()
+        if not student_id:
+            return None
+
+        cache = getattr(self, '_enrollment_record_cache', None)
+        if cache is None:
+            cache = {}
+            self._enrollment_record_cache = cache
+
+        cache_key = student_id.upper()
+        if cache_key not in cache:
+            cache[cache_key] = (
+                EnrollmentRecord.objects.filter(student_id__iexact=student_id)
+                .only('program', 'year_level')
+                .first()
+            )
+        return cache[cache_key]
+
+    def get_program(self, obj):
+        record = self._get_enrollment_record(obj)
+        return record.program if record else ''
+
+    def get_year_level(self, obj):
+        record = self._get_enrollment_record(obj)
+        return record.year_level if record else ''
 
     def validate_email(self, value):
         return normalize_unique_email(value, instance=self.instance)
