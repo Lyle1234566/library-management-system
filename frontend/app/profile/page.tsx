@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
-import { booksApi, BorrowRequest, resolveMediaUrl } from '@/lib/api';
+import { booksApi, BorrowRequest } from '@/lib/api';
 import { authApi } from '@/lib/auth';
 import { getUserRoleLabel } from '@/lib/roles';
 
@@ -52,7 +52,6 @@ const accountActions = [
 
 export default function ProfilePage() {
   const { user, refreshUser } = useAuth();
-  const avatarInputRef = useRef<HTMLInputElement>(null);
   const [requests, setRequests] = useState<BorrowRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +61,6 @@ export default function ProfilePage() {
   const [profileMessage, setProfileMessage] = useState<string | null>(null);
   const [draftFullName, setDraftFullName] = useState<string | null>(null);
   const [draftEmail, setDraftEmail] = useState<string | null>(null);
-  const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(null);
 
   const displayIdLabel = user?.staff_id
     ? user?.role === 'LIBRARIAN' || user?.role === 'TEACHER'
@@ -78,8 +76,7 @@ export default function ProfilePage() {
   const hasProfileChanges =
     fullNameValue.trim() !== (user?.full_name ?? '').trim() ||
     normalizedDraftEmail !== normalizedCurrentEmail;
-  const hasAvatarSelection = selectedAvatarFile !== null;
-  const canSaveProfile = isEditingProfile && (hasProfileChanges || hasAvatarSelection);
+  const canSaveProfile = isEditingProfile && hasProfileChanges;
 
   useEffect(() => {
     let isActive = true;
@@ -129,28 +126,8 @@ export default function ProfilePage() {
     [requests],
   );
 
-  const avatarPreviewUrl = useMemo(
-    () => (selectedAvatarFile ? URL.createObjectURL(selectedAvatarFile) : null),
-    [selectedAvatarFile],
-  );
   const memberSince = user?.date_joined ? formatDate(user.date_joined) : 'Unknown';
   const emailStatusLabel = user?.email ? 'Ready for reminders' : 'Email required';
-  const currentAvatarUrl = avatarPreviewUrl ?? resolveMediaUrl(user?.avatar) ?? '/student-avatar.svg';
-
-  useEffect(() => {
-    return () => {
-      if (avatarPreviewUrl) {
-        URL.revokeObjectURL(avatarPreviewUrl);
-      }
-    };
-  }, [avatarPreviewUrl]);
-
-  const resetAvatarSelection = () => {
-    setSelectedAvatarFile(null);
-    if (avatarInputRef.current) {
-      avatarInputRef.current.value = '';
-    }
-  };
 
   const handleStartProfileEdit = () => {
     setDraftFullName(user?.full_name ?? '');
@@ -163,35 +140,9 @@ export default function ProfilePage() {
   const handleCancelProfileEdit = () => {
     setDraftFullName(null);
     setDraftEmail(null);
-    resetAvatarSelection();
     setProfileError(null);
     setProfileMessage(null);
     setIsEditingProfile(false);
-  };
-
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] ?? null;
-
-    if (!file) {
-      resetAvatarSelection();
-      return;
-    }
-
-    if (!file.type.startsWith('image/')) {
-      setProfileError('Please choose a valid image file for the profile picture.');
-      resetAvatarSelection();
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      setProfileError('Profile picture must be 5 MB or smaller.');
-      resetAvatarSelection();
-      return;
-    }
-
-    setSelectedAvatarFile(file);
-    setProfileError(null);
-    setProfileMessage(null);
   };
 
   const handleProfileSave = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -219,18 +170,10 @@ export default function ProfilePage() {
     setProfileError(null);
     setProfileMessage(null);
 
-    const result = selectedAvatarFile
-      ? await (() => {
-          const formData = new FormData();
-          formData.append('full_name', trimmedFullName);
-          formData.append('email', trimmedEmail);
-          formData.append('avatar', selectedAvatarFile);
-          return authApi.updateProfileWithAvatar(formData);
-        })()
-      : await authApi.updateProfile({
-          full_name: trimmedFullName,
-          email: trimmedEmail,
-        });
+    const result = await authApi.updateProfile({
+      full_name: trimmedFullName,
+      email: trimmedEmail,
+    });
 
     setProfileSubmitting(false);
 
@@ -242,9 +185,8 @@ export default function ProfilePage() {
     await refreshUser();
     setDraftFullName(null);
     setDraftEmail(null);
-    resetAvatarSelection();
     setIsEditingProfile(false);
-    setProfileMessage('Profile updated. Your profile picture, due-date reminders, and password reset email are all ready.');
+    setProfileMessage('Profile updated successfully.');
   };
 
   return (
@@ -270,7 +212,7 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.02fr_1.38fr]">
                 <div className="space-y-5">
                   <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[linear-gradient(145deg,rgba(21,34,57,0.98)_0%,rgba(12,21,38,0.94)_100%)] p-6 shadow-[0_18px_50px_rgba(2,8,23,0.28)]">
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="space-y-3">
                       <div className="space-y-3">
                         <span className="inline-flex items-center rounded-full border border-sky-300/20 bg-sky-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-100">
                           Account Overview
@@ -283,19 +225,6 @@ export default function ProfilePage() {
                             {user?.email ?? 'No email saved for reminders'}
                           </p>
                         </div>
-                      </div>
-                      <div className="h-20 w-20 overflow-hidden rounded-[1.5rem] border border-white/15 bg-white/10 shadow-[0_10px_30px_rgba(14,165,233,0.18)]">
-                        {user?.avatar ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={currentAvatarUrl} alt={user.full_name ?? 'Student'} className="h-full w-full object-cover" />
-                        ) : (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={currentAvatarUrl}
-                            alt="Student profile"
-                            className="h-full w-full object-cover"
-                          />
-                        )}
                       </div>
                     </div>
 
@@ -322,24 +251,6 @@ export default function ProfilePage() {
                         <p className="mt-2 text-3xl font-semibold text-white">{pendingRequests.length}</p>
                         <p className="mt-1 text-sm text-white/55">Requests waiting for approval.</p>
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-                    <div className="rounded-2xl border border-white/10 bg-[#101b2d]/90 p-4">
-                      <p className="text-xs uppercase tracking-[0.22em] text-white/45">Identity</p>
-                      <p className="mt-2 text-base font-semibold text-white">{displayIdValue}</p>
-                      <p className="mt-1 text-sm text-white/55">{displayIdLabel}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-[#101b2d]/90 p-4">
-                      <p className="text-xs uppercase tracking-[0.22em] text-white/45">Completed</p>
-                      <p className="mt-2 text-base font-semibold text-white">{returnedBorrowCount} returned</p>
-                      <p className="mt-1 text-sm text-white/55">Finished borrow transactions.</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-[#101b2d]/90 p-4">
-                      <p className="text-xs uppercase tracking-[0.22em] text-white/45">Reminder Channel</p>
-                      <p className="mt-2 text-base font-semibold text-white">Email notifications</p>
-                      <p className="mt-1 text-sm text-white/55">Due-date alerts go to your saved email.</p>
                     </div>
                   </div>
                 </div>
@@ -404,59 +315,6 @@ export default function ProfilePage() {
                         {profileMessage}
                       </div>
                     )}
-
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="h-20 w-20 overflow-hidden rounded-[1.25rem] border border-white/15 bg-white/10 shadow-[0_10px_28px_rgba(14,165,233,0.16)]">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={currentAvatarUrl}
-                              alt={user?.full_name ?? 'Profile picture'}
-                              className="h-full w-full object-cover"
-                            />
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold text-white">Profile Picture</p>
-                            <p className="mt-1 text-sm text-white/55">
-                              Add a clear photo so your account looks more personal and easier to recognize.
-                            </p>
-                            <p className="mt-2 text-xs text-white/40">Accepted image files up to 5 MB.</p>
-                            {selectedAvatarFile && (
-                              <p className="mt-2 text-xs text-sky-200">
-                                Selected: {selectedAvatarFile.name}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex flex-wrap gap-3">
-                          <input
-                            ref={avatarInputRef}
-                            type="file"
-                            accept="image/*"
-                            onChange={handleAvatarChange}
-                            className="hidden"
-                          />
-                          <button
-                            type="button"
-                            disabled={!isEditingProfile}
-                            onClick={() => avatarInputRef.current?.click()}
-                            className="inline-flex items-center justify-center rounded-xl border border-white/15 px-4 py-3 text-sm font-semibold text-white/80 transition-colors hover:bg-white/8 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-                          >
-                            Choose Photo
-                          </button>
-                          {hasAvatarSelection && (
-                            <button
-                              type="button"
-                              onClick={resetAvatarSelection}
-                              className="inline-flex items-center justify-center rounded-xl border border-rose-300/20 px-4 py-3 text-sm font-semibold text-rose-200 transition-colors hover:bg-rose-500/10"
-                            >
-                              Clear Selection
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
 
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
