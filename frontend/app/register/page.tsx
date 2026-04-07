@@ -270,7 +270,7 @@ function RegisterPageContent({
   const initialRegisterRole = recoveryMode ? recoveryDetails.role : requestedRole;
   const initialLockedIdentifier =
     initialRegisterRole === 'TEACHER' ? recoveryDetails.staffId : recoveryDetails.studentId;
-  const registerRole = initialRegisterRole;
+  const [registerRole, setRegisterRole] = useState<RegisterRole>(initialRegisterRole);
 
   const [formData, setFormData] = useState<RegisterFormData>(() => ({
     studentId: recoveryMode ? initialLockedIdentifier : '',
@@ -299,6 +299,18 @@ function RegisterPageContent({
       : '/login';
   const showcaseHighlights = recoveryMode ? RECOVERY_HIGHLIGHTS : REGISTER_HIGHLIGHTS;
   const accountLabel = registerRole === 'TEACHER' ? 'Teacher' : 'Student';
+
+  const handleRoleSelect = (nextRole: RegisterRole) => {
+    if (recoveryMode || nextRole === registerRole) {
+      return;
+    }
+
+    setRegisterRole(nextRole);
+    setAvailabilityState('idle');
+    setAvailabilityMessage('');
+    setErrors({});
+    setFormData((prev) => ({ ...prev, studentId: '' }));
+  };
 
   useEffect(() => {
     if (recoveryMode) {
@@ -572,14 +584,14 @@ function RegisterPageContent({
                     <p className="max-w-2xl text-base leading-7 text-white/70 sm:text-lg">
                       {recoveryMode
                         ? 'If the original registration used an inaccessible address, update it here and continue the OTP step without rebuilding the account.'
-                        : 'Register with your ID and your account type will be automatically detected. Email verification and staff approval required before first sign in.'}
+                        : 'Choose whether you are registering as a student or teacher, then verify your email and wait for staff approval before your first sign in.'}
                     </p>
                   </div>
 
                   <div className="flex flex-wrap gap-2.5">
                     {(recoveryMode
                       ? ['Saved account', 'Email correction', 'Fresh OTP']
-                      : ['Web and mobile', 'Auto-detected role', 'Approval workflow']
+                      : ['Web and mobile', 'Student or teacher', 'Approval workflow']
                     ).map((item) => (
                       <span
                         key={item}
@@ -601,7 +613,7 @@ function RegisterPageContent({
                   <p className="mt-2 text-xs leading-5 text-white/60">
                     {recoveryMode
                       ? 'Keep the original account record and update only the address needed for verification.'
-                      : 'One registration flow with automatic role detection, email verification, and staff approval.'}
+                      : 'One registration form for both students and teachers with email verification and staff approval.'}
                   </p>
                   <div className="mt-4 grid gap-2">
                     {showcaseHighlights.map((item) => (
@@ -654,7 +666,7 @@ function RegisterPageContent({
                         <p className="mt-1.5 max-w-md text-xs leading-5 text-white/60 sm:text-sm">
                           {recoveryMode
                             ? 'We kept the registration details below. Change only the email so the student can receive OTP before first login.'
-                            : 'Create your account and your role will be automatically detected based on your ID.'}
+                            : 'Pick your account type first, then enter the correct school ID for registration.'}
                         </p>
                       </div>
                     </div>
@@ -676,6 +688,47 @@ function RegisterPageContent({
                         : 'Email verification is required before the first successful sign in.'}
                     </div>
                   </div>
+
+                  {!recoveryMode ? (
+                    <div className="mt-5 rounded-[22px] border border-white/10 bg-white/[0.03] p-3.5">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">
+                            Account type
+                          </p>
+                          <p className="mt-1 text-sm text-white/70">
+                            Select Teacher to use a Faculty ID from the teacher records.
+                          </p>
+                        </div>
+                        <div className="grid w-full gap-2 sm:w-auto sm:grid-cols-2">
+                          <button
+                            type="button"
+                            onClick={() => handleRoleSelect('STUDENT')}
+                            className={`rounded-[16px] border px-4 py-2.5 text-sm font-semibold transition ${
+                              registerRole === 'STUDENT'
+                                ? 'border-sky-300/45 bg-sky-500/20 text-white shadow-[0_12px_30px_rgba(14,165,233,0.18)]'
+                                : 'border-white/10 bg-[#111c2f] text-white/70 hover:border-white/20 hover:text-white'
+                            }`}
+                            aria-pressed={registerRole === 'STUDENT'}
+                          >
+                            Student
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRoleSelect('TEACHER')}
+                            className={`rounded-[16px] border px-4 py-2.5 text-sm font-semibold transition ${
+                              registerRole === 'TEACHER'
+                                ? 'border-sky-300/45 bg-sky-500/20 text-white shadow-[0_12px_30px_rgba(14,165,233,0.18)]'
+                                : 'border-white/10 bg-[#111c2f] text-white/70 hover:border-white/20 hover:text-white'
+                            }`}
+                            aria-pressed={registerRole === 'TEACHER'}
+                          >
+                            Teacher
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
 
                   {!recoveryMode ? (
                     <div className="mt-5 rounded-[20px] border border-sky-400/30 bg-sky-500/15 px-3.5 py-2.5 text-xs text-sky-100">
