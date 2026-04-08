@@ -152,7 +152,7 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
       </div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mx-auto mb-10 max-w-3xl pt-3 text-center sm:pt-4">
+        <div className="mx-auto mb-10 max-w-3xl text-center pt-0">
           <span className="inline-flex items-center rounded-full border border-white/12 bg-white/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-100/80 animate-fade-up">
             Core Features
           </span>
