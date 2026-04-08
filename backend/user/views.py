@@ -27,6 +27,7 @@ from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, Ou
 
 from .enrollment_import import EnrollmentImportError, get_enrollment_summary, import_enrollment_file
 from .email_delivery import get_email_config_error, send_email_message
+from books.librarian_notifications import notify_librarians_new_account
 from .models import (
     PasswordResetCode,
     ContactMessage,
@@ -655,6 +656,12 @@ def finalize_pending_registration(state: dict) -> tuple[User | None, str | None]
         with transaction.atomic():
             user.full_clean()
             user.save()
+            
+            # Notify librarians about new pending account
+            try:
+                notify_librarians_new_account(user.full_name, user.id)
+            except Exception as e:
+                logger.exception(f"Failed to notify librarians about new account: {e}")
     except ValidationError as exc:
         return None, format_validation_error(exc)
     except IntegrityError:

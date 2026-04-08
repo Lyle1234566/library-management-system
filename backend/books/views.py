@@ -44,6 +44,11 @@ from .email_notifications import (
     send_renewal_rejected_email,
     send_return_approved_email,
 )
+from .librarian_notifications import (
+    notify_librarians_new_borrow_request,
+    notify_librarians_new_renewal_request,
+    notify_librarians_new_return_request,
+)
 
 
 User = get_user_model()
@@ -1041,6 +1046,17 @@ class BookViewSet(viewsets.ModelViewSet):
                         else BorrowRequest.get_default_max_renewals()
                     ),
                 )
+                
+                # Notify librarians about new borrow request
+                try:
+                    notify_librarians_new_borrow_request(
+                        locked_user.full_name,
+                        locked_book.title,
+                        borrow_request.id
+                    )
+                except Exception as e:
+                    import logging
+                    logging.getLogger(__name__).error(f"Failed to notify librarians: {e}")
 
                 reservation = Reservation.objects.select_for_update().filter(
                     user=locked_user,
@@ -1111,6 +1127,17 @@ class BookViewSet(viewsets.ModelViewSet):
                     )
 
                 return_request = ReturnRequest.objects.create(borrow_request=borrow_request)
+                
+                # Notify librarians about new return request
+                try:
+                    notify_librarians_new_return_request(
+                        borrow_request.user.full_name,
+                        borrow_request.book.title,
+                        return_request.id
+                    )
+                except Exception as e:
+                    import logging
+                    logging.getLogger(__name__).error(f"Failed to notify librarians: {e}")
         except IntegrityError:
             return Response(
                 {'detail': 'Return request already pending.'},
@@ -1227,6 +1254,17 @@ class BorrowRequestViewSet(viewsets.ReadOnlyModelViewSet):
                     borrow_request=locked_borrow,
                     requested_extension_days=locked_borrow.get_renewal_duration_days(),
                 )
+                
+                # Notify librarians about new renewal request
+                try:
+                    notify_librarians_new_renewal_request(
+                        locked_borrow.user.full_name,
+                        locked_borrow.book.title,
+                        renewal_request.id
+                    )
+                except Exception as e:
+                    import logging
+                    logging.getLogger(__name__).error(f"Failed to notify librarians: {e}")
         except IntegrityError:
             return Response(
                 {'detail': 'A renewal request is already pending for this book.'},
