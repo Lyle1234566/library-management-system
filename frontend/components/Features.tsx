@@ -145,7 +145,7 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
     'Quick recap page at the end of each chapter',
   ];
   return (
-    <section className="relative overflow-hidden bg-[#0b1324] pt-0 pb-24">
+    <section className="relative overflow-hidden bg-[#0b1324] pt-4 pb-24 sm:pt-6">
       <div className="absolute inset-0">
         <div className="absolute -left-32 top-10 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl animate-float" />
         <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />

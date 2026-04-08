@@ -43,7 +43,7 @@ export default function FeaturedBooks() {
   }
 
   return (
-    <section className="relative bg-[#0f1b2f] pt-8 pb-4 sm:pt-10 sm:pb-6">
+    <section className="relative bg-[#0f1b2f] pt-8 pb-8 sm:pt-10 sm:pb-10">
       <div className="absolute inset-0">
         <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-sky-500/15 blur-3xl animate-float" />
         <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />
