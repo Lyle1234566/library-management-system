@@ -44,7 +44,7 @@ export default function HeroSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-4 pt-10 sm:px-8 sm:pb-6 sm:pt-12 lg:px-10 lg:pb-8 lg:pt-14 xl:pb-10 xl:pt-16">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:gap-8 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] xl:gap-10">
           <div className="space-y-8 sm:space-y-10">
-            <div className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-sky-200/90 backdrop-blur-sm tracking-wide animate-fade-up sm:px-5">
+            <div className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 mb-4 text-sm font-medium text-sky-200/90 backdrop-blur-sm tracking-wide animate-fade-up sm:px-5">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sky-400" />
