@@ -145,7 +145,7 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
     'Quick recap page at the end of each chapter',
   ];
   return (
-    <section className="relative overflow-hidden bg-[#0b1324] pt-12 pb-24 sm:pt-16">
+    <section className="relative overflow-hidden bg-[#0b1324] pt-8 pb-24 sm:pt-10">
       <div className="absolute inset-0">
         <div className="absolute -left-32 top-10 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl animate-float" />
         <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />
@@ -153,21 +153,21 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
       </div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mx-auto mb-12 max-w-4xl text-center">
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(17,27,48,0.9)_0%,rgba(10,18,34,0.82)_100%)] px-6 py-8 shadow-[0_24px_50px_rgba(2,8,23,0.22)] backdrop-blur-xl sm:px-8 sm:py-10">
+        <div className="mx-auto mb-10 max-w-3xl text-center">
+          <div className="relative overflow-hidden rounded-[1.7rem] border border-white/8 bg-[linear-gradient(180deg,rgba(16,26,46,0.82)_0%,rgba(10,18,34,0.72)_100%)] px-5 py-6 shadow-[0_18px_38px_rgba(2,8,23,0.18)] backdrop-blur-xl sm:px-7 sm:py-7">
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-x-16 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/35 to-transparent" />
-              <div className="absolute -left-12 top-6 h-28 w-28 rounded-full bg-sky-400/8 blur-3xl" />
-              <div className="absolute -right-10 bottom-2 h-24 w-24 rounded-full bg-amber-400/8 blur-3xl" />
+              <div className="absolute -left-12 top-6 h-24 w-24 rounded-full bg-sky-400/8 blur-3xl" />
+              <div className="absolute -right-10 bottom-2 h-20 w-20 rounded-full bg-amber-400/8 blur-3xl" />
             </div>
             <div className="relative">
-              <span className="inline-flex items-center rounded-full border border-white/12 bg-white/6 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-100/80 animate-fade-up">
+              <span className="inline-flex items-center rounded-full border border-white/12 bg-white/6 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-100/80 animate-fade-up sm:px-4 sm:py-2 sm:text-[11px]">
                 Core Features
               </span>
-              <h2 className="mt-5 text-3xl font-bold text-white md:text-5xl text-balance animate-fade-up">
+              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl text-balance animate-fade-up">
                 Why Choose SCSIT Digital Library?
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white/68 animate-fade-up delay-100">
+              <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-white/68 animate-fade-up delay-100 sm:text-lg">
                 Experience the future of library management with our feature-rich platform
                 designed for modern readers.
               </p>
