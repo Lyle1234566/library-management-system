@@ -101,6 +101,13 @@ type NotificationListResponse = {
   message?: string;
 };
 
+const notificationSectionTargets: Record<string, string> = {
+  PENDING_ACCOUNT: 'desk-accounts',
+  PENDING_BORROW_REQUEST: 'desk-borrows',
+  PENDING_RENEWAL_REQUEST: 'desk-renewals',
+  PENDING_RETURN_REQUEST: 'desk-returns',
+};
+
 const statusPill: Record<BorrowRequest['status'], string> = {
   PENDING: 'bg-sky-500/20 text-sky-100 border border-sky-300/30',
   APPROVED: 'bg-emerald-500/20 text-emerald-100 border border-emerald-300/30',
@@ -352,6 +359,7 @@ export default function LibrarianDeskPage() {
   const [inventoryBusyId, setInventoryBusyId] = useState<number | null>(null);
   const [bookBusy, setBookBusy] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState('desk-dashboard');
+  const [pendingScrollSectionId, setPendingScrollSectionId] = useState<string | null>(null);
   const [isDeskMenuOpen, setIsDeskMenuOpen] = useState(false);
   const [isNotificationMenuOpen, setIsNotificationMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -1581,11 +1589,49 @@ export default function LibrarianDeskPage() {
     loadNotifications,
   ]);
 
-  const openNotificationCenter = useCallback(() => {
-    setActiveSectionId('desk-notifications');
+  const navigateToDeskSection = useCallback((sectionId: string) => {
+    setActiveSectionId(sectionId);
+    setPendingScrollSectionId(sectionId);
+    setIsDeskMenuOpen(false);
     setIsNotificationMenuOpen(false);
     setIsProfileMenuOpen(false);
   }, []);
+
+  const getNotificationTargetSectionId = useCallback(
+    (notification: NotificationRecord) => {
+      const targetSectionId = notificationSectionTargets[notification.notification_type];
+      if (!targetSectionId) {
+        return 'desk-notifications';
+      }
+      return dashboardNavItems.some((item) => item.id === targetSectionId)
+        ? targetSectionId
+        : 'desk-notifications';
+    },
+    [dashboardNavItems]
+  );
+
+  const handleNotificationClick = useCallback(
+    (notification: NotificationRecord) => {
+      navigateToDeskSection(getNotificationTargetSectionId(notification));
+    },
+    [getNotificationTargetSectionId, navigateToDeskSection]
+  );
+
+  const openNotificationCenter = useCallback(() => {
+    navigateToDeskSection('desk-notifications');
+  }, [navigateToDeskSection]);
+
+  useEffect(() => {
+    if (!pendingScrollSectionId || resolvedActiveSectionId !== pendingScrollSectionId) {
+      return;
+    }
+
+    const section = document.getElementById(pendingScrollSectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setPendingScrollSectionId(null);
+  }, [pendingScrollSectionId, resolvedActiveSectionId]);
 
   useEffect(() => {
     const handlePointerDown = (event: MouseEvent) => {
@@ -2406,7 +2452,7 @@ export default function LibrarianDeskPage() {
                               <button
                                 type="button"
                                 key={notification.id}
-                                onClick={openNotificationCenter}
+                                onClick={() => handleNotificationClick(notification)}
                                 className="block w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left transition hover:border-sky-300/20 hover:bg-sky-400/10"
                               >
                                 <div className="flex items-start justify-between gap-3">
@@ -3986,9 +4032,11 @@ export default function LibrarianDeskPage() {
                         )}
                       {notificationsState !== 'loading' &&
                         notifications.map((notification) => (
-                          <article
+                          <button
+                            type="button"
                             key={notification.id}
-                            className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5"
+                            onClick={() => handleNotificationClick(notification)}
+                            className="block w-full rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5 text-left transition hover:border-sky-300/20 hover:bg-sky-400/10"
                           >
                             <div className="flex flex-wrap items-start justify-between gap-4">
                               <div className="min-w-0">
@@ -4010,7 +4058,7 @@ export default function LibrarianDeskPage() {
                                 {formatDate(notification.created_at)}
                               </p>
                             </div>
-                          </article>
+                          </button>
                         ))}
                     </div>
                   </section>
