@@ -87,7 +87,25 @@ function getNotificationCategory(notification: Notification) {
 }
 
 function getNotificationHref(notification: Notification) {
-  const maybeBookId = notification.data?.book_id;
+  const type = notification.notification_type;
+  const data = notification.data || {};
+  
+  // Librarian/Staff notifications - direct to specific pages
+  if (type === 'PENDING_ACCOUNT') {
+    return '/librarian?tab=pending-accounts';
+  }
+  if (type === 'PENDING_BORROW_REQUEST') {
+    return '/staff?tab=borrow-requests';
+  }
+  if (type === 'PENDING_RENEWAL_REQUEST') {
+    return '/staff?tab=renewal-requests';
+  }
+  if (type === 'PENDING_RETURN_REQUEST') {
+    return '/staff?tab=return-requests';
+  }
+  
+  // Student notifications - existing logic
+  const maybeBookId = data?.book_id;
   const bookId = typeof maybeBookId === 'number' ? maybeBookId : null;
   const category = getNotificationCategory(notification);
 
