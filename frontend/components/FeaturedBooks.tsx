@@ -43,7 +43,7 @@ export default function FeaturedBooks() {
   }
 
   return (
-    <section className="relative bg-[#0f1b2f] pt-8 pb-4 sm:pt-10 sm:pb-6">
+    <section className="relative bg-[#0f1b2f] pt-8 pb-14 sm:pt-10 sm:pb-18">
       <div className="absolute inset-0">
         <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-sky-500/15 blur-3xl animate-float" />
         <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />
@@ -108,14 +108,14 @@ export default function FeaturedBooks() {
         )}
 
         {/* View All Button */}
-        <div className="relative z-10 mt-6 text-center animate-fade-up delay-300">
+        <div className="relative z-10 mt-10 flex flex-col items-center gap-4 text-center animate-fade-up delay-300">
           <Link
             href="/books"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-full text-[#1a1b1f] bg-amber-500 transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-400 shadow-soft"
+            className="inline-flex items-center gap-3 rounded-full border border-amber-300/20 bg-amber-500 px-7 py-3.5 text-base font-semibold text-[#1a1b1f] shadow-[0_18px_34px_rgba(245,158,11,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-[0_22px_40px_rgba(251,191,36,0.34)]"
           >
             View All Books
             <svg
-              className="ml-4 w-5 h-5"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -128,6 +128,9 @@ export default function FeaturedBooks() {
               />
             </svg>
           </Link>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/38">
+            Continue to platform highlights
+          </p>
         </div>
       </div>
     </section>
