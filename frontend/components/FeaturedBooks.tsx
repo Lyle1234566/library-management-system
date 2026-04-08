@@ -108,14 +108,14 @@ export default function FeaturedBooks() {
         )}
 
         {/* View All Button */}
-        <div className="relative z-10 mt-8 flex flex-col items-center gap-3 text-center animate-fade-up delay-300">
+        <div className="relative z-10 mt-7 flex flex-col items-center gap-2 text-center animate-fade-up delay-300">
           <Link
             href="/books"
-            className="inline-flex items-center gap-2.5 rounded-full border border-amber-300/20 bg-amber-500 px-5 py-2.5 text-sm font-semibold text-[#1a1b1f] shadow-[0_14px_28px_rgba(245,158,11,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-[0_18px_34px_rgba(251,191,36,0.28)] sm:px-6 sm:py-3 sm:text-base"
+            className="inline-flex items-center gap-2 rounded-full border border-amber-300/15 bg-amber-500 px-4 py-2 text-[13px] font-semibold text-[#1a1b1f] shadow-[0_10px_20px_rgba(245,158,11,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-[0_14px_24px_rgba(251,191,36,0.22)] sm:px-4.5 sm:py-2.5 sm:text-sm"
           >
             View All Books
             <svg
-              className="h-4 w-4 sm:h-5 sm:w-5"
+              className="h-3.5 w-3.5 sm:h-4 sm:w-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -128,7 +128,7 @@ export default function FeaturedBooks() {
               />
             </svg>
           </Link>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/32 sm:text-[11px]">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/28 sm:text-[10px]">
             Continue to platform highlights
           </p>
         </div>
