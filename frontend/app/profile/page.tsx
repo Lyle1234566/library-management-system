@@ -246,6 +246,18 @@ export default function ProfilePage() {
                       </div>
 
                       <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                        <div className="rounded-[1.35rem] border border-sky-300/15 bg-[linear-gradient(180deg,rgba(56,189,248,0.09),rgba(255,255,255,0.03))] p-4">
+                          <p className="text-xs uppercase tracking-[0.22em] text-white/45">{displayIdLabel}</p>
+                          <p className="mt-2 text-2xl font-semibold text-white">{displayIdValue}</p>
+                          <p className="mt-1 text-sm text-white/55">Locked account identifier for library records.</p>
+                        </div>
+
+                        <div className="rounded-[1.35rem] border border-amber-300/15 bg-[linear-gradient(180deg,rgba(251,191,36,0.09),rgba(255,255,255,0.03))] p-4">
+                          <p className="text-xs uppercase tracking-[0.22em] text-white/45">Account Role</p>
+                          <p className="mt-2 text-2xl font-semibold text-white">{roleLabel}</p>
+                          <p className="mt-1 text-sm text-white/55">Managed by the system and approval workflow.</p>
+                        </div>
+
                         <div className="rounded-[1.35rem] border border-white/10 bg-white/[0.05] p-4 backdrop-blur-sm">
                           <div className="flex items-start justify-between gap-3">
                             <div>
@@ -285,7 +297,7 @@ export default function ProfilePage() {
                       <p className="text-xs uppercase tracking-[0.24em] text-sky-200/70">Editable Profile</p>
                       <h3 className="mt-2 text-2xl font-semibold text-white">Edit Account Details</h3>
                       <p className="mt-2 max-w-2xl text-sm text-white/65">
-                        Update the personal details that can change while keeping your system-assigned access role and account ID protected.
+                        Update the personal details that can change while your system-assigned account details stay listed in Account Overview.
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-3">
@@ -312,19 +324,6 @@ export default function ProfilePage() {
                       >
                         Forgot Password
                       </Link>
-                    </div>
-                  </div>
-
-                  <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                    <div className="rounded-[1.35rem] border border-sky-300/15 bg-[linear-gradient(180deg,rgba(56,189,248,0.09),rgba(255,255,255,0.03))] p-5">
-                      <p className="text-xs uppercase tracking-[0.22em] text-white/45">{displayIdLabel}</p>
-                      <p className="mt-3 text-xl font-semibold text-white">{displayIdValue}</p>
-                      <p className="mt-2 text-sm text-white/55">Locked account identifier for library records.</p>
-                    </div>
-                    <div className="rounded-[1.35rem] border border-amber-300/15 bg-[linear-gradient(180deg,rgba(251,191,36,0.09),rgba(255,255,255,0.03))] p-5">
-                      <p className="text-xs uppercase tracking-[0.22em] text-white/45">Account Role</p>
-                      <p className="mt-3 text-xl font-semibold text-white">{roleLabel}</p>
-                      <p className="mt-2 text-sm text-white/55">Managed by the system and approval workflow.</p>
                     </div>
                   </div>
 
