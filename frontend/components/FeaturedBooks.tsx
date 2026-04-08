@@ -16,7 +16,6 @@ export default function FeaturedBooks() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setLoading(false);
       return;
     }
 
@@ -44,7 +43,7 @@ export default function FeaturedBooks() {
   }
 
   return (
-    <section className="relative py-24 bg-[#0f1b2f]">
+    <section className="relative bg-[#0f1b2f] pt-10 pb-20 sm:pt-12 sm:pb-24">
       <div className="absolute inset-0">
         <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-sky-500/15 blur-3xl animate-float" />
         <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />
@@ -52,7 +51,7 @@ export default function FeaturedBooks() {
       </div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="mb-8 text-center sm:mb-10">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 animate-fade-up">
             Featured Books
           </h2>

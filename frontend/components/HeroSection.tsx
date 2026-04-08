@@ -34,14 +34,14 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#0a1221] via-[#0e1629] to-[#0b1324] flex items-center">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#0a1221] via-[#0e1629] to-[#0b1324]">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-sky-600/10 blur-3xl animate-float" />
         <div className="absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />
         <div className="absolute inset-0 bg-gradient-to-br from-sky-950/30 via-transparent to-amber-950/20" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24 xl:py-28">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-8 sm:py-12 lg:px-10 lg:py-14 xl:py-16">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:gap-10 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] xl:gap-12">
           <div className="space-y-8 sm:space-y-10">
             <div className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-sky-200/90 backdrop-blur-sm tracking-wide animate-fade-up sm:px-5">
