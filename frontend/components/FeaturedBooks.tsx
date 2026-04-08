@@ -43,7 +43,7 @@ export default function FeaturedBooks() {
   }
 
   return (
-    <section className="relative bg-[#0f1b2f] pt-8 pb-8 sm:pt-10 sm:pb-10">
+    <section className="relative bg-[#0f1b2f] pt-8 pb-2 sm:pt-10 sm:pb-4">
       <div className="absolute inset-0">
         <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-sky-500/15 blur-3xl animate-float" />
         <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />
@@ -108,7 +108,7 @@ export default function FeaturedBooks() {
         )}
 
         {/* View All Button */}
-        <div className="mt-8 text-center animate-fade-up delay-300">
+        <div className="mt-6 text-center animate-fade-up delay-300">
           <Link
             href="/books"
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-full text-[#1a1b1f] bg-amber-500 transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-400 shadow-soft"
