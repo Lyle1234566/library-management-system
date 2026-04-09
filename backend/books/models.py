@@ -60,6 +60,7 @@ class Book(models.Model):
     isbn = models.CharField(max_length=13, unique=True)
     published_date = models.DateField()
     genre = models.CharField(max_length=50)
+    description = models.TextField(blank=True, default='')
     language = models.CharField(max_length=50, blank=True, default='')
     grade_level = models.CharField(max_length=50, blank=True, default='')
     location_shelf = models.CharField(max_length=100, blank=True, default='')

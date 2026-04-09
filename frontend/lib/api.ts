@@ -178,6 +178,7 @@ export interface Book {
   isbn: string;
   published_date: string;
   genre: string;
+  description?: string;
   location_shelf?: string;
   language?: string;
   grade_level?: string;
@@ -217,6 +218,7 @@ export interface BookInput {
   isbn: string;
   published_date: string;
   genre: string;
+  description?: string;
   location_shelf?: string;
   language?: string;
   grade_level?: string;

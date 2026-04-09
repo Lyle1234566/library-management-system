@@ -100,6 +100,7 @@ class BookAdmin(admin.ModelAdmin):
         'isbn',
         'published_date',
         'genre',
+        'description',
         'language',
         'grade_level',
         'location_shelf',

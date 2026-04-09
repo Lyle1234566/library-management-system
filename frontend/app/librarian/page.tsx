@@ -465,6 +465,7 @@ export default function LibrarianDeskPage() {
     title: '',
     author: '',
     genre: '',
+    description: '',
     location_shelf: '',
     copies_total: '0',
   });
@@ -2082,6 +2083,11 @@ export default function LibrarianDeskPage() {
       payload.append('grade_level', gradeLevel);
     }
 
+    const description = bookForm.description.trim();
+    if (description) {
+      payload.append('description', description);
+    }
+
     if (coverImageFile) {
       payload.append('cover_image', coverImageFile);
     }
@@ -2148,6 +2154,7 @@ export default function LibrarianDeskPage() {
       title: book.title,
       author: book.author,
       genre: book.genre,
+      description: book.description ?? '',
       location_shelf: book.location_shelf ?? '',
       copies_total: String(book.copies_total ?? book.copies_available ?? 0),
     });
@@ -2159,6 +2166,7 @@ export default function LibrarianDeskPage() {
       title: '',
       author: '',
       genre: '',
+      description: '',
       location_shelf: '',
       copies_total: '0',
     });
@@ -2184,6 +2192,7 @@ export default function LibrarianDeskPage() {
       title: bookEditForm.title.trim(),
       author: bookEditForm.author.trim(),
       genre: bookEditForm.genre.trim(),
+      description: bookEditForm.description.trim(),
       location_shelf: bookEditForm.location_shelf.trim(),
     };
 
@@ -6171,6 +6180,15 @@ export default function LibrarianDeskPage() {
                             }
                             className="md:col-span-12 rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/45 focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all"
                             placeholder="Book shelf (optional)"
+                          />
+                          <textarea
+                            value={bookEditForm.description}
+                            onChange={(event) =>
+                              handleBookEditChange('description', event.target.value)
+                            }
+                            rows={3}
+                            className="md:col-span-12 rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/45 focus:border-sky-300 focus:ring-2 focus:ring-sky-300/30 transition-all resize-none"
+                            placeholder="Book description (optional)"
                           />
                           <div className="md:col-span-12 flex flex-wrap justify-end gap-2">
                             <button

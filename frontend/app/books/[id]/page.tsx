@@ -1118,6 +1118,14 @@ export default function BookDetailsPage() {
                         {book.author || 'Unknown author'}
                       </p>
                       <h2 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">{book.title}</h2>
+                      <div className="mt-4 rounded-2xl border border-white/12 bg-white/[0.03] px-4 py-4">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
+                          Description
+                        </p>
+                        <p className="mt-2 max-w-3xl text-sm leading-7 text-white/78 sm:text-base">
+                          {book.description?.trim() || 'No description has been added for this book yet.'}
+                        </p>
+                      </div>
                       <p className="mt-3 max-w-xl text-sm text-white/75 sm:text-base">
                         {availabilityMessage}
                       </p>
