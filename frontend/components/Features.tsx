@@ -154,7 +154,7 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mx-auto mb-10 max-w-3xl text-center">
-          <div className="relative overflow-hidden rounded-[1.7rem] border border-white/8 bg-[linear-gradient(180deg,rgba(16,26,46,0.82)_0%,rgba(10,18,34,0.72)_100%)] px-5 py-6 shadow-[0_18px_38px_rgba(2,8,23,0.18)] backdrop-blur-xl sm:px-7 sm:py-7">
+          <div className="relative overflow-hidden rounded-[1.7rem] bg-[linear-gradient(180deg,rgba(16,26,46,0.82)_0%,rgba(10,18,34,0.72)_100%)] px-5 py-6 shadow-[0_18px_38px_rgba(2,8,23,0.18)] backdrop-blur-xl sm:px-7 sm:py-7">
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-x-16 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/35 to-transparent" />
               <div className="absolute -left-12 top-6 h-24 w-24 rounded-full bg-sky-400/8 blur-3xl" />
