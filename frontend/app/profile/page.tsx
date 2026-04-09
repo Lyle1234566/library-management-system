@@ -232,10 +232,19 @@ export default function ProfilePage() {
                         <p className="max-w-xl text-sm leading-6 text-white/60">
                           Your library role, active borrowing status, and access information are organized here for a cleaner and more professional account view.
                         </p>
+                        
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <div className="rounded-[1.2rem] border border-sky-300/20 bg-sky-400/[0.08] p-3.5">
+                            <p className="text-[10px] uppercase tracking-[0.2em] text-sky-200/70">{displayIdLabel}</p>
+                            <p className="mt-1.5 text-xl font-bold text-white">{displayIdValue}</p>
+                          </div>
+                          <div className="rounded-[1.2rem] border border-amber-300/20 bg-amber-400/[0.08] p-3.5">
+                            <p className="text-[10px] uppercase tracking-[0.2em] text-amber-200/70">Role</p>
+                            <p className="mt-1.5 text-xl font-bold text-white">{roleLabel}</p>
+                          </div>
+                        </div>
+
                         <div className="flex flex-wrap gap-2">
-                          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/82">
-                            {roleLabel}
-                          </span>
                           <span className="inline-flex items-center rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-100">
                             {emailStatusLabel}
                           </span>
@@ -246,18 +255,6 @@ export default function ProfilePage() {
                       </div>
 
                       <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                        <div className="rounded-[1.35rem] border border-sky-300/15 bg-[linear-gradient(180deg,rgba(56,189,248,0.09),rgba(255,255,255,0.03))] p-4">
-                          <p className="text-xs uppercase tracking-[0.22em] text-white/45">{displayIdLabel}</p>
-                          <p className="mt-2 text-2xl font-semibold text-white">{displayIdValue}</p>
-                          <p className="mt-1 text-sm text-white/55">Locked account identifier for library records.</p>
-                        </div>
-
-                        <div className="rounded-[1.35rem] border border-amber-300/15 bg-[linear-gradient(180deg,rgba(251,191,36,0.09),rgba(255,255,255,0.03))] p-4">
-                          <p className="text-xs uppercase tracking-[0.22em] text-white/45">Account Role</p>
-                          <p className="mt-2 text-2xl font-semibold text-white">{roleLabel}</p>
-                          <p className="mt-1 text-sm text-white/55">Managed by the system and approval workflow.</p>
-                        </div>
-
                         <div className="rounded-[1.35rem] border border-white/10 bg-white/[0.05] p-4 backdrop-blur-sm">
                           <div className="flex items-start justify-between gap-3">
                             <div>
