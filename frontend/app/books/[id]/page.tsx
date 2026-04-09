@@ -363,6 +363,7 @@ export default function BookDetailsPage() {
   const languageLabel = book?.language?.trim() ? book.language : 'Not specified';
   const gradeLevelLabel = book?.grade_level?.trim() ? book.grade_level : 'General';
   const isbnLabel = book?.isbn?.trim() ? book.isbn : 'Not provided';
+  const shelfLabel = book?.location_shelf?.trim() ? book.location_shelf : 'Not assigned';
   const resolvedBookId = book?.id ?? (Number.isNaN(bookId) ? -1 : bookId);
   const coverSide = coverState?.bookId === resolvedBookId ? coverState.side : 'front';
   const effectiveCoverSide = hasBackCover ? coverSide : 'front';
@@ -989,7 +990,7 @@ export default function BookDetailsPage() {
             {!loading && !error && book && (
               <div className="grid gap-5 lg:grid-cols-[minmax(190px,0.58fr)_minmax(0,1.42fr)] xl:gap-6">
                 <aside className="lg:pr-0">
-                  <div className="space-y-4 lg:sticky lg:top-24">
+                  <div className="space-y-5 lg:sticky lg:top-24">
                     <div className="rounded-[26px] border border-white/15 bg-[#0f1b2f]/80 p-4 shadow-xl shadow-black/20">
                       <div 
                         className="group relative mx-auto aspect-[3/4] max-w-[210px] overflow-visible rounded-[18px] [perspective:2000px] flex items-center justify-center sm:max-w-[225px] lg:max-w-[200px] xl:max-w-[215px]"
@@ -1086,6 +1087,32 @@ export default function BookDetailsPage() {
                       </div>
                     </div>
 
+                    <div className="rounded-2xl border border-white/15 bg-[#0a1221]/80 px-4 py-4">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
+                        Book facts
+                      </p>
+                      <div className="mt-3 space-y-2.5">
+                        <div className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5">
+                          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
+                            Published
+                          </span>
+                          <span className="text-right text-sm font-semibold text-white">{publishedLabel}</span>
+                        </div>
+                        <div className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5">
+                          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
+                            Language
+                          </span>
+                          <span className="text-right text-sm font-semibold text-white">{languageLabel}</span>
+                        </div>
+                        <div className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5">
+                          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
+                            Grade level
+                          </span>
+                          <span className="text-right text-sm font-semibold text-white">{gradeLevelLabel}</span>
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="rounded-2xl border border-white/15 bg-[#0a1221]/80 px-4 py-3">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
                         Friendly note
@@ -1095,8 +1122,8 @@ export default function BookDetailsPage() {
                   </div>
                 </aside>
 
-                <div className="space-y-5 lg:max-w-[48rem] xl:max-w-[50rem]">
-                  <div className="space-y-4">
+                <div className="space-y-6 lg:max-w-[48rem] xl:max-w-[50rem]">
+                  <div className="space-y-5">
                     <div className="flex flex-wrap items-center gap-2">
                       <span
                         className={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium ${availabilityBadgeClass}`}
@@ -1118,15 +1145,7 @@ export default function BookDetailsPage() {
                         {book.author || 'Unknown author'}
                       </p>
                       <h2 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">{book.title}</h2>
-                      <div className="mt-4 rounded-2xl border border-white/12 bg-white/[0.03] px-4 py-4">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
-                          Description
-                        </p>
-                        <p className="mt-2 max-w-3xl text-sm leading-7 text-white/78 sm:text-base">
-                          {book.description?.trim() || 'No description has been added for this book yet.'}
-                        </p>
-                      </div>
-                      <p className="mt-3 max-w-xl text-sm text-white/75 sm:text-base">
+                      <p className="mt-4 max-w-xl text-sm text-white/75 sm:text-base">
                         {availabilityMessage}
                       </p>
                     </div>
@@ -1135,27 +1154,15 @@ export default function BookDetailsPage() {
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div className="rounded-2xl border border-white/15 bg-[#0a1221]/80 px-4 py-3.5">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
-                        Published
-                      </p>
-                      <p className="mt-1 text-base font-semibold text-white">{publishedLabel}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/15 bg-[#0a1221]/80 px-4 py-3.5">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
                         ISBN
                       </p>
                       <p className="mt-1 break-all text-base font-semibold text-white">{isbnLabel}</p>
                     </div>
                     <div className="rounded-2xl border border-white/15 bg-[#0a1221]/80 px-4 py-3.5">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
-                        Language
+                        Shelf
                       </p>
-                      <p className="mt-1 text-base font-semibold text-white">{languageLabel}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/15 bg-[#0a1221]/80 px-4 py-3.5">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
-                        Grade level
-                      </p>
-                      <p className="mt-1 text-base font-semibold text-white">{gradeLevelLabel}</p>
+                      <p className="mt-1 text-base font-semibold text-white">{shelfLabel}</p>
                     </div>
                   </div>
 
@@ -1301,6 +1308,15 @@ export default function BookDetailsPage() {
                       )}
                     </div>
                   )}
+
+                  <div className="rounded-[22px] border border-white/15 bg-[#0f1b2f]/80 px-4 py-5 sm:px-5">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
+                      Description
+                    </p>
+                    <p className="mt-3 max-w-3xl text-sm leading-7 text-white/78 sm:text-base">
+                      {book.description?.trim() || 'No description has been added for this book yet.'}
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
