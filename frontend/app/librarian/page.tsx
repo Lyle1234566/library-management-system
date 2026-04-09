@@ -106,6 +106,77 @@ const notificationSectionTargets: Record<string, string> = {
   PENDING_BORROW_REQUEST: 'desk-borrows',
   PENDING_RENEWAL_REQUEST: 'desk-renewals',
   PENDING_RETURN_REQUEST: 'desk-returns',
+  BORROW_APPROVED: 'desk-borrowed',
+  BORROW_REJECTED: 'desk-borrows',
+  RETURN_APPROVED: 'desk-returns',
+  RETURN_REJECTED: 'desk-returns',
+  RENEWAL_REQUEST_SUBMITTED: 'desk-renewals',
+  RENEWAL_REQUEST_REJECTED: 'desk-renewals',
+  RENEWAL_SUCCESS: 'desk-renewals',
+  REPORT_SUBMITTED: 'desk-borrowed',
+  FINE_CREATED: 'desk-fines',
+  FINE_PAID: 'desk-fines',
+  FINE_WAIVED: 'desk-fines',
+  RESERVATION_CREATED: 'desk-books',
+  RESERVATION_AVAILABLE: 'desk-books',
+  RESERVATION_EXPIRED: 'desk-books',
+  RESERVATION_CANCELLED: 'desk-books',
+  DUE_SOON: 'desk-overdue',
+};
+
+const inferNotificationSectionTarget = (notification: NotificationRecord) => {
+  const exactTarget = notificationSectionTargets[notification.notification_type];
+  if (exactTarget) {
+    return exactTarget;
+  }
+
+  const combinedContent = `${notification.title} ${notification.message}`.toLowerCase();
+
+  if (combinedContent.includes('fine')) {
+    return 'desk-fines';
+  }
+  if (combinedContent.includes('renew')) {
+    return 'desk-renewals';
+  }
+  if (combinedContent.includes('return')) {
+    return 'desk-returns';
+  }
+  if (
+    combinedContent.includes('pending account') ||
+    combinedContent.includes('account approval') ||
+    combinedContent.includes('registered')
+  ) {
+    return 'desk-accounts';
+  }
+  if (
+    combinedContent.includes('overdue') ||
+    combinedContent.includes('due soon') ||
+    combinedContent.includes('due on')
+  ) {
+    return 'desk-overdue';
+  }
+  if (
+    combinedContent.includes('reservation') ||
+    combinedContent.includes('catalog') ||
+    combinedContent.includes('book available')
+  ) {
+    return 'desk-books';
+  }
+  if (
+    combinedContent.includes('borrow request') ||
+    combinedContent.includes('requested to borrow')
+  ) {
+    return 'desk-borrows';
+  }
+  if (
+    combinedContent.includes('borrowed') ||
+    combinedContent.includes('borrow report') ||
+    combinedContent.includes('receipt')
+  ) {
+    return 'desk-borrowed';
+  }
+
+  return 'desk-notifications';
 };
 
 const statusPill: Record<BorrowRequest['status'], string> = {
@@ -1599,10 +1670,7 @@ export default function LibrarianDeskPage() {
 
   const getNotificationTargetSectionId = useCallback(
     (notification: NotificationRecord) => {
-      const targetSectionId = notificationSectionTargets[notification.notification_type];
-      if (!targetSectionId) {
-        return 'desk-notifications';
-      }
+      const targetSectionId = inferNotificationSectionTarget(notification);
       return dashboardNavItems.some((item) => item.id === targetSectionId)
         ? targetSectionId
         : 'desk-notifications';
