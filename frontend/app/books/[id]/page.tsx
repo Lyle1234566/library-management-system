@@ -987,12 +987,12 @@ export default function BookDetailsPage() {
             )}
 
             {!loading && !error && book && (
-              <div className="grid gap-6 lg:grid-cols-[minmax(220px,0.68fr)_minmax(0,1.32fr)] xl:gap-8">
-                <aside className="lg:pr-2">
+              <div className="grid gap-5 lg:grid-cols-[minmax(190px,0.58fr)_minmax(0,1.42fr)] xl:gap-6">
+                <aside className="lg:pr-0">
                   <div className="space-y-4 lg:sticky lg:top-24">
                     <div className="rounded-[26px] border border-white/15 bg-[#0f1b2f]/80 p-4 shadow-xl shadow-black/20">
                       <div 
-                        className="group relative mx-auto aspect-[3/4] max-w-[240px] overflow-visible rounded-[20px] [perspective:2000px] flex items-center justify-center sm:max-w-[260px] lg:max-w-[230px] xl:max-w-[250px]"
+                        className="group relative mx-auto aspect-[3/4] max-w-[210px] overflow-visible rounded-[18px] [perspective:2000px] flex items-center justify-center sm:max-w-[225px] lg:max-w-[200px] xl:max-w-[215px]"
                         style={{ transformStyle: 'preserve-3d' }}
                       >
                         <div 
@@ -1011,13 +1011,13 @@ export default function BookDetailsPage() {
                           }}
                         >
                           {/* Front Cover */}
-                          <div className="absolute inset-0 overflow-hidden rounded-[20px] border border-white/15 bg-[#0a1221] shadow-[1px_1px_12px_rgba(0,0,0,0.5)] [backface-visibility:hidden]">
+                          <div className="absolute inset-0 overflow-hidden rounded-[18px] border border-white/15 bg-[#0a1221] shadow-[1px_1px_12px_rgba(0,0,0,0.5)] [backface-visibility:hidden]">
                             {coverUrl ? (
                               <Image
                                 src={coverUrl}
                                 alt={`${book.title} front cover`}
                                 fill
-                                sizes="(min-width: 1280px) 250px, (min-width: 1024px) 230px, (min-width: 640px) 260px, 240px"
+                                sizes="(min-width: 1280px) 215px, (min-width: 1024px) 200px, (min-width: 640px) 225px, 210px"
                                 className="object-cover"
                                 unoptimized
                               />
@@ -1037,13 +1037,13 @@ export default function BookDetailsPage() {
                           
                           {/* Back Cover */}
                           {hasBackCover && (
-                            <div className="absolute inset-0 overflow-hidden rounded-[20px] border border-white/15 bg-[#0a1221] shadow-[1px_1px_12px_rgba(0,0,0,0.5)] [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                            <div className="absolute inset-0 overflow-hidden rounded-[18px] border border-white/15 bg-[#0a1221] shadow-[1px_1px_12px_rgba(0,0,0,0.5)] [backface-visibility:hidden] [transform:rotateY(180deg)]">
                               {coverBackUrl ? (
                                 <Image
                                   src={coverBackUrl}
                                   alt={`${book.title} back cover`}
                                   fill
-                                  sizes="(min-width: 1280px) 250px, (min-width: 1024px) 230px, (min-width: 640px) 260px, 240px"
+                                  sizes="(min-width: 1280px) 215px, (min-width: 1024px) 200px, (min-width: 640px) 225px, 210px"
                                   className="object-cover"
                                   unoptimized
                                 />
@@ -1095,7 +1095,7 @@ export default function BookDetailsPage() {
                   </div>
                 </aside>
 
-                <div className="space-y-5">
+                <div className="space-y-5 lg:max-w-[48rem] xl:max-w-[50rem]">
                   <div className="space-y-4">
                     <div className="flex flex-wrap items-center gap-2">
                       <span
@@ -1118,7 +1118,7 @@ export default function BookDetailsPage() {
                         {book.author || 'Unknown author'}
                       </p>
                       <h2 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">{book.title}</h2>
-                      <p className="mt-3 max-w-2xl text-sm text-white/75 sm:text-base">
+                      <p className="mt-3 max-w-xl text-sm text-white/75 sm:text-base">
                         {availabilityMessage}
                       </p>
                     </div>
