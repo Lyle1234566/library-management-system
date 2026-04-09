@@ -126,9 +126,6 @@ export default function ProfilePage() {
     [requests],
   );
 
-  const memberSince = user?.date_joined ? formatDate(user.date_joined) : 'Unknown';
-  const emailStatusLabel = user?.email ? 'Ready for reminders' : 'Email required';
-
   const handleStartProfileEdit = () => {
     setDraftFullName(user?.full_name ?? '');
     setDraftEmail(user?.email ?? '');
@@ -244,14 +241,6 @@ export default function ProfilePage() {
                           </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-2">
-                          <span className="inline-flex items-center rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-100">
-                            {emailStatusLabel}
-                          </span>
-                          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">
-                            Member since {memberSince}
-                          </span>
-                        </div>
                       </div>
 
                       <div className="mt-6 grid gap-3 sm:grid-cols-2">

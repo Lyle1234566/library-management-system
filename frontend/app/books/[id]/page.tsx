@@ -987,12 +987,12 @@ export default function BookDetailsPage() {
             )}
 
             {!loading && !error && book && (
-              <div className="grid gap-6 lg:grid-cols-[minmax(260px,0.8fr)_minmax(0,1.2fr)] xl:gap-8">
+              <div className="grid gap-6 lg:grid-cols-[minmax(220px,0.68fr)_minmax(0,1.32fr)] xl:gap-8">
                 <aside className="lg:pr-2">
                   <div className="space-y-4 lg:sticky lg:top-24">
                     <div className="rounded-[26px] border border-white/15 bg-[#0f1b2f]/80 p-4 shadow-xl shadow-black/20">
                       <div 
-                        className="group relative mx-auto aspect-[3/4] max-w-[320px] overflow-visible rounded-[22px] [perspective:2000px] flex items-center justify-center"
+                        className="group relative mx-auto aspect-[3/4] max-w-[240px] overflow-visible rounded-[20px] [perspective:2000px] flex items-center justify-center sm:max-w-[260px] lg:max-w-[230px] xl:max-w-[250px]"
                         style={{ transformStyle: 'preserve-3d' }}
                       >
                         <div 
@@ -1011,13 +1011,13 @@ export default function BookDetailsPage() {
                           }}
                         >
                           {/* Front Cover */}
-                          <div className="absolute inset-0 overflow-hidden rounded-[22px] border border-white/15 bg-[#0a1221] shadow-[1px_1px_12px_rgba(0,0,0,0.5)] [backface-visibility:hidden]">
+                          <div className="absolute inset-0 overflow-hidden rounded-[20px] border border-white/15 bg-[#0a1221] shadow-[1px_1px_12px_rgba(0,0,0,0.5)] [backface-visibility:hidden]">
                             {coverUrl ? (
                               <Image
                                 src={coverUrl}
                                 alt={`${book.title} front cover`}
                                 fill
-                                sizes="(min-width: 1024px) 34vw, 82vw"
+                                sizes="(min-width: 1280px) 250px, (min-width: 1024px) 230px, (min-width: 640px) 260px, 240px"
                                 className="object-cover"
                                 unoptimized
                               />
@@ -1037,13 +1037,13 @@ export default function BookDetailsPage() {
                           
                           {/* Back Cover */}
                           {hasBackCover && (
-                            <div className="absolute inset-0 overflow-hidden rounded-[22px] border border-white/15 bg-[#0a1221] shadow-[1px_1px_12px_rgba(0,0,0,0.5)] [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                            <div className="absolute inset-0 overflow-hidden rounded-[20px] border border-white/15 bg-[#0a1221] shadow-[1px_1px_12px_rgba(0,0,0,0.5)] [backface-visibility:hidden] [transform:rotateY(180deg)]">
                               {coverBackUrl ? (
                                 <Image
                                   src={coverBackUrl}
                                   alt={`${book.title} back cover`}
                                   fill
-                                  sizes="(min-width: 1024px) 34vw, 82vw"
+                                  sizes="(min-width: 1280px) 250px, (min-width: 1024px) 230px, (min-width: 640px) 260px, 240px"
                                   className="object-cover"
                                   unoptimized
                                 />
