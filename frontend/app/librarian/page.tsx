@@ -2867,7 +2867,6 @@ export default function LibrarianDeskPage() {
                         </div>
                       </div>
                     </div>
-                  </section>
 
                     <div className="grid gap-6 xl:grid-cols-2">
                       <section className="rounded-lg border border-slate-200 bg-white p-5">
@@ -2952,8 +2951,9 @@ export default function LibrarianDeskPage() {
                         </div>
                       </section>
                     </div>
-                  </div>
-                )}
+                  </section>
+                </div>
+              )}
 
                 {canManageBooks && resolvedActiveSectionId === 'desk-books' && (
                   <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
