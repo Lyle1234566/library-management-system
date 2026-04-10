@@ -3016,16 +3016,16 @@ export default function LibrarianDeskPage() {
                 )}
 
                 {canManageBooks && resolvedActiveSectionId === 'desk-books' && (
-                  <section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                  <section className="public-panel rounded-[30px] border border-white/80 p-6 shadow-card">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">
                           Library Management
                         </p>
-                        <h2 className="mt-2 text-2xl font-semibold text-gray-900">
+                        <h2 className="mt-2 text-2xl font-semibold text-ink">
                           Catalog and Books
                         </h2>
-                        <p className="mt-2 max-w-2xl text-sm text-gray-600">
+                        <p className="mt-2 max-w-2xl text-sm text-ink-muted">
                           Update metadata, adjust availability, and add new titles without leaving the desk.
                         </p>
                       </div>
@@ -3033,7 +3033,7 @@ export default function LibrarianDeskPage() {
                         <button
                           type="button"
                           onClick={loadCatalogBooks}
-                          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
+                          className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
                         >
                           <RefreshCw className="h-4 w-4" />
                           Refresh
@@ -3041,7 +3041,7 @@ export default function LibrarianDeskPage() {
                         <button
                           type="button"
                           onClick={() => setIsAddBookOpen((prev) => !prev)}
-                          className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"
+                          className="inline-flex items-center gap-2 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-2.5 text-sm font-semibold text-sky-700 transition hover:bg-sky-100"
                         >
                           <Plus className="h-4 w-4" />
                           {isAddBookOpen ? 'Hide add form' : 'Add new book'}
@@ -3050,21 +3050,21 @@ export default function LibrarianDeskPage() {
                     </div>
 
                     <div className="mt-6 grid gap-4 md:grid-cols-3">
-                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                        <p className="text-sm text-gray-600">Catalog Titles</p>
-                        <p className="mt-3 text-3xl font-semibold text-gray-900">
+                      <div className="rounded-2xl border border-line bg-white/80 p-4">
+                        <p className="text-sm text-ink-muted">Catalog Titles</p>
+                        <p className="mt-3 text-3xl font-semibold text-ink">
                           {catalogBooks.length}
                         </p>
                       </div>
-                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                        <p className="text-sm text-gray-600">Total Copies</p>
-                        <p className="mt-3 text-3xl font-semibold text-gray-900">
+                      <div className="rounded-2xl border border-line bg-white/80 p-4">
+                        <p className="text-sm text-ink-muted">Total Copies</p>
+                        <p className="mt-3 text-3xl font-semibold text-ink">
                           {totalCatalogCopies}
                         </p>
                       </div>
-                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                        <p className="text-sm text-gray-600">Available Now</p>
-                        <p className="mt-3 text-3xl font-semibold text-gray-900">
+                      <div className="rounded-2xl border border-line bg-white/80 p-4">
+                        <p className="text-sm text-ink-muted">Available Now</p>
+                        <p className="mt-3 text-3xl font-semibold text-ink">
                           {totalAvailableCopies}
                         </p>
                       </div>
@@ -3073,23 +3073,23 @@ export default function LibrarianDeskPage() {
                 )}
 
                 {canManageBooks && resolvedActiveSectionId === 'desk-book-copies' && (
-                  <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-6">
+                  <section className="public-panel rounded-[30px] border border-white/80 p-5 shadow-card md:p-6">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-200/70">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">
                           Monitoring
                         </p>
-                        <h2 className="mt-2 text-2xl font-semibold text-white">
+                        <h2 className="mt-2 text-2xl font-semibold text-ink">
                           Book Copy Utilization
                         </h2>
-                        <p className="mt-2 max-w-2xl text-sm text-white/65">
+                        <p className="mt-2 max-w-2xl text-sm text-ink-muted">
                           See which titles are fully checked out, lightly used, or ready for more copies.
                         </p>
                       </div>
                       <button
                         type="button"
                         onClick={loadCatalogBooks}
-                        className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                        className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
                       >
                         <RefreshCw className="h-4 w-4" />
                         Refresh copies
@@ -3097,43 +3097,43 @@ export default function LibrarianDeskPage() {
                     </div>
 
                     <div className="mt-6 grid gap-4 md:grid-cols-4">
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Tracked Titles</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">{catalogBooks.length}</p>
+                      <div className="rounded-2xl border border-line bg-white/80 p-4">
+                        <p className="text-sm text-ink-muted">Tracked Titles</p>
+                        <p className="mt-3 text-3xl font-semibold text-ink">{catalogBooks.length}</p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Total Copies</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">{totalCatalogCopies}</p>
+                      <div className="rounded-2xl border border-line bg-white/80 p-4">
+                        <p className="text-sm text-ink-muted">Total Copies</p>
+                        <p className="mt-3 text-3xl font-semibold text-ink">{totalCatalogCopies}</p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Checked Out</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">
+                      <div className="rounded-2xl border border-line bg-white/80 p-4">
+                        <p className="text-sm text-ink-muted">Checked Out</p>
+                        <p className="mt-3 text-3xl font-semibold text-ink">
                           {Math.max(0, totalCatalogCopies - totalAvailableCopies)}
                         </p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Available</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">{totalAvailableCopies}</p>
+                      <div className="rounded-2xl border border-line bg-white/80 p-4">
+                        <p className="text-sm text-ink-muted">Available</p>
+                        <p className="mt-3 text-3xl font-semibold text-ink">{totalAvailableCopies}</p>
                       </div>
                     </div>
 
-                    <div className="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-[#0b1729]/88">
+                    <div className="mt-6 overflow-hidden rounded-[28px] border border-line bg-white/80">
                       <div className="overflow-x-auto">
                         <div className="min-w-[560px]">
-                          <div className="grid grid-cols-[minmax(0,1.5fr)_110px_110px_120px] gap-4 border-b border-white/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/45">
+                          <div className="grid grid-cols-[minmax(0,1.5fr)_110px_110px_120px] gap-4 border-b border-line px-4 py-3 text-xs font-semibold uppercase tracking-wider text-ink-muted">
                             <span>Title</span>
                             <span>Total</span>
                             <span>In Use</span>
                             <span>Load</span>
                           </div>
-                          <div className="divide-y divide-white/8">
+                          <div className="divide-y divide-line">
                             {inventoryState === 'loading' && (
-                              <div className="px-4 py-10 text-center text-sm text-white/55">
+                              <div className="px-4 py-10 text-center text-sm text-ink-muted">
                                 Loading copy utilization...
                               </div>
                             )}
                             {inventoryState !== 'loading' && copyUtilizationRows.length === 0 && (
-                              <div className="px-4 py-10 text-center text-sm text-white/55">
+                              <div className="px-4 py-10 text-center text-sm text-ink-muted">
                                 No catalog titles available for copy monitoring yet.
                               </div>
                             )}
@@ -3144,12 +3144,12 @@ export default function LibrarianDeskPage() {
                                   className="grid grid-cols-[minmax(0,1.5fr)_110px_110px_120px] gap-4 px-4 py-4"
                                 >
                                   <div className="min-w-0">
-                                    <p className="truncate font-semibold text-white">{book.title}</p>
-                                    <p className="truncate text-xs text-white/55">{book.author}</p>
-                                    <p className="mt-1 truncate text-[11px] text-sky-100/65">
+                                    <p className="truncate font-semibold text-ink">{book.title}</p>
+                                    <p className="truncate text-xs text-ink-muted">{book.author}</p>
+                                    <p className="mt-1 truncate text-[11px] text-sky-700">
                                       Shelf: {book.locationPreview}
                                     </p>
-                                    <p className="mt-1 truncate text-[11px] text-white/45">
+                                    <p className="mt-1 truncate text-[11px] text-ink-muted">
                                       {book.barcodePreview.length > 0
                                         ? `Barcodes: ${book.barcodePreview.join(', ')}${
                                             book.copyPreview.length > book.barcodePreview.length
@@ -3159,16 +3159,16 @@ export default function LibrarianDeskPage() {
                                         : 'No copy barcode preview available yet.'}
                                     </p>
                                   </div>
-                                  <p className="text-sm text-white/75">{book.totalCopies}</p>
-                                  <p className="text-sm text-white/75">{book.inUse}</p>
+                                  <p className="text-sm text-ink">{book.totalCopies}</p>
+                                  <p className="text-sm text-ink">{book.inUse}</p>
                                   <div className="space-y-2">
-                                    <div className="h-2 rounded-full bg-white/8">
+                                    <div className="h-2 rounded-full bg-slate-100">
                                       <div
-                                        className="h-2 rounded-full bg-gradient-to-r from-sky-400 to-cyan-300"
+                                        className="h-2 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400"
                                         style={{ width: `${Math.min(book.utilization, 100)}%` }}
                                       />
                                     </div>
-                                    <p className="text-xs text-white/55">{book.utilization}% in use</p>
+                                    <p className="text-xs text-ink-muted">{book.utilization}% in use</p>
                                   </div>
                                 </div>
                               ))}
