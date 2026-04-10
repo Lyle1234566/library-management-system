@@ -2253,9 +2253,9 @@ export default function LibrarianDeskPage() {
     <ProtectedRoute requiredRoles={['LIBRARIAN', 'WORKING', 'STAFF', 'ADMIN']}>
       <div className="min-h-screen bg-[#f8f9fb] text-ink">
         <div className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div className="absolute -left-28 top-0 h-80 w-80 rounded-full bg-sky-300/16 blur-3xl" />
-          <div className="absolute right-0 top-1/4 h-[26rem] w-[26rem] rounded-full bg-cyan-300/12 blur-3xl" />
-          <div className="absolute bottom-0 left-1/3 h-[24rem] w-[24rem] rounded-full bg-indigo-300/12 blur-3xl" />
+          <div className="absolute -left-28 top-0 h-80 w-80 rounded-full bg-sky-300/26 blur-3xl" />
+          <div className="absolute right-0 top-1/4 h-[26rem] w-[26rem] rounded-full bg-amber-300/18 blur-3xl" />
+          <div className="absolute bottom-0 left-1/3 h-[24rem] w-[24rem] rounded-full bg-sky-200/12 blur-3xl" />
         </div>
 
         <div className="relative flex min-h-screen">
@@ -2269,18 +2269,18 @@ export default function LibrarianDeskPage() {
           />
 
           <aside
-            className={`fixed inset-y-0 left-0 z-40 flex w-[280px] flex-col overflow-y-auto border-r border-line bg-white/90 px-4 py-6 shadow-2xl backdrop-blur-2xl transition-transform duration-300 md:translate-x-0 ${
+            className={`fixed inset-y-0 left-0 z-40 flex w-[280px] flex-col overflow-y-auto border-r border-line bg-white shadow-lg transition-transform duration-300 md:translate-x-0 ${
               isDeskMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
           >
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-4 py-6">
               <div className="flex items-start justify-between gap-3">
                 <Link
                   href="/"
                   onClick={() => setIsDeskMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-2xl transition hover:bg-white/[0.04]"
+                  className="flex items-center gap-3 rounded-2xl transition hover:bg-sky-50"
                 >
-                  <div className="relative h-11 w-11 overflow-hidden rounded-2xl border border-white/10 bg-white/10 shadow-lg shadow-black/30">
+                  <div className="relative h-11 w-11 overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
                     <Image
                       src="/logo%20lib.png"
                       alt="SCSIT Digital Library logo"
@@ -2290,8 +2290,8 @@ export default function LibrarianDeskPage() {
                     />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-white">SCSIT Digital Library</p>
-                    <p className="text-xs uppercase tracking-[0.28em] text-white/45">
+                    <p className="text-sm font-semibold text-ink">SCSIT Digital Library</p>
+                    <p className="text-xs uppercase tracking-[0.28em] text-ink-muted">
                       {deskLabel}
                     </p>
                   </div>
@@ -2299,7 +2299,7 @@ export default function LibrarianDeskPage() {
                 <button
                   type="button"
                   onClick={() => setIsDeskMenuOpen(false)}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white md:hidden"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:bg-sky-50 hover:text-ink md:hidden"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -2308,38 +2308,38 @@ export default function LibrarianDeskPage() {
               <Link
                 href="/"
                 onClick={() => setIsDeskMenuOpen(false)}
-                className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-3 text-sm font-medium text-white/80 transition hover:border-sky-300/20 hover:bg-sky-400/10 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to Landing Page
               </Link>
             </div>
 
-            <div className="mt-6 rounded-3xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-black/20">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-200/70">
+            <div className="mt-6 rounded-3xl border border-line bg-white p-4 shadow-sm">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-600">
                 Desk Summary
               </p>
-              <p className="mt-2 text-sm text-white/55">{deskTagline}</p>
+              <p className="mt-2 text-sm text-ink-muted">{deskTagline}</p>
               <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-2xl border border-white/10 bg-[#0b1729]/80 p-3">
-                  <p className="text-white/55">Open queue</p>
-                  <p className="mt-2 text-2xl font-semibold text-white">
+                <div className="rounded-2xl border border-line bg-[#f8f9fb] p-3">
+                  <p className="text-ink-muted">Open queue</p>
+                  <p className="mt-2 text-2xl font-semibold text-ink">
                     {dashboardQueueCount}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-white/10 bg-[#0b1729]/80 p-3">
-                  <p className="text-white/55">Unread alerts</p>
-                  <p className="mt-2 text-2xl font-semibold text-white">
+                <div className="rounded-2xl border border-line bg-[#f8f9fb] p-3">
+                  <p className="text-ink-muted">Unread alerts</p>
+                  <p className="mt-2 text-2xl font-semibold text-ink">
                     {notificationUnreadCount}
                   </p>
                 </div>
               </div>
             </div>
 
-            <nav className="mt-6 space-y-5">
+            <nav className="mt-6 space-y-5 px-4 pb-6">
               {dashboardNavGroups.map((group) => (
                 <div key={group.label}>
-                  <p className="px-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/35">
+                  <p className="px-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-ink-muted">
                     {group.label}
                   </p>
                   <div className="mt-2 space-y-1.5">
@@ -2357,15 +2357,15 @@ export default function LibrarianDeskPage() {
                           }}
                           className={`flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition ${
                             isActive
-                              ? 'border-sky-300/25 bg-sky-400/10 text-white shadow-lg shadow-sky-950/20'
-                              : 'border-transparent bg-white/[0.03] text-white/72 hover:border-white/10 hover:bg-white/[0.06] hover:text-white'
+                              ? 'border-sky-300 bg-sky-50 text-ink shadow-sm'
+                              : 'border-transparent bg-white text-ink-muted hover:border-line hover:bg-[#f8f9fb] hover:text-ink'
                           }`}
                         >
                           <span
                             className={`inline-flex h-10 w-10 items-center justify-center rounded-2xl ${
                               isActive
-                                ? 'bg-sky-400/15 text-sky-100 ring-1 ring-sky-300/20'
-                                : 'bg-[#0d182a] text-white/65'
+                                ? 'bg-sky-100 text-sky-700 ring-1 ring-sky-200'
+                                : 'bg-[#f8f9fb] text-ink-muted'
                             }`}
                           >
                             <Icon className="h-4 w-4" />
@@ -2377,8 +2377,8 @@ export default function LibrarianDeskPage() {
                             <span
                               className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
                                 isActive
-                                  ? 'bg-white/10 text-white'
-                                  : 'bg-[#0b1729] text-white/55'
+                                  ? 'bg-sky-100 text-sky-700'
+                                  : 'bg-[#f8f9fb] text-ink-muted'
                               }`}
                             >
                               {item.badge}
@@ -2393,25 +2393,25 @@ export default function LibrarianDeskPage() {
             </nav>
           </aside>
 
-          <div className="flex min-h-screen flex-1 flex-col bg-gradient-to-b from-[#f0f4f8] via-[#e8f0f7] to-[#f8f9fb] md:pl-[280px]">
-            <header className="sticky top-0 z-20 border-b border-line bg-white/90 backdrop-blur-2xl">
+          <div className="flex min-h-screen flex-1 flex-col bg-[#f8f9fb] md:pl-[280px]">
+            <header className="sticky top-0 z-20 border-b border-line bg-white shadow-sm">
               <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
                 <div className="flex min-w-0 items-start gap-3">
                   <button
                     type="button"
                     onClick={() => setIsDeskMenuOpen(true)}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white/80 transition hover:bg-white/[0.09] hover:text-white md:hidden"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:bg-sky-50 hover:text-ink md:hidden"
                   >
                     <PanelLeft className="h-4 w-4" />
                   </button>
                   <div className="min-w-0">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-200/70">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-600">
                       {deskLabel}
                     </p>
-                    <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white">
+                    <h1 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
                       {activeSectionTitle}
                     </h1>
-                    <p className="mt-1 max-w-2xl text-sm text-white/60">
+                    <p className="mt-1 max-w-2xl text-sm text-ink-muted">
                       {activeSectionDescription}
                     </p>
                   </div>
@@ -2421,7 +2421,7 @@ export default function LibrarianDeskPage() {
                   <Link
                     href="/"
                     aria-label="Back to landing page"
-                    className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-3 py-2.5 text-sm font-medium text-white/75 transition hover:bg-white/[0.09] hover:text-white"
+                    className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-3 py-2.5 text-sm font-medium text-ink-muted transition hover:bg-sky-50 hover:text-ink"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     <span className="hidden sm:inline">Back</span>
@@ -2435,23 +2435,23 @@ export default function LibrarianDeskPage() {
                         setIsNotificationMenuOpen((prev) => !prev);
                         setIsProfileMenuOpen(false);
                       }}
-                      className="relative inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white/75 transition hover:bg-white/[0.09] hover:text-white"
+                      className="relative inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:bg-sky-50 hover:text-ink"
                     >
                       <BellRing className="h-4 w-4" />
                       {notificationUnreadCount > 0 && (
-                        <span className="absolute right-2 top-2 min-w-[18px] rounded-full bg-rose-400 px-1.5 py-0.5 text-[10px] font-semibold text-[#220610]">
+                        <span className="absolute right-2 top-2 min-w-[18px] rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-semibold text-[#1a1b1f]">
                           {notificationUnreadCount}
                         </span>
                       )}
                     </button>
 
                     {isNotificationMenuOpen && (
-                      <div className="absolute right-0 top-[calc(100%+0.75rem)] z-30 w-[22rem] max-w-[calc(100vw-2rem)] rounded-3xl border border-white/10 bg-[#081221]/95 p-3 shadow-2xl shadow-black/40 backdrop-blur-2xl">
-                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                      <div className="absolute right-0 top-[calc(100%+0.75rem)] z-30 w-[22rem] max-w-[calc(100vw-2rem)] rounded-3xl border border-line bg-white p-3 shadow-xl">
+                        <div className="rounded-2xl border border-line bg-[#f8f9fb] p-4">
                           <div className="flex items-start justify-between gap-3">
                             <div>
-                              <p className="text-sm font-semibold text-white">Notifications</p>
-                              <p className="mt-1 text-xs text-white/55">
+                              <p className="text-sm font-semibold text-ink">Notifications</p>
+                              <p className="mt-1 text-xs text-ink-muted">
                                 {notificationUnreadCount > 0
                                   ? `${notificationUnreadCount} unread alert${notificationUnreadCount === 1 ? '' : 's'}`
                                   : 'All caught up'}
@@ -2460,7 +2460,7 @@ export default function LibrarianDeskPage() {
                             <button
                               type="button"
                               onClick={openNotificationCenter}
-                              className="inline-flex items-center gap-1 rounded-full border border-sky-300/15 bg-sky-400/10 px-3 py-1.5 text-xs font-semibold text-sky-50 transition hover:bg-sky-400/15"
+                              className="inline-flex items-center gap-1 rounded-full border border-sky-300 bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700 transition hover:bg-sky-100"
                             >
                               View all
                               <ArrowUpRight className="h-3.5 w-3.5" />
@@ -2471,7 +2471,7 @@ export default function LibrarianDeskPage() {
                             <button
                               type="button"
                               onClick={loadNotifications}
-                              className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-3 py-2 text-xs font-semibold text-white transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                              className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-3 py-2 text-xs font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
                             >
                               <RefreshCw
                                 className={`h-3.5 w-3.5 ${
@@ -2484,7 +2484,7 @@ export default function LibrarianDeskPage() {
                               type="button"
                               onClick={() => void handleMarkAllNotificationsRead()}
                               disabled={notificationActionBusy || notificationUnreadCount === 0}
-                              className="inline-flex items-center gap-2 rounded-2xl border border-sky-300/15 bg-sky-400/10 px-3 py-2 text-xs font-semibold text-sky-50 transition hover:bg-sky-400/15 disabled:cursor-not-allowed disabled:opacity-60"
+                              className="inline-flex items-center gap-2 rounded-2xl border border-sky-300 bg-sky-50 px-3 py-2 text-xs font-semibold text-sky-700 transition hover:bg-sky-100 disabled:cursor-not-allowed disabled:opacity-60"
                             >
                               {notificationActionBusy ? (
                                 <>
@@ -2503,13 +2503,13 @@ export default function LibrarianDeskPage() {
 
                         <div className="mt-3 space-y-2">
                           {notificationsState === 'loading' && (
-                            <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-6 text-sm text-white/60">
+                            <div className="rounded-2xl border border-line bg-white px-4 py-6 text-sm text-ink-muted">
                               Loading notifications...
                             </div>
                           )}
 
                           {notificationsError && notificationsState !== 'loading' && (
-                            <div className="rounded-2xl border border-rose-300/20 bg-rose-400/10 px-4 py-4 text-sm text-rose-100">
+                            <div className="rounded-2xl border border-rose-300 bg-rose-50 px-4 py-4 text-sm text-rose-700">
                               {notificationsError}
                             </div>
                           )}
@@ -2517,7 +2517,7 @@ export default function LibrarianDeskPage() {
                           {notificationsState !== 'loading' &&
                             !notificationsError &&
                             recentNotifications.length === 0 && (
-                              <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.04] px-4 py-6 text-sm text-white/60">
+                              <div className="rounded-2xl border border-dashed border-line bg-white px-4 py-6 text-sm text-ink-muted">
                                 No notifications found for this account.
                               </div>
                             )}
@@ -2529,7 +2529,7 @@ export default function LibrarianDeskPage() {
                                 type="button"
                                 key={notification.id}
                                 onClick={() => handleNotificationClick(notification)}
-                                className="block w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                                className="block w-full rounded-2xl border border-line bg-white px-4 py-3 text-left transition hover:border-sky-300 hover:bg-sky-50"
                               >
                                 <div className="flex items-start justify-between gap-3">
                                   <div className="min-w-0">

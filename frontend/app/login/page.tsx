@@ -14,11 +14,7 @@ type LoginErrors = {
   general?: string;
 };
 
-const LOGIN_HIGHLIGHTS = [
-  { value: '24/7', label: 'Catalog access' },
-  { value: '4 roles', label: 'Auto-detected routing' },
-  { value: 'OTP', label: 'Protected first login' },
-];
+
 
 function LoginPageContent() {
   const router = useRouter();

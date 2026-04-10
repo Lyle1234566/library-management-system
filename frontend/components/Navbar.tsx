@@ -198,7 +198,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden items-center gap-1 rounded-full bg-white/[0.08] px-2.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] md:flex">
+          <div className="hidden items-center gap-1 md:flex">
             {navItems
               .filter((item) => !item.requireAuth || isAuthenticated)
               .map((item) => (

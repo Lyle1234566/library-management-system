@@ -3,9 +3,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { authApi, IdentifierAvailabilityResult, RegisterRole } from '@/lib/auth';
+import { RegisterRole } from '@/lib/auth';
 import { getPasswordRequirements, getPasswordValidationMessage, isValidPassword } from '@/lib/passwordRules';
 
 type RegisterFormData = {
@@ -25,7 +25,7 @@ type RegisterFormErrors = {
   general?: string;
 };
 
-type AvailabilityState = 'idle' | 'checking' | 'available' | 'taken' | 'blocked' | 'error';
+
 
 const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
@@ -46,7 +46,6 @@ function RegisterPageShell() {
   });
   const [errors, setErrors] = useState<RegisterFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [availabilityState, setAvailabilityState] = useState<AvailabilityState>('idle');
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
@@ -63,7 +62,6 @@ function RegisterPageShell() {
   const updateField = (field: keyof RegisterFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => ({ ...prev, [field]: undefined, general: undefined }));
-    if (field === 'studentId') setAvailabilityState('idle');
   };
 
   const validateForm = () => {
