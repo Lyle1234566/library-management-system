@@ -41,7 +41,7 @@ export default function HeroSection() {
           <div className="space-y-8 sm:space-y-10">
             <h1 className="text-ink animate-fade-up delay-100">
               <span
-                className="block whitespace-nowrap text-[clamp(3.4rem,9.4vw,5.2rem)] lg:text-[clamp(5.4rem,6.3vw,6.7rem)] xl:text-[clamp(6.2rem,6.9vw,7.4rem)]"
+                className="block whitespace-nowrap text-[clamp(2.8rem,7.5vw,4.2rem)] lg:text-[clamp(4.2rem,5vw,5.4rem)] xl:text-[clamp(4.8rem,5.5vw,6rem)]"
                 style={{
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 700,
@@ -52,7 +52,7 @@ export default function HeroSection() {
                 Salazar Library
               </span>
               <span
-                className="block text-[clamp(3.4rem,9.4vw,5.2rem)] lg:text-[clamp(5.4rem,6.3vw,6.7rem)] xl:text-[clamp(6.2rem,6.9vw,7.4rem)]"
+                className="block text-[clamp(2.8rem,7.5vw,4.2rem)] lg:text-[clamp(4.2rem,5vw,5.4rem)] xl:text-[clamp(4.8rem,5.5vw,6rem)]"
                 style={{
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 1000,
@@ -63,7 +63,7 @@ export default function HeroSection() {
                 System
               </span>
               <span
-                className="mt-2 block whitespace-nowrap text-[clamp(1.45rem,3.3vw,2.35rem)] font-medium italic text-[color:var(--accent-cool-strong)] lg:text-[clamp(1.85rem,2.55vw,2.85rem)]"
+                className="mt-2 block whitespace-nowrap text-[clamp(1.2rem,2.8vw,1.9rem)] font-medium italic text-[color:var(--accent-cool-strong)] lg:text-[clamp(1.5rem,2vw,2.2rem)]"
                 style={{
                   fontFamily: 'Georgia, "Times New Roman", serif',
                   letterSpacing: '-0.03em',
