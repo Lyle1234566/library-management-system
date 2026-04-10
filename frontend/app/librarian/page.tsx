@@ -2867,7 +2867,8 @@ export default function LibrarianDeskPage() {
                           </div>
                         </div>
                       </div>
-                    </section>
+                    </div>
+                  </section>
 
                     <div className="grid gap-6 xl:grid-cols-2">
                       <section className="rounded-lg border border-slate-200 bg-white p-5">
