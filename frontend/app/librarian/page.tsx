@@ -3638,27 +3638,27 @@ export default function LibrarianDeskPage() {
                         ))}
                     </div>
 
-                    <div className="mt-8 rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5">
+                    <div className="mt-8 rounded-[28px] border border-line bg-white/80 p-5">
                       <div className="flex flex-wrap items-start justify-between gap-4">
                         <div>
-                          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/45">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">
                             History
                           </p>
-                          <h3 className="mt-2 text-lg font-semibold text-white">
+                          <h3 className="mt-2 text-lg font-semibold text-ink">
                             Overdue History
                           </h3>
-                          <p className="mt-1 text-sm text-white/60">
+                          <p className="mt-1 text-sm text-ink-muted">
                           Records with late fees applied (active and resolved).
                         </p>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/70">
+                        <span className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-ink-muted">
                           {overdueHistory.length} records
                         </span>
                         <button
                           type="button"
                           onClick={() => setHideCurrentMonthHistory((prev) => !prev)}
-                          className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-white/80 hover:bg-white/20 transition-all"
+                          className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-ink hover:bg-slate-50 transition-all"
                         >
                           {hideCurrentMonthHistory
                             ? `Show ${currentMonthLabel}`
@@ -3668,12 +3668,12 @@ export default function LibrarianDeskPage() {
                     </div>
                       <div className="mt-4 space-y-3">
                         {analyticsState === 'loading' && (
-                          <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-6 text-center text-sm text-white/55">
+                          <div className="rounded-2xl border border-line bg-white px-4 py-6 text-center text-sm text-ink-muted">
                             Loading overdue history...
                           </div>
                         )}
                         {analyticsState !== 'loading' && overdueHistory.length === 0 && (
-                          <div className="rounded-2xl border border-dashed border-white/10 bg-white/5 px-4 py-6 text-center text-sm text-white/55">
+                          <div className="rounded-2xl border border-dashed border-line bg-white px-4 py-6 text-center text-sm text-ink-muted">
                             No overdue history available yet.
                           </div>
                         )}
@@ -3681,7 +3681,7 @@ export default function LibrarianDeskPage() {
                           overdueHistory.map((request) => (
                             <div
                               key={request.id}
-                              className="rounded-2xl border border-white/10 bg-[#0f1b2f]/70 p-4"
+                              className="rounded-2xl border border-line bg-white p-4"
                             >
                               <div className="flex flex-wrap items-center justify-between gap-3">
                                 <div className="flex items-start gap-3">
@@ -3691,10 +3691,10 @@ export default function LibrarianDeskPage() {
                                     roundedClass="rounded-xl"
                                   />
                                   <div>
-                                    <p className="text-sm font-semibold text-white">
+                                    <p className="text-sm font-semibold text-ink">
                                       {request.book.title}
                                     </p>
-                                    <p className="mt-1 text-xs text-white/55">
+                                    <p className="mt-1 text-xs text-ink-muted">
                                       {request.book.author}
                                     </p>
                                     <div className="mt-3 flex items-center gap-2">
@@ -3703,62 +3703,58 @@ export default function LibrarianDeskPage() {
                                       sizeClass="h-8 w-8"
                                     />
                                     <div>
-                                      <p className="text-xs font-medium text-white">
+                                      <p className="text-xs font-medium text-ink">
                                         {request.user?.full_name ?? 'Unknown'}
                                       </p>
-                                      <p className="text-[11px] text-white/45">
+                                      <p className="text-[11px] text-ink-muted">
                                         {formatUserIdentifier(request.user)}
                                       </p>
                                     </div>
                                   </div>
-                                  <p className="hidden text-xs text-white/55">
-                                    {request.user?.full_name ?? 'Unknown'} ·{' '}
-                                    {formatUserIdentifier(request.user)}
-                                  </p>
                                 </div>
                                 </div>
                                 <span
-                                  className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] ${
+                                  className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider ${
                                     statusPill[request.status]
                                   }`}
                                 >
                                   {request.status}
                                 </span>
                               </div>
-                              <div className="mt-3 grid gap-3 text-xs text-white/60 sm:grid-cols-4">
+                              <div className="mt-3 grid gap-3 text-xs text-ink-muted sm:grid-cols-4">
                                 <div>
-                                  <p className="uppercase tracking-[0.2em] text-white/40">
+                                  <p className="uppercase tracking-wider text-ink-muted">
                                     Due Date
                                   </p>
-                                  <p className="mt-1 text-sm text-white">
+                                  <p className="mt-1 text-sm text-ink">
                                     {formatDate(request.due_date)}
                                   </p>
                                 </div>
                                 <div>
-                                  <p className="uppercase tracking-[0.2em] text-white/40">
+                                  <p className="uppercase tracking-wider text-ink-muted">
                                     Returned
                                   </p>
-                                  <p className="mt-1 text-sm text-white">
+                                  <p className="mt-1 text-sm text-ink">
                                     {request.status === 'RETURNED'
                                       ? formatDate(request.returned_at ?? request.processed_at)
                                       : '—'}
                                   </p>
                                 </div>
                                 <div>
-                                  <p className="uppercase tracking-[0.2em] text-white/40">
+                                  <p className="uppercase tracking-wider text-ink-muted">
                                     Late Fee
                                   </p>
-                                  <p className="mt-1 text-sm text-white">
+                                  <p className="mt-1 text-sm text-ink">
                                     {formatCurrency(
                                       Number.parseFloat(request.late_fee_amount ?? '0')
                                     )}
                                   </p>
                                 </div>
                                 <div>
-                                  <p className="uppercase tracking-[0.2em] text-white/40">
+                                  <p className="uppercase tracking-wider text-ink-muted">
                                     Receipt
                                   </p>
-                                  <p className="mt-1 text-sm text-white">
+                                  <p className="mt-1 text-sm text-ink">
                                     {request.receipt_number ?? '—'}
                                   </p>
                                 </div>
@@ -3766,7 +3762,7 @@ export default function LibrarianDeskPage() {
                             </div>
                           ))}
                       </div>
-                      <p className="mt-3 text-xs text-white/45">
+                      <p className="mt-3 text-xs text-ink-muted">
                         {hideCurrentMonthHistory
                           ? `Current month hidden (${currentMonthLabel}). Showing the 10 most recent older records.`
                           : 'Showing the 10 most recent overdue records.'}
@@ -3776,27 +3772,27 @@ export default function LibrarianDeskPage() {
                 )}
 
                 {resolvedActiveSectionId === 'desk-contact' && (
-                  <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-6">
+                  <section className="public-panel rounded-[30px] border border-white/80 p-5 shadow-card md:p-6">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-200/70">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">
                           Communication
                         </p>
-                        <h2 className="mt-2 text-2xl font-semibold text-white">
+                        <h2 className="mt-2 text-2xl font-semibold text-ink">
                           Contact Messages
                         </h2>
-                        <p className="mt-2 max-w-2xl text-sm text-white/65">
+                        <p className="mt-2 max-w-2xl text-sm text-ink-muted">
                           Read user messages, add librarian notes, and update the status in one place.
                         </p>
                       </div>
                       <div className="flex flex-wrap items-center gap-3">
-                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white/70">
+                        <div className="rounded-2xl border border-line bg-white/80 px-4 py-2.5 text-sm text-ink-muted">
                           Read, note, then update the message status.
                         </div>
                         <button
                           type="button"
                           onClick={() => void loadContactMessages()}
-                          className="inline-flex items-center gap-2 rounded-2xl border border-sky-300/15 bg-sky-400/10 px-4 py-2.5 text-sm font-semibold text-sky-50 transition hover:bg-sky-400/15"
+                          className="inline-flex items-center gap-2 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-2.5 text-sm font-semibold text-sky-700 transition hover:bg-sky-100"
                         >
                           <RefreshCw className="h-4 w-4" />
                           Refresh inbox
@@ -3805,31 +3801,31 @@ export default function LibrarianDeskPage() {
                     </div>
 
                     <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                      <div className="rounded-2xl border border-white/10 bg-[#101c30]/80 px-4 py-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">Total</p>
-                        <p className="mt-2 text-3xl font-semibold text-white">{contactMessages.length}</p>
-                        <p className="mt-1 text-xs text-white/45">All submitted messages</p>
+                      <div className="rounded-2xl border border-line bg-white/80 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">Total</p>
+                        <p className="mt-2 text-3xl font-semibold text-ink">{contactMessages.length}</p>
+                        <p className="mt-1 text-xs text-ink-muted">All submitted messages</p>
                       </div>
-                      <div className="rounded-2xl border border-amber-300/15 bg-amber-400/5 px-4 py-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">New</p>
-                        <p className="mt-2 text-3xl font-semibold text-white">
+                      <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-amber-700/75">New</p>
+                        <p className="mt-2 text-3xl font-semibold text-amber-700">
                           {contactMessages.filter((message) => message.status === 'NEW').length}
                         </p>
-                        <p className="mt-1 text-xs text-white/45">Waiting for handling</p>
+                        <p className="mt-1 text-xs text-amber-700/75">Waiting for handling</p>
                       </div>
-                      <div className="rounded-2xl border border-sky-300/15 bg-sky-400/5 px-4 py-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">In Progress</p>
-                        <p className="mt-2 text-3xl font-semibold text-white">
+                      <div className="rounded-2xl border border-sky-200 bg-sky-50 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">In Progress</p>
+                        <p className="mt-2 text-3xl font-semibold text-sky-700">
                           {contactMessages.filter((message) => message.status === 'IN_PROGRESS').length}
                         </p>
-                        <p className="mt-1 text-xs text-white/45">Currently being reviewed</p>
+                        <p className="mt-1 text-xs text-sky-700/75">Currently being reviewed</p>
                       </div>
-                      <div className="rounded-2xl border border-emerald-300/15 bg-emerald-500/5 px-4 py-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">Resolved</p>
-                        <p className="mt-2 text-3xl font-semibold text-white">
+                      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700/75">Resolved</p>
+                        <p className="mt-2 text-3xl font-semibold text-emerald-700">
                           {contactMessages.filter((message) => message.status === 'RESOLVED').length}
                         </p>
-                        <p className="mt-1 text-xs text-white/45">Finished concerns</p>
+                        <p className="mt-1 text-xs text-emerald-700/75">Finished concerns</p>
                       </div>
                     </div>
 
