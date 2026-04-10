@@ -36,7 +36,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(220,236,255,0.24))]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:px-10 w-full">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:px-10 w-full pt-24 sm:pt-28">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:gap-8 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] xl:gap-10">
           <div className="space-y-8 sm:space-y-10">
             <h1 className="text-ink animate-fade-up delay-100">
