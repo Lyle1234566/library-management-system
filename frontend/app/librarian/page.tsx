@@ -3180,27 +3180,27 @@ export default function LibrarianDeskPage() {
                 )}
 
                 {canManageBooks && resolvedActiveSectionId === 'desk-categories' && (
-                  <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-6">
+                  <section className="public-panel rounded-[30px] border border-white/80 p-5 shadow-card md:p-6">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-200/70">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">
                           Library Management
                         </p>
-                        <h2 className="mt-2 text-2xl font-semibold text-white">
+                        <h2 className="mt-2 text-2xl font-semibold text-ink">
                           Categories
                         </h2>
-                        <p className="mt-2 max-w-2xl text-sm text-white/65">
+                        <p className="mt-2 max-w-2xl text-sm text-ink-muted">
                           Keep subject labels clean so students can filter and discover titles faster.
                         </p>
                       </div>
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2 text-sm text-white/65">
+                      <div className="rounded-2xl border border-line bg-white/80 px-4 py-2 text-sm text-ink-muted">
                         {categories.length} categories configured
                       </div>
                     </div>
 
                     <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(280px,0.9fr)_minmax(0,1.2fr)]">
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5">
-                        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
+                      <div className="rounded-[28px] border border-line bg-white/80 p-5">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">
                           Add Category
                         </p>
                         <div className="mt-4 space-y-3">
@@ -3217,14 +3217,14 @@ export default function LibrarianDeskPage() {
                                 void handleCreateCategory();
                               }
                             }}
-                            className="w-full rounded-2xl border border-white/12 bg-white/[0.05] px-4 py-3 text-sm text-white placeholder-white/35 outline-none transition focus:border-sky-300/30 focus:bg-white/[0.07]"
+                            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink placeholder-ink-muted/50 outline-none transition focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
                             placeholder="e.g. Philippine History"
                           />
                           <button
                             type="button"
                             onClick={handleCreateCategory}
                             disabled={categoryBusy || !newCategoryName.trim()}
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-sky-300/15 bg-sky-400/10 px-4 py-3 text-sm font-semibold text-sky-50 transition hover:bg-sky-400/15 disabled:cursor-not-allowed disabled:opacity-60"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm font-semibold text-sky-700 transition hover:bg-sky-100 disabled:cursor-not-allowed disabled:opacity-60"
                           >
                             {categoryBusy ? (
                               <>
@@ -3239,30 +3239,30 @@ export default function LibrarianDeskPage() {
                             )}
                           </button>
                           {categoryError && (
-                            <p className="rounded-2xl border border-rose-300/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
+                            <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
                               {categoryError}
                             </p>
                           )}
                           {categorySuccess && (
-                            <p className="rounded-2xl border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
+                            <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
                               {categorySuccess}
                             </p>
                           )}
                         </div>
                       </div>
 
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5">
+                      <div className="rounded-[28px] border border-line bg-white/80 p-5">
                         <div className="flex flex-wrap items-center justify-between gap-3">
-                          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">
                             Active Categories
                           </p>
-                          <span className="text-sm text-white/55">
+                          <span className="text-sm text-ink-muted">
                             Top borrowed tags appear first
                           </span>
                         </div>
                         <div className="mt-4 flex flex-wrap gap-2">
                           {categories.length === 0 ? (
-                            <p className="text-sm text-white/55">
+                            <p className="text-sm text-ink-muted">
                               No categories created yet.
                             </p>
                           ) : (
@@ -3271,7 +3271,7 @@ export default function LibrarianDeskPage() {
                               .map((category) => (
                                 <span
                                   key={category.id}
-                                  className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-2 text-sm text-white/80"
+                                  className="rounded-full border border-line bg-white px-3 py-2 text-sm text-ink"
                                 >
                                   {category.name}
                                 </span>
@@ -3279,22 +3279,22 @@ export default function LibrarianDeskPage() {
                           )}
                         </div>
                         <div className="mt-6">
-                          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">
                             Borrow Trends
                           </p>
                           <div className="mt-3 space-y-3">
                             {categoryPopularity.length === 0 ? (
-                              <p className="text-sm text-white/55">
+                              <p className="text-sm text-ink-muted">
                                 Category borrowing trends will appear after circulation history builds up.
                               </p>
                             ) : (
                               categoryPopularity.map((category) => (
                                 <div
                                   key={category.id}
-                                  className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3"
+                                  className="flex items-center justify-between rounded-2xl border border-line bg-white px-4 py-3"
                                 >
-                                  <p className="font-medium text-white">{category.name}</p>
-                                  <span className="rounded-full bg-sky-400/10 px-2.5 py-1 text-xs font-semibold text-sky-100">
+                                  <p className="font-medium text-ink">{category.name}</p>
+                                  <span className="rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-700">
                                     {category.count} borrows
                                   </span>
                                 </div>
