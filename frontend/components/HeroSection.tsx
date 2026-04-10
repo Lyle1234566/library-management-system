@@ -11,11 +11,6 @@ const deskItems = [
     desc: 'One-click return requests',
   },
   {
-    title: 'Advanced filters',
-    value: 'Author - Genre - ISBN',
-    desc: 'Find books in seconds',
-  },
-  {
     title: 'Digital receipts',
     value: 'Instant - trackable',
     desc: 'Every borrow securely logged',
@@ -44,14 +39,6 @@ export default function HeroSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:px-10 w-full">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:gap-8 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] xl:gap-10">
           <div className="space-y-8 sm:space-y-10">
-            <div className="public-pill mb-4 inline-flex max-w-full items-center gap-2.5 rounded-full px-4 py-2 text-sm font-medium tracking-wide animate-fade-up sm:px-5">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sky-400" />
-              </span>
-              Digital Borrowing
-            </div>
-
             <h1 className="text-ink animate-fade-up delay-100">
               <span
                 className="block whitespace-nowrap text-[clamp(3.4rem,9.4vw,5.2rem)] lg:text-[clamp(5.4rem,6.3vw,6.7rem)] xl:text-[clamp(6.2rem,6.9vw,7.4rem)]"
