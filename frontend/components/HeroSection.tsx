@@ -34,14 +34,14 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden min-h-screen flex items-center">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-sky-300/28 blur-3xl animate-float" />
         <div className="absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-amber-300/18 blur-3xl animate-float-slow" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(220,236,255,0.24))]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-4 pt-24 sm:px-8 sm:pb-6 sm:pt-28 lg:px-10 lg:pb-8 lg:pt-32 xl:pb-10 xl:pt-36">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:px-10 w-full">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:gap-8 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] xl:gap-10">
           <div className="space-y-8 sm:space-y-10">
             <div className="public-pill mb-4 inline-flex max-w-full items-center gap-2.5 rounded-full px-4 py-2 text-sm font-medium tracking-wide animate-fade-up sm:px-5">

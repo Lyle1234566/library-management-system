@@ -145,13 +145,13 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
     'Quick recap page at the end of each chapter',
   ];
   return (
-    <section className="relative overflow-hidden pt-8 pb-24 sm:pt-10">
+    <section className="relative overflow-hidden min-h-screen flex items-center pt-8 pb-24 sm:pt-10">
       <div className="absolute inset-0">
         <div className="absolute -left-32 top-10 h-72 w-72 rounded-full bg-sky-300/16 blur-3xl animate-float" />
         <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-300/14 blur-3xl animate-float-slow" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-200/80 to-transparent" />
       </div>
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         {/* Section Header */}
         <div className="mx-auto mb-10 max-w-3xl text-center">
           <span className="public-pill inline-flex items-center rounded-full px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] animate-fade-up sm:px-4 sm:py-2 sm:text-[11px]">
