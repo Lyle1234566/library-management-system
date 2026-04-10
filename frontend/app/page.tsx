@@ -7,8 +7,8 @@ import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#0b1324] text-white">
-      <Navbar variant="dark" />
+    <div className="public-shell min-h-screen text-ink">
+      <Navbar />
       <main>
         <HeroSection />
         <FeaturedBooks />

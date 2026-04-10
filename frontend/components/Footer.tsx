@@ -25,13 +25,13 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#0b1424] text-white">
+    <footer className="border-t border-line bg-[linear-gradient(180deg,rgba(255,255,255,0.72)_0%,rgba(237,245,255,0.94)_100%)] text-ink">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="mb-4 flex items-center space-x-2">
-              <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-white/20">
+              <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-line bg-white">
                 <Image
                   src="/logo%20lib.png"
                   alt="SCSIT Digital Library logo"
@@ -42,7 +42,7 @@ export default function Footer() {
               </div>
               <span className="text-xl font-semibold">SCSIT Digital Library</span>
             </div>
-            <p className="text-white/70 max-w-md">
+            <p className="max-w-md text-ink-muted">
               A comprehensive library management system designed to streamline book
               management, user tracking, and borrowing processes for modern libraries.
             </p>
@@ -56,7 +56,7 @@ export default function Footer() {
                 <Link
                   href="/books"
                   onClick={(event) => handleQuickLinkClick(event, '/books')}
-                  className="text-white/70 hover:text-[color:var(--accent)] transition-colors"
+                  className="text-ink-muted transition-colors hover:text-[color:var(--accent-strong)]"
                 >
                   Browse Books
                 </Link>
@@ -65,7 +65,7 @@ export default function Footer() {
                 <Link
                   href="/about"
                   onClick={(event) => handleQuickLinkClick(event, '/about')}
-                  className="text-white/70 hover:text-[color:var(--accent)] transition-colors"
+                  className="text-ink-muted transition-colors hover:text-[color:var(--accent-strong)]"
                 >
                   About Us
                 </Link>
@@ -74,7 +74,7 @@ export default function Footer() {
                 <Link
                   href="/features"
                   onClick={(event) => handleQuickLinkClick(event, '/features')}
-                  className="text-white/70 hover:text-[color:var(--accent)] transition-colors"
+                  className="text-ink-muted transition-colors hover:text-[color:var(--accent-strong)]"
                 >
                   Features
                 </Link>
@@ -83,7 +83,7 @@ export default function Footer() {
                 <Link
                   href="/contact"
                   onClick={(event) => handleQuickLinkClick(event, '/contact')}
-                  className="text-white/70 hover:text-[color:var(--accent)] transition-colors"
+                  className="text-ink-muted transition-colors hover:text-[color:var(--accent-strong)]"
                 >
                   Contact
                 </Link>
@@ -92,7 +92,7 @@ export default function Footer() {
                 <Link
                   href="/faq"
                   onClick={(event) => handleQuickLinkClick(event, '/faq')}
-                  className="text-white/70 hover:text-[color:var(--accent)] transition-colors"
+                  className="text-ink-muted transition-colors hover:text-[color:var(--accent-strong)]"
                 >
                   FAQ
                 </Link>
@@ -103,7 +103,7 @@ export default function Footer() {
           {/* Contact Info */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-            <ul className="space-y-2 text-white/70">
+            <ul className="space-y-2 text-ink-muted">
               <li className="flex items-start space-x-2">
                 <svg
                   className="mt-0.5 h-5 w-5 shrink-0"
@@ -163,26 +163,26 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-8 md:flex-row md:items-center">
-          <p className="text-white/60 text-sm">
+        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-line pt-8 md:flex-row md:items-center">
+          <p className="text-sm text-ink-muted">
             (c) {new Date().getFullYear()} SCSIT Digital Library. All rights reserved.
           </p>
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <Link
               href="/privacy"
-              className="text-white/60 hover:text-[color:var(--accent)] text-sm transition-colors"
+              className="text-sm text-ink-muted transition-colors hover:text-[color:var(--accent-strong)]"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-white/60 hover:text-[color:var(--accent)] text-sm transition-colors"
+              className="text-sm text-ink-muted transition-colors hover:text-[color:var(--accent-strong)]"
             >
               Terms of Service
             </Link>
             <button
               onClick={scrollToTop}
-              className="flex items-center gap-2 text-white/60 hover:text-[color:var(--accent)] text-sm transition-all hover:scale-105"
+              className="flex items-center gap-2 text-sm text-ink-muted transition-all hover:scale-105 hover:text-[color:var(--accent-strong)]"
               aria-label="Scroll to top"
             >
               <span>Back to Top</span>

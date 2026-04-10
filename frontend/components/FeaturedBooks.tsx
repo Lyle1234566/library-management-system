@@ -43,19 +43,19 @@ export default function FeaturedBooks() {
   }
 
   return (
-    <section className="relative bg-[#0f1b2f] pt-8 pb-10 sm:pt-10 sm:pb-12">
+    <section className="relative pt-8 pb-10 sm:pt-10 sm:pb-12">
       <div className="absolute inset-0">
-        <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-sky-500/15 blur-3xl animate-float" />
-        <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(56,189,248,0.12),transparent_45%)]" />
+        <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-sky-300/18 blur-3xl animate-float" />
+        <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-amber-300/14 blur-3xl animate-float-slow" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(126,191,231,0.14),transparent_45%)]" />
       </div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-8 text-center sm:mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 animate-fade-up">
+          <h2 className="mb-4 text-3xl font-bold text-ink animate-fade-up md:text-4xl">
             Featured Books
           </h2>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto animate-fade-up delay-100">
+          <p className="mx-auto max-w-2xl text-lg text-ink-muted animate-fade-up delay-100">
             Discover our curated collection of popular books available for borrowing
           </p>
         </div>
@@ -69,16 +69,16 @@ export default function FeaturedBooks() {
 
         {/* Error State */}
         {error && !loading && (
-          <div className="mb-8 animate-fade-up rounded-3xl border border-amber-400/30 bg-amber-500/10 px-5 py-4 text-left">
-            <p className="text-[color:var(--accent-strong)] text-sm font-semibold uppercase tracking-[0.2em]">
+          <div className="mb-8 animate-fade-up rounded-3xl border border-amber-300/40 bg-amber-50 px-5 py-4 text-left">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[color:var(--accent-strong)]">
               Live catalog unavailable
             </p>
-            <p className="mt-2 text-sm text-amber-100/90">
+            <p className="mt-2 text-sm text-amber-900/80">
               Request failed for <span className="font-mono text-[13px]">{booksRequestUrl}</span>
             </p>
-            <p className="mt-1 text-sm text-amber-100/80">{error}</p>
+            <p className="mt-1 text-sm text-amber-900/75">{error}</p>
             {API_CONFIGURATION_WARNING && (
-              <p className="mt-2 text-sm text-amber-100/80">{API_CONFIGURATION_WARNING}</p>
+              <p className="mt-2 text-sm text-amber-900/75">{API_CONFIGURATION_WARNING}</p>
             )}
           </div>
         )}
@@ -99,9 +99,9 @@ export default function FeaturedBooks() {
         )}
 
         {!loading && !error && books.length === 0 && (
-          <div className="rounded-3xl border border-white/12 bg-white/6 px-6 py-14 text-center shadow-[0_20px_36px_rgba(2,6,23,0.45)] backdrop-blur-xl">
-            <h3 className="text-2xl font-semibold text-white">No featured books available</h3>
-            <p className="mt-2 text-white/70">
+          <div className="public-panel rounded-3xl px-6 py-14 text-center backdrop-blur-xl">
+            <h3 className="text-2xl font-semibold text-ink">No featured books available</h3>
+            <p className="mt-2 text-ink-muted">
               Add catalog titles in the librarian desk to populate this section.
             </p>
           </div>
@@ -111,7 +111,7 @@ export default function FeaturedBooks() {
         <div className="relative z-10 mt-6 flex items-center justify-center text-center animate-fade-up delay-300">
           <Link
             href="/books"
-            className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/10 bg-amber-500 px-3.5 py-1.5 text-xs font-semibold text-[#1a1b1f] shadow-[0_8px_16px_rgba(245,158,11,0.16)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-[0_10px_20px_rgba(251,191,36,0.2)] sm:px-4 sm:py-2 sm:text-[13px]"
+            className="inline-flex items-center gap-1.5 rounded-full border border-amber-200/40 bg-[color:var(--accent)] px-3.5 py-1.5 text-xs font-semibold text-[#17314e] shadow-[0_8px_16px_rgba(217,175,88,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] hover:text-[#17314e] sm:px-4 sm:py-2 sm:text-[13px]"
           >
             View All Books
             <svg

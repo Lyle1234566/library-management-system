@@ -141,31 +141,31 @@ export default function BookCard({ book }: BookCardProps) {
           <div
             className="absolute h-[300px] w-[120px] animate-[rotation_3s_linear_infinite] [animation-play-state:paused] group-hover:[animation-play-state:running]"
             style={{
-              background: 'linear-gradient(90deg, #ff2288, transparent)',
+              background: 'linear-gradient(90deg, rgba(217,175,88,0.5), transparent)',
               transform: 'rotate(0deg) translateY(50%)',
             }}
           />
           <div
             className="absolute h-[300px] w-[120px] animate-[rotation-reverse_3s_linear_infinite] [animation-play-state:paused] group-hover:[animation-play-state:running]"
             style={{
-              background: 'linear-gradient(90deg, transparent, #2268ff)',
+              background: 'linear-gradient(90deg, transparent, rgba(126,191,231,0.65))',
               transform: 'rotate(0deg) translateY(-50%)',
             }}
           />
         </div>
       </div>
 
-      <div className="absolute inset-0 z-10 rounded-[18px] bg-[#171717]/20 backdrop-blur-[50px] transition-opacity duration-500 group-hover:opacity-0" />
+      <div className="absolute inset-0 z-10 rounded-[18px] bg-white/20 backdrop-blur-[50px] transition-opacity duration-500 group-hover:opacity-0" />
 
-      <div className="relative z-20 flex h-full w-full flex-col rounded-[18px] border border-[#d8dce3] bg-[#171717] p-2 text-white shadow-[0_0_3px_1px_rgba(0,0,0,0.53)] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_16px_30px_rgba(0,0,0,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1324]">
+      <div className="relative z-20 flex h-full w-full flex-col rounded-[18px] border border-line bg-[linear-gradient(180deg,rgba(255,255,255,0.9)_0%,rgba(237,245,255,0.96)_100%)] p-2 text-ink shadow-[0_10px_28px_rgba(31,53,84,0.16)] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_18px_36px_rgba(31,53,84,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--page-bg)]">
         <div className="absolute inset-0 rounded-[18px] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <div className="absolute left-1/2 top-1/2 h-[50px] w-[50px] -translate-x-1/2 -translate-y-1/2 bg-white/30 blur-[50px]" />
+          <div className="absolute left-1/2 top-1/2 h-[50px] w-[50px] -translate-x-1/2 -translate-y-1/2 bg-sky-100/80 blur-[50px]" />
         </div>
 
         <div className="relative flex h-full flex-col">
-          <div className="relative overflow-hidden rounded-[13px] border border-white/20 bg-[#0a1221]">
+          <div className="relative overflow-hidden rounded-[13px] border border-line bg-[color:var(--surface-muted)]">
             <div className="relative aspect-[3/4]">
-              <div className="absolute -bottom-3 left-1/2 h-4 w-[72%] -translate-x-1/2 rounded-full bg-slate-400/25 blur-lg" />
+              <div className="absolute -bottom-3 left-1/2 h-4 w-[72%] -translate-x-1/2 rounded-full bg-sky-200/60 blur-lg" />
               {coverUrl ? (
                 <Image
                   src={coverUrl}
@@ -176,7 +176,7 @@ export default function BookCard({ book }: BookCardProps) {
                   unoptimized
                 />
               ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/40">
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-ink-muted/70">
                   <svg className="h-14 w-14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
@@ -194,15 +194,15 @@ export default function BookCard({ book }: BookCardProps) {
               <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-2">
                 <span
                   title={categoryLabel}
-                  className="inline-flex max-w-[62%] items-center rounded-full border border-white/30 bg-white/20 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm"
+                  className="inline-flex max-w-[62%] items-center rounded-full border border-white/70 bg-white/80 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-ink backdrop-blur-sm"
                 >
                   <span className="truncate">{categoryChipLabel}</span>
                 </span>
                 <span
                   className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] backdrop-blur-sm ${
                     localBook.available
-                      ? 'border-emerald-300/40 bg-emerald-500/25 text-emerald-100'
-                      : 'border-amber-300/40 bg-amber-500/25 text-amber-100'
+                      ? 'border-emerald-300/40 bg-emerald-100 text-emerald-700'
+                      : 'border-amber-300/40 bg-amber-100 text-amber-800'
                   }`}
                 >
                   <span
@@ -217,14 +217,14 @@ export default function BookCard({ book }: BookCardProps) {
           </div>
 
           <div className="mt-2.5 px-0.5">
-            <h3 className="line-clamp-1 text-[15px] font-semibold leading-tight text-white">
+            <h3 className="line-clamp-1 text-[15px] font-semibold leading-tight text-ink">
               {localBook.title}
             </h3>
-            <p className="mt-0.5 line-clamp-1 text-xs text-white/70">{localBook.author}</p>
+            <p className="mt-0.5 line-clamp-1 text-xs text-ink-muted">{localBook.author}</p>
             {averageRating > 0 && (
               <div className="mt-1 flex items-center gap-1">
-                <span className="text-xs text-amber-400">{renderStars(averageRating)}</span>
-                <span className="text-xs text-white/50">
+                <span className="text-xs text-[color:var(--accent)]">{renderStars(averageRating)}</span>
+                <span className="text-xs text-ink-muted/80">
                   ({averageRating.toFixed(1)}) · {reviewCount} review
                   {reviewCount !== 1 ? 's' : ''}
                 </span>
@@ -233,19 +233,19 @@ export default function BookCard({ book }: BookCardProps) {
           </div>
 
           <div className="mt-2 flex items-center justify-between px-0.5 text-[11px]">
-            <span className="inline-flex items-center gap-1.5 text-white/60">
+            <span className="inline-flex items-center gap-1.5 text-ink-muted">
               <BookOpen className="h-3.5 w-3.5" />
               <span>
                 {availableCopies}/{totalCopies} copies
               </span>
             </span>
-            <span className="font-medium text-amber-300">{publishedYear}</span>
+            <span className="font-medium text-[color:var(--accent-strong)]">{publishedYear}</span>
           </div>
 
-          <div className="mt-2 rounded-[11px] border border-white/20 bg-white/5 p-2">
-            <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.14em] text-white/50">
+          <div className="mt-2 rounded-[11px] border border-line bg-white/72 p-2">
+            <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.14em] text-ink-muted">
               <span>ISBN</span>
-              <span className="max-w-[56%] truncate text-right text-white/80">
+              <span className="max-w-[56%] truncate text-right text-ink">
                 {localBook.isbn || 'N/A'}
               </span>
             </div>
@@ -258,12 +258,12 @@ export default function BookCard({ book }: BookCardProps) {
               className={`
                 inline-flex w-full items-center justify-center gap-2 rounded-[10px] px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em]
                 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
-                focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1324]
+                focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--page-bg)]
                 disabled:cursor-not-allowed disabled:opacity-60
                 ${
                   isDisabled
-                    ? 'border border-white/20 bg-white/10 text-white/40'
-                    : 'bg-amber-500 text-[#1a1b1f] hover:bg-amber-400'
+                    ? 'border border-line bg-white/72 text-ink-muted/70'
+                    : 'bg-[color:var(--accent)] text-[#17314e] hover:bg-[color:var(--accent-strong)] hover:text-[#17314e]'
                 }
               `}
             >

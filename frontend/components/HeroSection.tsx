@@ -34,17 +34,17 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#0a1221] via-[#0e1629] to-[#0b1324]">
+    <section className="relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-sky-600/10 blur-3xl animate-float" />
-        <div className="absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />
-        <div className="absolute inset-0 bg-gradient-to-br from-sky-950/30 via-transparent to-amber-950/20" />
+        <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-sky-300/28 blur-3xl animate-float" />
+        <div className="absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-amber-300/18 blur-3xl animate-float-slow" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(220,236,255,0.24))]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-4 pt-24 sm:px-8 sm:pb-6 sm:pt-28 lg:px-10 lg:pb-8 lg:pt-32 xl:pb-10 xl:pt-36">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:gap-8 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] xl:gap-10">
           <div className="space-y-8 sm:space-y-10">
-            <div className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 mb-4 text-sm font-medium text-sky-200/90 backdrop-blur-sm tracking-wide animate-fade-up sm:px-5">
+            <div className="public-pill mb-4 inline-flex max-w-full items-center gap-2.5 rounded-full px-4 py-2 text-sm font-medium tracking-wide animate-fade-up sm:px-5">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sky-400" />
@@ -52,7 +52,7 @@ export default function HeroSection() {
               Digital Borrowing
             </div>
 
-            <h1 className="text-white animate-fade-up delay-100">
+            <h1 className="text-ink animate-fade-up delay-100">
               <span
                 className="block whitespace-nowrap text-[clamp(3.4rem,9.4vw,5.2rem)] lg:text-[clamp(5.4rem,6.3vw,6.7rem)] xl:text-[clamp(6.2rem,6.9vw,7.4rem)]"
                 style={{
@@ -76,7 +76,7 @@ export default function HeroSection() {
                 Library
               </span>
               <span
-                className="mt-2 block whitespace-nowrap text-[clamp(1.45rem,3.3vw,2.35rem)] font-medium italic text-sky-200/90 lg:text-[clamp(1.85rem,2.55vw,2.85rem)]"
+                className="mt-2 block whitespace-nowrap text-[clamp(1.45rem,3.3vw,2.35rem)] font-medium italic text-[color:var(--accent-cool-strong)] lg:text-[clamp(1.85rem,2.55vw,2.85rem)]"
                 style={{
                   fontFamily: 'Georgia, "Times New Roman", serif',
                   letterSpacing: '-0.03em',
@@ -87,7 +87,7 @@ export default function HeroSection() {
               </span>
             </h1>
 
-            <p className="max-w-3xl text-base leading-relaxed font-light text-gray-200/85 animate-fade-up delay-200 sm:text-xl">
+            <p className="max-w-3xl text-base leading-relaxed font-light text-ink-muted animate-fade-up delay-200 sm:text-xl">
               Explore curated collections, borrow instantly, and manage your reading life with clarity.
               Search by title, author, genre, or ISBN - everything stays organized.
             </p>
@@ -100,11 +100,11 @@ export default function HeroSection() {
                   placeholder="Title, author, genre, ISBN..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full min-w-0 rounded-2xl border border-white/10 bg-white/7 px-5 py-4 text-base text-white shadow-inner backdrop-blur-xl transition-all duration-300 placeholder:text-gray-400/70 focus:outline-none focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/30 focus:bg-white/10 sm:py-5 sm:pl-6 sm:pr-36"
+                  className="w-full min-w-0 rounded-2xl border border-line bg-white/85 px-5 py-4 text-base text-ink shadow-inner backdrop-blur-xl transition-all duration-300 placeholder:text-ink-muted/65 focus:outline-none focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/30 focus:bg-white sm:py-5 sm:pl-6 sm:pr-36"
                 />
                 <button
                   type="submit"
-                  className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 px-5 py-3.5 text-base text-gray-900 font-semibold shadow-lg shadow-amber-500/20 transition-all duration-300 active:scale-95 hover:from-amber-400 hover:to-amber-300 hover:shadow-amber-400/40 sm:absolute sm:right-3 sm:top-1/2 sm:px-7 sm:py-2.5 sm:-translate-y-1/2 sm:hover:-translate-y-[55%]"
+                  className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-[linear-gradient(135deg,var(--accent)_0%,#e7c37c_100%)] px-5 py-3.5 text-base font-semibold text-[#17314e] shadow-lg shadow-amber-300/20 transition-all duration-300 active:scale-95 hover:bg-[linear-gradient(135deg,var(--accent-strong)_0%,var(--accent)_100%)] hover:text-[#17314e] sm:absolute sm:right-3 sm:top-1/2 sm:px-7 sm:py-2.5 sm:-translate-y-1/2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -117,7 +117,7 @@ export default function HeroSection() {
             <div className="flex flex-col gap-4 animate-fade-up delay-300 sm:flex-row sm:gap-5">
               <Link
                 href="/books"
-                className="inline-flex items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 px-7 py-4 text-gray-900 font-semibold shadow-lg shadow-amber-600/20 transition-all duration-300 hover:-translate-y-0.5 hover:from-amber-400 hover:to-amber-300 hover:shadow-amber-500/40 active:scale-[0.98] lg:rounded-2xl lg:px-9"
+                className="inline-flex items-center justify-center gap-3 rounded-xl bg-[linear-gradient(135deg,var(--accent)_0%,#e7c37c_100%)] px-7 py-4 font-semibold text-[#17314e] shadow-lg shadow-amber-300/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,var(--accent-strong)_0%,var(--accent)_100%)] hover:text-[#17314e] active:scale-[0.98] lg:rounded-2xl lg:px-9"
               >
                 Browse Collection
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,23 +128,23 @@ export default function HeroSection() {
               {!isLoading && !isAuthenticated ? (
                 <Link
                   href="/register"
-                  className="inline-flex items-center justify-center rounded-xl border border-white/20 px-7 py-4 text-white/90 font-medium backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/8 hover:border-white/30 lg:rounded-2xl lg:px-9"
+                  className="inline-flex items-center justify-center rounded-xl border border-line bg-white/65 px-7 py-4 font-medium text-ink backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white lg:rounded-2xl lg:px-9"
                 >
                   Create Free Account
                 </Link>
               ) : null}
             </div>
 
-            <div className="flex flex-wrap gap-x-8 gap-y-4 text-sm text-gray-300/80 animate-fade-up delay-300">
-              <div className="flex items-center gap-2.5 transition-colors duration-300 hover:text-white/90">
+            <div className="flex flex-wrap gap-x-8 gap-y-4 text-sm text-ink-muted animate-fade-up delay-300">
+              <div className="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink">
                 <div className="h-2.5 w-2.5 rounded-full bg-sky-400" />
                 Real-time Availability
               </div>
-              <div className="flex items-center gap-2.5 transition-colors duration-300 hover:text-white/90">
-                <div className="h-2.5 w-2.5 rounded-full bg-amber-300" />
+              <div className="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink">
+                <div className="h-2.5 w-2.5 rounded-full bg-[color:var(--accent)]" />
                 Borrow receipts - always accessible
               </div>
-              <div className="flex items-center gap-2.5 transition-colors duration-300 hover:text-white/90">
+              <div className="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink">
                 <div className="h-2.5 w-2.5 rounded-full bg-sky-300" />
                 Smart due-date Reminders
               </div>
@@ -152,16 +152,16 @@ export default function HeroSection() {
           </div>
 
           <div className="relative hidden lg:block animate-fade-up delay-300">
-            <div className="absolute -top-8 -left-8 h-40 w-32 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl animate-float-slow opacity-40" />
-            <div className="absolute -bottom-10 -right-10 h-36 w-28 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl animate-float opacity-40" />
+            <div className="absolute -top-8 -left-8 h-40 w-32 rounded-3xl border border-white/40 bg-white/45 backdrop-blur-xl animate-float-slow opacity-50" />
+            <div className="absolute -bottom-10 -right-10 h-36 w-28 rounded-3xl border border-white/40 bg-white/40 backdrop-blur-xl animate-float opacity-50" />
 
-            <div className="relative rounded-3xl border border-white/12 bg-white/6 backdrop-blur-2xl p-7 lg:p-8 shadow-2xl shadow-black/30 transition-all duration-300 hover:border-white/25 hover:bg-white/8">
+            <div className="public-panel relative rounded-3xl p-7 backdrop-blur-2xl lg:p-8 transition-all duration-300 hover:-translate-y-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-gray-400/80 font-medium">Your Library Today</p>
-                  <h3 className="mt-2 text-2xl font-semibold text-white tracking-tight">Reading Desk</h3>
+                  <p className="text-xs uppercase tracking-widest text-[color:var(--accent-cool-strong)]/80 font-medium">Your Library Today</p>
+                  <h3 className="mt-2 text-2xl font-semibold tracking-tight text-ink">Reading Desk</h3>
                 </div>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3.5 py-1 text-xs font-medium text-emerald-300/90 backdrop-blur-sm border border-emerald-400/20">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/40 bg-emerald-100 px-3.5 py-1 text-xs font-medium text-emerald-700 backdrop-blur-sm">
                   <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                   Live
                 </span>
@@ -172,16 +172,16 @@ export default function HeroSection() {
                   <div
                     key={item.title}
                     style={{ animationDelay: `${i * 90 + 120}ms` }}
-                    className="rounded-2xl bg-white/5 border border-white/10 p-5 animate-fade-up transition-all duration-300 hover:-translate-y-1 hover:bg-white/8 hover:border-white/20"
+                    className="public-panel-soft rounded-2xl p-5 animate-fade-up transition-all duration-300 hover:-translate-y-1"
                   >
-                    <p className="text-xs uppercase tracking-widest text-gray-400/80 font-medium">{item.title}</p>
-                    <p className="mt-2.5 text-lg font-semibold text-white">{item.value}</p>
-                    <p className="mt-1.5 text-sm text-gray-300/70">{item.desc}</p>
+                    <p className="text-xs font-medium uppercase tracking-widest text-[color:var(--accent-cool-strong)]/80">{item.title}</p>
+                    <p className="mt-2.5 text-lg font-semibold text-ink">{item.value}</p>
+                    <p className="mt-1.5 text-sm text-ink-muted">{item.desc}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8 flex items-center justify-between text-xs text-gray-400/70">
+              <div className="mt-8 flex items-center justify-between text-xs text-ink-muted">
                 <span>Updates in real time</span>
                 <span className="flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-sky-400 animate-pulse" />

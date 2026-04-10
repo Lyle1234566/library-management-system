@@ -78,10 +78,10 @@ export default function AboutStatsGrid() {
         <div
           key={stat.label}
           style={{ animationDelay: `${index * 90 + 120}ms` }}
-          className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-xl animate-fade-up transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10"
+          className="public-panel-soft rounded-2xl px-4 py-3 backdrop-blur-xl animate-fade-up transition-all duration-300 hover:-translate-y-1"
         >
-          <p className="text-lg font-semibold text-white">{stat.value}</p>
-          <p className="text-xs text-white/65">{stat.label}</p>
+          <p className="text-lg font-semibold text-ink">{stat.value}</p>
+          <p className="text-xs text-ink-muted">{stat.label}</p>
         </div>
       ))}
     </div>

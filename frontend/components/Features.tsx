@@ -145,29 +145,29 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
     'Quick recap page at the end of each chapter',
   ];
   return (
-    <section className="relative overflow-hidden bg-[#0b1324] pt-8 pb-24 sm:pt-10">
+    <section className="relative overflow-hidden pt-8 pb-24 sm:pt-10">
       <div className="absolute inset-0">
-        <div className="absolute -left-32 top-10 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl animate-float" />
-        <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl animate-float-slow" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+        <div className="absolute -left-32 top-10 h-72 w-72 rounded-full bg-sky-300/16 blur-3xl animate-float" />
+        <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-300/14 blur-3xl animate-float-slow" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-200/80 to-transparent" />
       </div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mx-auto mb-10 max-w-3xl text-center">
-          <div className="relative overflow-hidden rounded-[1.7rem] bg-[linear-gradient(180deg,rgba(16,26,46,0.82)_0%,rgba(10,18,34,0.72)_100%)] px-5 py-6 shadow-[0_18px_38px_rgba(2,8,23,0.18)] backdrop-blur-xl sm:px-7 sm:py-7">
+          <div className="public-panel relative overflow-hidden rounded-[1.7rem] px-5 py-6 backdrop-blur-xl sm:px-7 sm:py-7">
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute inset-x-16 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/35 to-transparent" />
-              <div className="absolute -left-12 top-6 h-24 w-24 rounded-full bg-sky-400/8 blur-3xl" />
-              <div className="absolute -right-10 bottom-2 h-20 w-20 rounded-full bg-amber-400/8 blur-3xl" />
+              <div className="absolute inset-x-16 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
+              <div className="absolute -left-12 top-6 h-24 w-24 rounded-full bg-sky-300/18 blur-3xl" />
+              <div className="absolute -right-10 bottom-2 h-20 w-20 rounded-full bg-amber-300/16 blur-3xl" />
             </div>
             <div className="relative">
-              <span className="inline-flex items-center rounded-full border border-white/12 bg-white/6 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-100/80 animate-fade-up sm:px-4 sm:py-2 sm:text-[11px]">
+              <span className="public-pill inline-flex items-center rounded-full px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] animate-fade-up sm:px-4 sm:py-2 sm:text-[11px]">
                 Core Features
               </span>
-              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl text-balance animate-fade-up">
+              <h2 className="mt-4 text-3xl font-bold text-ink md:text-4xl text-balance animate-fade-up">
                 Why Choose SCSIT Digital Library?
               </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-white/68 animate-fade-up delay-100 sm:text-lg">
+              <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-ink-muted animate-fade-up delay-100 sm:text-lg">
                 Experience the future of library management with our feature-rich platform
                 designed for modern readers.
               </p>
@@ -181,29 +181,29 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
             <article
               key={feature.title}
               style={{ animationDelay: `${index * 90 + 120}ms` }}
-              className="group relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-[linear-gradient(180deg,rgba(24,33,53,0.92)_0%,rgba(17,25,43,0.9)_100%)] p-5 shadow-[0_18px_42px_rgba(2,8,23,0.2)] transition-all duration-300 hover:-translate-y-1 hover:border-white/18 hover:shadow-[0_22px_52px_rgba(2,8,23,0.28)] animate-fade-up sm:p-6"
+              className="public-panel-soft group relative overflow-hidden rounded-[1.6rem] p-5 transition-all duration-300 hover:-translate-y-1 animate-fade-up sm:p-6"
             >
               <div className="pointer-events-none absolute inset-0">
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                <div className="absolute -right-10 top-8 h-24 w-24 rounded-full bg-amber-400/6 blur-3xl transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="absolute -left-10 bottom-0 h-28 w-28 rounded-full bg-sky-400/6 blur-3xl transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/40 to-transparent" />
+                <div className="absolute -right-10 top-8 h-24 w-24 rounded-full bg-amber-300/14 blur-3xl transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute -left-10 bottom-0 h-28 w-28 rounded-full bg-sky-300/14 blur-3xl transition-opacity duration-300 group-hover:opacity-100" />
               </div>
 
               <div className="relative flex h-full flex-col">
                 <div className="flex items-start justify-between gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/8 bg-white/[0.06] text-[color:var(--accent)] transition-all duration-300 group-hover:scale-105 group-hover:-translate-y-0.5">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-sky-200/60 bg-white/80 text-[color:var(--accent)] transition-all duration-300 group-hover:scale-105 group-hover:-translate-y-0.5">
                     {feature.icon}
                   </div>
-                  <span className="pt-1 text-[11px] font-semibold tracking-[0.34em] text-white/28">
+                  <span className="pt-1 text-[11px] font-semibold tracking-[0.34em] text-[color:var(--accent-cool-strong)]/45">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                 </div>
 
                 <div className="mt-5">
-                  <h3 className="text-[1.32rem] font-semibold leading-tight text-white">
+                  <h3 className="text-[1.32rem] font-semibold leading-tight text-ink">
                     {feature.title}
                   </h3>
-                  <p className="mt-2.5 max-w-sm text-[0.95rem] leading-6 text-white/64 transition-colors duration-300 group-hover:text-white/76">
+                  <p className="mt-2.5 max-w-sm text-[0.95rem] leading-6 text-ink-muted transition-colors duration-300 group-hover:text-ink">
                     {feature.description}
                   </p>
                 </div>
@@ -213,9 +213,9 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
         </div>
 
         {showBookFeatures && (
-          <div className="mt-16 rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8 backdrop-blur-xl animate-fade-up">
-            <h3 className="text-2xl font-semibold text-white">Book Features</h3>
-            <p className="mt-2 text-sm text-white/70 max-w-3xl">
+          <div className="public-panel mt-16 rounded-3xl p-6 sm:p-8 backdrop-blur-xl animate-fade-up">
+            <h3 className="text-2xl font-semibold text-ink">Book Features</h3>
+            <p className="mt-2 max-w-3xl text-sm text-ink-muted">
               Core sections and content blocks you can include in books to improve navigation,
               context, and learning value.
             </p>
@@ -225,13 +225,13 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
                 <article
                   key={feature.title}
                   style={{ animationDelay: `${index * 90 + 140}ms` }}
-                  className="rounded-2xl border border-white/10 bg-[#0f1a31]/70 p-4 animate-fade-up"
+                  className="public-panel-soft rounded-2xl p-4 animate-fade-up"
                 >
-                  <h4 className="text-base font-semibold text-white">{feature.title}</h4>
-                  <ul className="mt-3 space-y-2 text-sm text-white/75">
+                  <h4 className="text-base font-semibold text-ink">{feature.title}</h4>
+                  <ul className="mt-3 space-y-2 text-sm text-ink-muted">
                     {feature.points.map((point) => (
                       <li key={point} className="flex items-start gap-2">
-                        <span className="mt-[2px] text-amber-300">-</span>
+                        <span className="mt-[2px] text-[color:var(--accent)]">-</span>
                         <span>{point}</span>
                       </li>
                     ))}
@@ -241,36 +241,36 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
             </div>
 
             <div className="mt-6 grid gap-4 lg:grid-cols-3">
-              <article className="rounded-2xl border border-white/10 bg-[#0f1a31]/70 p-4">
-                <h4 className="text-base font-semibold text-white">Key Features (Nonfiction / Textbooks)</h4>
-                <ul className="mt-3 space-y-2 text-sm text-white/75">
+              <article className="public-panel-soft rounded-2xl p-4">
+                <h4 className="text-base font-semibold text-ink">Key Features (Nonfiction / Textbooks)</h4>
+                <ul className="mt-3 space-y-2 text-sm text-ink-muted">
                   {nonfictionFeatures.map((item) => (
                     <li key={item} className="flex items-start gap-2">
-                      <span className="mt-[2px] text-emerald-300">v</span>
+                      <span className="mt-[2px] text-emerald-500">v</span>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               </article>
 
-              <article className="rounded-2xl border border-white/10 bg-[#0f1a31]/70 p-4">
-                <h4 className="text-base font-semibold text-white">For Fiction Books</h4>
-                <ul className="mt-3 space-y-2 text-sm text-white/75">
+              <article className="public-panel-soft rounded-2xl p-4">
+                <h4 className="text-base font-semibold text-ink">For Fiction Books</h4>
+                <ul className="mt-3 space-y-2 text-sm text-ink-muted">
                   {fictionFeatures.map((item) => (
                     <li key={item} className="flex items-start gap-2">
-                      <span className="mt-[2px] text-sky-300">-</span>
+                      <span className="mt-[2px] text-[color:var(--accent-cool-strong)]">-</span>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               </article>
 
-              <article className="rounded-2xl border border-white/10 bg-[#0f1a31]/70 p-4">
-                <h4 className="text-base font-semibold text-white">For Academic / Textbooks</h4>
-                <ul className="mt-3 space-y-2 text-sm text-white/75">
+              <article className="public-panel-soft rounded-2xl p-4">
+                <h4 className="text-base font-semibold text-ink">For Academic / Textbooks</h4>
+                <ul className="mt-3 space-y-2 text-sm text-ink-muted">
                   {academicFeatures.map((item) => (
                     <li key={item} className="flex items-start gap-2">
-                      <span className="mt-[2px] text-violet-300">-</span>
+                      <span className="mt-[2px] text-indigo-500">-</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -278,12 +278,12 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
               </article>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-white/10 bg-[#0f1a31]/70 p-4">
-              <h4 className="text-base font-semibold text-white">Suggested Additions</h4>
-              <ul className="mt-3 space-y-2 text-sm text-white/75">
+            <div className="public-panel-soft mt-6 rounded-2xl p-4">
+              <h4 className="text-base font-semibold text-ink">Suggested Additions</h4>
+              <ul className="mt-3 space-y-2 text-sm text-ink-muted">
                 {suggestedAdditions.map((item) => (
                   <li key={item} className="flex items-start gap-2">
-                    <span className="mt-[2px] text-amber-300">+</span>
+                    <span className="mt-[2px] text-[color:var(--accent)]">+</span>
                     <span>{item}</span>
                   </li>
                 ))}

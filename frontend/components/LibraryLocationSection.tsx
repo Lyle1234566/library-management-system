@@ -89,41 +89,41 @@ export default function LibraryLocationSection() {
   }, [liveLocation]);
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8 animate-fade-up delay-250">
+    <div className="public-panel rounded-3xl p-6 sm:p-8 animate-fade-up delay-250">
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
         <div>
-          <p className="text-xs uppercase tracking-widest text-white/60">School Library Location</p>
-          <h3 className="mt-3 text-2xl font-semibold text-white">Real-time map access</h3>
-          <p className="mt-3 max-w-xl text-sm text-white/70 leading-relaxed">
+          <p className="text-xs uppercase tracking-widest text-[color:var(--accent-cool-strong)]/80">School Library Location</p>
+          <h3 className="mt-3 text-2xl font-semibold text-ink">Real-time map access</h3>
+          <p className="mt-3 max-w-xl text-sm text-ink-muted leading-relaxed">
             View the exact location of {LIBRARY_NAME} and start live tracking from your current position to
             open directions instantly.
           </p>
-          <p className="mt-2 text-sm text-white/65">{LIBRARY_ADDRESS}</p>
+          <p className="mt-2 text-sm text-ink-muted">{LIBRARY_ADDRESS}</p>
 
           <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.18em]">
             <span
               className={`rounded-full border px-3 py-1.5 ${
                 tracking
-                  ? 'border-emerald-300/50 bg-emerald-300/15 text-emerald-100'
-                  : 'border-white/20 bg-white/10 text-white/70'
+                  ? 'border-emerald-300/40 bg-emerald-100 text-emerald-700'
+                  : 'border-line bg-white/72 text-ink-muted'
               }`}
             >
               {tracking ? 'Live Tracking On' : 'Live Tracking Off'}
             </span>
-            <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-white/70">
+            <span className="rounded-full border border-line bg-white/72 px-3 py-1.5 text-ink-muted">
               {liveLocation ? `Updated ${formatTimestamp(liveLocation.timestamp)}` : 'Awaiting location'}
             </span>
             {liveLocation && (
-              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-white/70">
+              <span className="rounded-full border border-line bg-white/72 px-3 py-1.5 text-ink-muted">
                 Accuracy +/- {Math.round(liveLocation.accuracy)}m
               </span>
             )}
           </div>
 
-          {locationError && <p className="mt-4 text-sm text-amber-200">{locationError}</p>}
+          {locationError && <p className="mt-4 text-sm text-[color:var(--accent-strong)]">{locationError}</p>}
 
           {liveLocation && (
-            <p className="mt-3 text-sm text-white/70">
+            <p className="mt-3 text-sm text-ink-muted">
               Current location: {liveLocation.latitude.toFixed(5)}, {liveLocation.longitude.toFixed(5)}
             </p>
           )}
@@ -134,8 +134,8 @@ export default function LibraryLocationSection() {
               onClick={tracking ? stopTracking : startTracking}
               className={`inline-flex w-full items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 sm:w-auto ${
                 tracking
-                  ? 'bg-sky-400 text-[#0b1324] hover:bg-sky-300'
-                  : 'bg-amber-500 text-[#1a1b1f] shadow-[0_16px_30px_rgba(251,191,36,0.24)] hover:-translate-y-0.5 hover:bg-amber-400'
+                  ? 'bg-sky-300 text-[#17314e] hover:bg-sky-200'
+                  : 'bg-[color:var(--accent)] text-[#17314e] shadow-[0_16px_30px_rgba(217,175,88,0.22)] hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] hover:text-[#17314e]'
               }`}
             >
               {tracking ? 'Stop Live Tracking' : 'Start Live Tracking'}
@@ -144,7 +144,7 @@ export default function LibraryLocationSection() {
               href={directionsUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex w-full items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/35 hover:bg-white/15 sm:w-auto"
+              className="inline-flex w-full items-center justify-center rounded-full border border-line bg-white/78 px-5 py-2.5 text-sm font-semibold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:bg-white sm:w-auto"
             >
               Open Live Directions
             </a>
@@ -152,14 +152,14 @@ export default function LibraryLocationSection() {
               href={MAP_PLACE_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex w-full items-center justify-center rounded-full border border-white/20 bg-transparent px-5 py-2.5 text-sm font-semibold text-white/85 transition-colors duration-300 hover:text-white sm:w-auto"
+              className="inline-flex w-full items-center justify-center rounded-full border border-line bg-transparent px-5 py-2.5 text-sm font-semibold text-ink-muted transition-colors duration-300 hover:text-ink sm:w-auto"
             >
               Open Full Map
             </a>
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/5">
+        <div className="overflow-hidden rounded-2xl border border-line bg-white/80">
           <iframe
             title="School Library Map Location"
             src={MAP_EMBED_URL}

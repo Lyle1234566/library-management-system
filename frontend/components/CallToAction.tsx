@@ -11,39 +11,39 @@ export default function CallToAction() {
   }
 
   return (
-    <section className="relative overflow-hidden py-24 bg-[#0f1b2f]">
+    <section className="relative overflow-hidden py-24">
       <div className="absolute inset-0">
-        <div className="absolute -top-20 left-10 h-64 w-64 rounded-full bg-sky-500/15 blur-3xl animate-float" />
-        <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-500/20 blur-3xl animate-float-slow" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(56,189,248,0.14),transparent_45%)]" />
+        <div className="absolute -top-20 left-10 h-64 w-64 rounded-full bg-sky-300/18 blur-3xl animate-float" />
+        <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-300/18 blur-3xl animate-float-slow" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(126,191,231,0.16),transparent_45%)]" />
       </div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 animate-fade-up">
+          <h2 className="mb-4 text-3xl font-bold text-ink animate-fade-up md:text-4xl">
             Ready to Start Your Reading Journey?
           </h2>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto mb-8 animate-fade-up delay-100">
+          <p className="mx-auto mb-8 max-w-2xl text-xl text-ink-muted animate-fade-up delay-100">
             Join readers who want a modern borrowing experience. Create your account,
             explore the catalog, and track every receipt in one place.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-200">
             <Link
               href="/register"
-              className="px-8 py-4 bg-amber-500 text-[#1a1b1f] font-semibold rounded-full transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-400 shadow-card"
+              className="rounded-full bg-[color:var(--accent)] px-8 py-4 font-semibold text-[#17314e] shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] hover:text-[#17314e]"
             >
               Create Free Account
             </Link>
             <Link
               href="/about"
-              className="px-8 py-4 bg-transparent border border-white/25 text-white/90 font-semibold rounded-full transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10"
+              className="rounded-full border border-line bg-white/72 px-8 py-4 font-semibold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:bg-white"
             >
               Learn More
             </Link>
           </div>
 
           {/* Trust Badges */}
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-white/70 animate-fade-up delay-300">
-            <div className="flex items-center space-x-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-ink-muted animate-fade-up delay-300">
+            <div className="flex items-center space-x-2 rounded-full border border-line bg-white/72 px-4 py-2 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -59,7 +59,7 @@ export default function CallToAction() {
               </svg>
               <span>Free to Join</span>
             </div>
-            <div className="flex items-center space-x-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
+            <div className="flex items-center space-x-2 rounded-full border border-line bg-white/72 px-4 py-2 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -75,7 +75,7 @@ export default function CallToAction() {
               </svg>
               <span>No Credit Card Required</span>
             </div>
-            <div className="flex items-center space-x-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
+            <div className="flex items-center space-x-2 rounded-full border border-line bg-white/72 px-4 py-2 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white">
               <svg
                 className="w-5 h-5"
                 fill="none"
