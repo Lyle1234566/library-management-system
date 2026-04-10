@@ -38,7 +38,7 @@ export default function HeroSection() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:px-10 w-full pt-24 sm:pt-28">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:gap-8 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] xl:gap-10">
-          <div className="space-y-8 sm:space-y-10">
+          <div className="space-y-6 sm:space-y-7">
             <h1 className="text-ink animate-fade-up delay-100">
               <span
                 className="block whitespace-nowrap text-[clamp(2.8rem,7.5vw,4.2rem)] lg:text-[clamp(4.2rem,5vw,5.4rem)] xl:text-[clamp(4.8rem,5.5vw,6rem)]"
@@ -74,7 +74,7 @@ export default function HeroSection() {
               </span>
             </h1>
 
-            <p className="max-w-3xl text-base leading-relaxed font-light text-ink-muted animate-fade-up delay-200 sm:text-xl">
+            <p className="max-w-3xl text-base leading-relaxed font-light text-ink-muted animate-fade-up delay-200 sm:text-lg">
               Explore curated collections, borrow instantly, and manage your reading life with clarity.
               Search by title, author, genre, or ISBN - everything stays organized.
             </p>
@@ -87,11 +87,11 @@ export default function HeroSection() {
                   placeholder="Title, author, genre, ISBN..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full min-w-0 rounded-2xl border border-line bg-white/85 px-5 py-4 text-base text-ink shadow-inner backdrop-blur-xl transition-all duration-300 placeholder:text-ink-muted/65 focus:outline-none focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/30 focus:bg-white sm:py-5 sm:pl-6 sm:pr-36"
+                  className="w-full min-w-0 rounded-2xl border border-line bg-white/85 px-5 py-3.5 text-base text-ink shadow-inner backdrop-blur-xl transition-all duration-300 placeholder:text-ink-muted/65 focus:outline-none focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/30 focus:bg-white sm:py-4 sm:pl-6 sm:pr-36"
                 />
                 <button
                   type="submit"
-                  className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-5 py-3.5 text-base font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all duration-300 active:scale-95 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f] sm:absolute sm:right-3 sm:top-1/2 sm:px-7 sm:py-2.5 sm:-translate-y-1/2"
+                  className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-5 py-3 text-base font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all duration-300 active:scale-95 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f] sm:absolute sm:right-3 sm:top-1/2 sm:px-6 sm:py-2.5 sm:-translate-y-1/2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -101,10 +101,10 @@ export default function HeroSection() {
               </div>
             </form>
 
-            <div className="flex flex-col gap-4 animate-fade-up delay-300 sm:flex-row sm:gap-5">
+            <div className="flex flex-col gap-3 animate-fade-up delay-300 sm:flex-row sm:gap-4">
               <Link
                 href="/books"
-                className="inline-flex items-center justify-center gap-3 rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-7 py-4 font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f] active:scale-[0.98] lg:rounded-2xl lg:px-9"
+                className="inline-flex items-center justify-center gap-3 rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-6 py-3.5 font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f] active:scale-[0.98] lg:rounded-2xl lg:px-8"
               >
                 Browse Collection
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +115,7 @@ export default function HeroSection() {
               {!isLoading && !isAuthenticated ? (
                 <Link
                   href="/register"
-                  className="inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-7 py-4 font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f] lg:rounded-2xl lg:px-9"
+                  className="inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-6 py-3.5 font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f] lg:rounded-2xl lg:px-8"
                 >
                   Create Free Account
                 </Link>
