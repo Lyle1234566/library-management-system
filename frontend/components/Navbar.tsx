@@ -147,15 +147,15 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
   const avatarUrl = user?.avatar ? resolveMediaUrl(user.avatar) : null;
   const defaultAvatarUrl = '/student-avatar.svg';
   const dropdownPanelClasses =
-    'border border-white/12 bg-[linear-gradient(180deg,rgba(44,68,170,0.98)_0%,rgba(33,53,140,0.98)_100%)] shadow-[0_24px_60px_rgba(21,33,94,0.34)]';
-  const dropdownBorderClasses = 'border-white/12';
-  const dropdownPrimaryTextClasses = 'text-[color:var(--header-text)]';
-  const dropdownSecondaryTextClasses = 'text-[color:var(--header-text-muted)]';
-  const dropdownBadgeClasses = 'bg-white/12 text-[color:var(--header-text)]';
+    'border border-line bg-white shadow-lg';
+  const dropdownBorderClasses = 'border-line';
+  const dropdownPrimaryTextClasses = 'text-ink';
+  const dropdownSecondaryTextClasses = 'text-ink-muted';
+  const dropdownBadgeClasses = 'bg-sky-500/15 text-sky-700 border border-sky-300/30';
   const dropdownItemClasses =
-    'flex items-center px-4 py-2 text-sm text-[color:var(--header-text)] transition-colors hover:bg-white/10';
+    'flex items-center px-4 py-2 text-sm text-ink transition-colors hover:bg-sky-50';
   const dropdownSignOutClasses =
-    'flex items-center w-full px-4 py-2 text-sm text-rose-100 transition-colors hover:bg-white/10';
+    'flex items-center w-full px-4 py-2 text-sm text-rose-600 transition-colors hover:bg-rose-50';
 
   return (
     <nav
