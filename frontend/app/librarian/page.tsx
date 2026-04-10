@@ -180,34 +180,34 @@ const inferNotificationSectionTarget = (notification: NotificationRecord) => {
 };
 
 const statusPill: Record<BorrowRequest['status'], string> = {
-  PENDING: 'bg-sky-500/20 text-sky-100 border border-sky-300/30',
-  APPROVED: 'bg-emerald-500/20 text-emerald-100 border border-emerald-300/30',
-  REJECTED: 'bg-rose-500/20 text-rose-100 border border-rose-300/30',
-  RETURNED: 'bg-white/10 text-white/70 border border-white/20',
+  PENDING: 'bg-sky-500/20 text-sky-700 border border-sky-300/40',
+  APPROVED: 'bg-emerald-500/20 text-emerald-700 border border-emerald-300/40',
+  REJECTED: 'bg-rose-500/20 text-rose-700 border border-rose-300/40',
+  RETURNED: 'bg-gray-500/20 text-gray-700 border border-gray-300/40',
 };
 
 const returnStatusPill: Record<ReturnRequest['status'], string> = {
-  PENDING: 'bg-sky-500/20 text-sky-100 border border-sky-300/30',
-  APPROVED: 'bg-emerald-500/20 text-emerald-100 border border-emerald-300/30',
-  REJECTED: 'bg-rose-500/20 text-rose-100 border border-rose-300/30',
+  PENDING: 'bg-sky-500/20 text-sky-700 border border-sky-300/40',
+  APPROVED: 'bg-emerald-500/20 text-emerald-700 border border-emerald-300/40',
+  REJECTED: 'bg-rose-500/20 text-rose-700 border border-rose-300/40',
 };
 
 const renewalStatusPill: Record<RenewalRequest['status'], string> = {
-  PENDING: 'bg-sky-500/20 text-sky-100 border border-sky-300/30',
-  APPROVED: 'bg-emerald-500/20 text-emerald-100 border border-emerald-300/30',
-  REJECTED: 'bg-rose-500/20 text-rose-100 border border-rose-300/30',
+  PENDING: 'bg-sky-500/20 text-sky-700 border border-sky-300/40',
+  APPROVED: 'bg-emerald-500/20 text-emerald-700 border border-emerald-300/40',
+  REJECTED: 'bg-rose-500/20 text-rose-700 border border-rose-300/40',
 };
 
 const fineStatusPill: Record<FinePayment['status'], string> = {
-  PENDING: 'bg-rose-500/20 text-rose-100 border border-rose-300/30',
-  PAID: 'bg-emerald-500/20 text-emerald-100 border border-emerald-300/30',
-  WAIVED: 'bg-amber-500/20 text-amber-100 border border-amber-300/30',
+  PENDING: 'bg-rose-500/20 text-rose-700 border border-rose-300/40',
+  PAID: 'bg-emerald-500/20 text-emerald-700 border border-emerald-300/40',
+  WAIVED: 'bg-amber-500/20 text-amber-700 border border-amber-300/40',
 };
 
 const contactStatusPill: Record<ContactMessageRecord['status'], string> = {
-  NEW: 'bg-amber-500/20 text-amber-100 border border-amber-300/30',
-  IN_PROGRESS: 'bg-sky-500/20 text-sky-100 border border-sky-300/30',
-  RESOLVED: 'bg-emerald-500/20 text-emerald-100 border border-emerald-300/30',
+  NEW: 'bg-amber-500/20 text-amber-700 border border-amber-300/40',
+  IN_PROGRESS: 'bg-sky-500/20 text-sky-700 border border-sky-300/40',
+  RESOLVED: 'bg-emerald-500/20 text-emerald-700 border border-emerald-300/40',
 };
 
 const formatDate = (dateString?: string | null) => {
@@ -2251,12 +2251,11 @@ export default function LibrarianDeskPage() {
 
   return (
     <ProtectedRoute requiredRoles={['LIBRARIAN', 'WORKING', 'STAFF', 'ADMIN']}>
-      <div className="royal-app min-h-screen bg-[#060b16] text-white">
+      <div className="min-h-screen bg-[#f8f9fb] text-ink">
         <div className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div className="absolute -left-28 top-0 h-80 w-80 rounded-full bg-sky-500/12 blur-3xl" />
-          <div className="absolute right-0 top-1/4 h-[26rem] w-[26rem] rounded-full bg-cyan-500/10 blur-3xl" />
-          <div className="absolute bottom-0 left-1/3 h-[24rem] w-[24rem] rounded-full bg-indigo-500/10 blur-3xl" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.12),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_35%)]" />
+          <div className="absolute -left-28 top-0 h-80 w-80 rounded-full bg-sky-300/16 blur-3xl" />
+          <div className="absolute right-0 top-1/4 h-[26rem] w-[26rem] rounded-full bg-cyan-300/12 blur-3xl" />
+          <div className="absolute bottom-0 left-1/3 h-[24rem] w-[24rem] rounded-full bg-indigo-300/12 blur-3xl" />
         </div>
 
         <div className="relative flex min-h-screen">
@@ -2270,7 +2269,7 @@ export default function LibrarianDeskPage() {
           />
 
           <aside
-            className={`fixed inset-y-0 left-0 z-40 flex w-[280px] flex-col overflow-y-auto border-r border-white/10 bg-[#07111f]/85 px-4 py-6 shadow-2xl shadow-black/40 backdrop-blur-2xl transition-transform duration-300 md:translate-x-0 ${
+            className={`fixed inset-y-0 left-0 z-40 flex w-[280px] flex-col overflow-y-auto border-r border-line bg-white/90 px-4 py-6 shadow-2xl backdrop-blur-2xl transition-transform duration-300 md:translate-x-0 ${
               isDeskMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
           >
@@ -2394,8 +2393,8 @@ export default function LibrarianDeskPage() {
             </nav>
           </aside>
 
-          <div className="flex min-h-screen flex-1 flex-col bg-gradient-to-b from-[#031020] via-[#07101d] to-[#0a1322] md:pl-[280px]">
-            <header className="sticky top-0 z-20 border-b border-white/10 bg-[#060d18]/82 backdrop-blur-2xl">
+          <div className="flex min-h-screen flex-1 flex-col bg-gradient-to-b from-[#f0f4f8] via-[#e8f0f7] to-[#f8f9fb] md:pl-[280px]">
+            <header className="sticky top-0 z-20 border-b border-line bg-white/90 backdrop-blur-2xl">
               <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
                 <div className="flex min-w-0 items-start gap-3">
                   <button
