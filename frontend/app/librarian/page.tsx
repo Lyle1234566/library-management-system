@@ -3459,32 +3459,29 @@ export default function LibrarianDeskPage() {
                 )}
 
                 {resolvedActiveSectionId === 'desk-overdue' && (
-                  <section className="public-panel rounded-[30px] border border-white/80 p-5 shadow-card md:p-6">
+                  <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-wider text-rose-700/75">
-                          Monitoring
-                        </p>
-                        <h2 className="mt-2 text-2xl font-semibold text-ink">
+                        <h2 className="text-2xl font-bold text-slate-900">
                           Overdue Books
                         </h2>
-                        <p className="mt-2 max-w-2xl text-sm text-ink-muted">
+                        <p className="mt-2 text-sm text-slate-600">
                           Prioritize follow-up, confirm returns, and estimate outstanding penalties.
                         </p>
                       </div>
-                      <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-700">
+                      <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700">
                         {formatCurrency(totalOverdueFees)} estimated fines
                       </div>
                     </div>
 
                     <div className="mt-6 space-y-4">
                       {analyticsState === 'loading' && (
-                        <div className="rounded-[28px] border border-line bg-white/80 px-4 py-8 text-center text-sm text-ink-muted">
+                        <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-600">
                           Loading overdue records...
                         </div>
                       )}
                       {analyticsState !== 'loading' && overdueRequests.length === 0 && (
-                        <div className="rounded-[28px] border border-dashed border-line bg-white/80 px-4 py-8 text-center text-sm text-ink-muted">
+                        <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-600">
                           No overdue books at the moment.
                         </div>
                       )}
@@ -3492,21 +3489,21 @@ export default function LibrarianDeskPage() {
                         overdueRequests.map((request) => (
                           <article
                             key={request.id}
-                            className="rounded-[28px] border border-line bg-white/80 p-5"
+                            className="rounded-lg border border-slate-200 bg-white p-5"
                           >
                             <div className="flex flex-wrap items-start justify-between gap-4">
                               <div className="flex items-start gap-4">
                                 <BookCoverPreview book={request.book} />
                                 <div>
-                                  <h3 className="text-lg font-semibold text-ink">
+                                  <h3 className="text-lg font-semibold text-slate-900">
                                     {request.book.title}
                                   </h3>
-                                  <p className="mt-1 text-sm text-ink-muted">
+                                  <p className="mt-1 text-sm text-slate-600">
                                     {request.book.author}
                                   </p>
                                   <div className="mt-3 flex items-center gap-3">
                                     <BorrowerAvatar user={request.user} />
-                                    <p className="text-sm text-ink">
+                                    <p className="text-sm text-slate-900">
                                       {request.user?.full_name ?? 'Unknown borrower'}
                                     </p>
                                   </div>
@@ -3516,7 +3513,7 @@ export default function LibrarianDeskPage() {
                                 <span className="rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-rose-700">
                                   {(request.overdue_days ?? 0)} days overdue
                                 </span>
-                                <p className="mt-3 text-lg font-semibold text-ink">
+                                <p className="mt-3 text-lg font-semibold text-slate-900">
                                   {formatCurrency(
                                     Number.parseFloat(request.late_fee_amount ?? '0')
                                   )}
@@ -3525,37 +3522,37 @@ export default function LibrarianDeskPage() {
                             </div>
                             <div className="mt-5 grid gap-4 md:grid-cols-4">
                               <div>
-                                <p className="text-xs uppercase tracking-wider text-ink-muted">
+                                <p className="text-xs uppercase tracking-wider text-slate-500">
                                   Due Date
                                 </p>
-                                <p className="mt-2 text-sm text-ink">
+                                <p className="mt-2 text-sm text-slate-900">
                                   {formatDate(request.due_date)}
                                 </p>
                               </div>
                               <div>
-                                <p className="text-xs uppercase tracking-wider text-ink-muted">
+                                <p className="text-xs uppercase tracking-wider text-slate-500">
                                   Borrower ID
                                 </p>
-                                <p className="mt-2 text-sm text-ink">
+                                <p className="mt-2 text-sm text-slate-900">
                                   {formatUserIdentifier(request.user)}
                                 </p>
                               </div>
                               <div>
-                                <p className="text-xs uppercase tracking-wider text-ink-muted">
+                                <p className="text-xs uppercase tracking-wider text-slate-500">
                                   Receipt
                                 </p>
-                                <p className="mt-2 text-sm text-ink">
+                                <p className="mt-2 text-sm text-slate-900">
                                   {request.receipt_number ?? 'Pending receipt'}
                                 </p>
                               </div>
                               <div>
-                                <p className="text-xs uppercase tracking-wider text-ink-muted">
+                                <p className="text-xs uppercase tracking-wider text-slate-500">
                                   Action
                                 </p>
                                 <button
                                   type="button"
                                   onClick={() => setActiveSectionId('desk-fines')}
-                                  className="mt-2 inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
+                                  className="mt-2 inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"
                                 >
                                   Review fine
                                   <ArrowUpRight className="h-4 w-4" />
@@ -3566,27 +3563,27 @@ export default function LibrarianDeskPage() {
                         ))}
                     </div>
 
-                    <div className="mt-8 rounded-[28px] border border-line bg-white/80 p-5">
+                    <div className="mt-8 rounded-lg border border-slate-200 bg-white p-5">
                       <div className="flex flex-wrap items-start justify-between gap-4">
                         <div>
-                          <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-slate-600">
                             History
                           </p>
-                          <h3 className="mt-2 text-lg font-semibold text-ink">
+                          <h3 className="mt-2 text-lg font-semibold text-slate-900">
                             Overdue History
                           </h3>
-                          <p className="mt-1 text-sm text-ink-muted">
+                          <p className="mt-1 text-sm text-slate-600">
                           Records with late fees applied (active and resolved).
                         </p>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-ink-muted">
+                        <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
                           {overdueHistory.length} records
                         </span>
                         <button
                           type="button"
                           onClick={() => setHideCurrentMonthHistory((prev) => !prev)}
-                          className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-ink hover:bg-slate-50 transition-all"
+                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all"
                         >
                           {hideCurrentMonthHistory
                             ? `Show ${currentMonthLabel}`
@@ -3596,12 +3593,12 @@ export default function LibrarianDeskPage() {
                     </div>
                       <div className="mt-4 space-y-3">
                         {analyticsState === 'loading' && (
-                          <div className="rounded-2xl border border-line bg-white px-4 py-6 text-center text-sm text-ink-muted">
+                          <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-600">
                             Loading overdue history...
                           </div>
                         )}
                         {analyticsState !== 'loading' && overdueHistory.length === 0 && (
-                          <div className="rounded-2xl border border-dashed border-line bg-white px-4 py-6 text-center text-sm text-ink-muted">
+                          <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-600">
                             No overdue history available yet.
                           </div>
                         )}
@@ -3609,20 +3606,20 @@ export default function LibrarianDeskPage() {
                           overdueHistory.map((request) => (
                             <div
                               key={request.id}
-                              className="rounded-2xl border border-line bg-white p-4"
+                              className="rounded-lg border border-slate-200 bg-white p-4"
                             >
                               <div className="flex flex-wrap items-center justify-between gap-3">
                                 <div className="flex items-start gap-3">
                                   <BookCoverPreview
                                     book={request.book}
                                     sizeClass="h-20 w-14"
-                                    roundedClass="rounded-xl"
+                                    roundedClass="rounded-lg"
                                   />
                                   <div>
-                                    <p className="text-sm font-semibold text-ink">
+                                    <p className="text-sm font-semibold text-slate-900">
                                       {request.book.title}
                                     </p>
-                                    <p className="mt-1 text-xs text-ink-muted">
+                                    <p className="mt-1 text-xs text-slate-600">
                                       {request.book.author}
                                     </p>
                                     <div className="mt-3 flex items-center gap-2">
@@ -3631,10 +3628,10 @@ export default function LibrarianDeskPage() {
                                       sizeClass="h-8 w-8"
                                     />
                                     <div>
-                                      <p className="text-xs font-medium text-ink">
+                                      <p className="text-xs font-medium text-slate-900">
                                         {request.user?.full_name ?? 'Unknown'}
                                       </p>
-                                      <p className="text-[11px] text-ink-muted">
+                                      <p className="text-[11px] text-slate-500">
                                         {formatUserIdentifier(request.user)}
                                       </p>
                                     </div>
@@ -3649,40 +3646,40 @@ export default function LibrarianDeskPage() {
                                   {request.status}
                                 </span>
                               </div>
-                              <div className="mt-3 grid gap-3 text-xs text-ink-muted sm:grid-cols-4">
+                              <div className="mt-3 grid gap-3 text-xs text-slate-600 sm:grid-cols-4">
                                 <div>
-                                  <p className="uppercase tracking-wider text-ink-muted">
+                                  <p className="uppercase tracking-wider text-slate-500">
                                     Due Date
                                   </p>
-                                  <p className="mt-1 text-sm text-ink">
+                                  <p className="mt-1 text-sm text-slate-900">
                                     {formatDate(request.due_date)}
                                   </p>
                                 </div>
                                 <div>
-                                  <p className="uppercase tracking-wider text-ink-muted">
+                                  <p className="uppercase tracking-wider text-slate-500">
                                     Returned
                                   </p>
-                                  <p className="mt-1 text-sm text-ink">
+                                  <p className="mt-1 text-sm text-slate-900">
                                     {request.status === 'RETURNED'
                                       ? formatDate(request.returned_at ?? request.processed_at)
                                       : '—'}
                                   </p>
                                 </div>
                                 <div>
-                                  <p className="uppercase tracking-wider text-ink-muted">
+                                  <p className="uppercase tracking-wider text-slate-500">
                                     Late Fee
                                   </p>
-                                  <p className="mt-1 text-sm text-ink">
+                                  <p className="mt-1 text-sm text-slate-900">
                                     {formatCurrency(
                                       Number.parseFloat(request.late_fee_amount ?? '0')
                                     )}
                                   </p>
                                 </div>
                                 <div>
-                                  <p className="uppercase tracking-wider text-ink-muted">
+                                  <p className="uppercase tracking-wider text-slate-500">
                                     Receipt
                                   </p>
-                                  <p className="mt-1 text-sm text-ink">
+                                  <p className="mt-1 text-sm text-slate-900">
                                     {request.receipt_number ?? '—'}
                                   </p>
                                 </div>
@@ -3690,7 +3687,7 @@ export default function LibrarianDeskPage() {
                             </div>
                           ))}
                       </div>
-                      <p className="mt-3 text-xs text-ink-muted">
+                      <p className="mt-3 text-xs text-slate-500">
                         {hideCurrentMonthHistory
                           ? `Current month hidden (${currentMonthLabel}). Showing the 10 most recent older records.`
                           : 'Showing the 10 most recent overdue records.'}
@@ -3700,27 +3697,21 @@ export default function LibrarianDeskPage() {
                 )}
 
                 {resolvedActiveSectionId === 'desk-contact' && (
-                  <section className="public-panel rounded-[30px] border border-white/80 p-5 shadow-card md:p-6">
+                  <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">
-                          Communication
-                        </p>
-                        <h2 className="mt-2 text-2xl font-semibold text-ink">
+                        <h2 className="text-2xl font-bold text-slate-900">
                           Contact Messages
                         </h2>
-                        <p className="mt-2 max-w-2xl text-sm text-ink-muted">
+                        <p className="mt-2 text-sm text-slate-600">
                           Read user messages, add librarian notes, and update the status in one place.
                         </p>
                       </div>
                       <div className="flex flex-wrap items-center gap-3">
-                        <div className="rounded-2xl border border-line bg-white/80 px-4 py-2.5 text-sm text-ink-muted">
-                          Read, note, then update the message status.
-                        </div>
                         <button
                           type="button"
                           onClick={() => void loadContactMessages()}
-                          className="inline-flex items-center gap-2 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-2.5 text-sm font-semibold text-sky-700 transition hover:bg-sky-100"
+                          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                         >
                           <RefreshCw className="h-4 w-4" />
                           Refresh inbox
@@ -3729,48 +3720,48 @@ export default function LibrarianDeskPage() {
                     </div>
 
                     <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                      <div className="rounded-2xl border border-line bg-white/80 px-4 py-4">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">Total</p>
-                        <p className="mt-2 text-3xl font-semibold text-ink">{contactMessages.length}</p>
-                        <p className="mt-1 text-xs text-ink-muted">All submitted messages</p>
+                      <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-600">Total</p>
+                        <p className="mt-2 text-3xl font-semibold text-slate-900">{contactMessages.length}</p>
+                        <p className="mt-1 text-xs text-slate-600">All submitted messages</p>
                       </div>
-                      <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-amber-700/75">New</p>
+                      <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-amber-700">New</p>
                         <p className="mt-2 text-3xl font-semibold text-amber-700">
                           {contactMessages.filter((message) => message.status === 'NEW').length}
                         </p>
-                        <p className="mt-1 text-xs text-amber-700/75">Waiting for handling</p>
+                        <p className="mt-1 text-xs text-amber-600">Waiting for handling</p>
                       </div>
-                      <div className="rounded-2xl border border-sky-200 bg-sky-50 px-4 py-4">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-sky-700/75">In Progress</p>
+                      <div className="rounded-lg border border-sky-200 bg-sky-50 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-sky-700">In Progress</p>
                         <p className="mt-2 text-3xl font-semibold text-sky-700">
                           {contactMessages.filter((message) => message.status === 'IN_PROGRESS').length}
                         </p>
-                        <p className="mt-1 text-xs text-sky-700/75">Currently being reviewed</p>
+                        <p className="mt-1 text-xs text-sky-600">Currently being reviewed</p>
                       </div>
-                      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700/75">Resolved</p>
+                      <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-4">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Resolved</p>
                         <p className="mt-2 text-3xl font-semibold text-emerald-700">
                           {contactMessages.filter((message) => message.status === 'RESOLVED').length}
                         </p>
-                        <p className="mt-1 text-xs text-emerald-700/75">Finished concerns</p>
+                        <p className="mt-1 text-xs text-emerald-600">Finished concerns</p>
                       </div>
                     </div>
 
                     <div className="mt-6 space-y-4">
                       {contactMessagesSuccess && (
-                        <div className="rounded-2xl border border-emerald-400/35 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-100">
+                        <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
                           {contactMessagesSuccess}
                         </div>
                       )}
                       {contactMessagesError && (
-                        <div className="rounded-2xl border border-rose-400/35 bg-rose-500/15 px-4 py-3 text-sm text-rose-100">
+                        <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
                           {contactMessagesError}
                         </div>
                       )}
 
                       {contactMessagesState === 'loading' && (
-                        <div className="rounded-3xl border border-white/10 bg-[#101c30]/80 px-4 py-10 text-center text-sm text-white/55">
+                        <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm text-slate-600">
                           Loading contact messages...
                         </div>
                       )}
@@ -3778,7 +3769,7 @@ export default function LibrarianDeskPage() {
                       {contactMessagesState !== 'loading' &&
                         contactMessages.length === 0 &&
                         !contactMessagesError && (
-                          <div className="rounded-3xl border border-dashed border-white/10 bg-[#101c30]/80 px-4 py-10 text-center text-sm text-white/55">
+                          <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm text-slate-600">
                             No contact messages have been submitted yet.
                           </div>
                         )}
@@ -3796,62 +3787,62 @@ export default function LibrarianDeskPage() {
                             return (
                               <article
                                 key={message.id}
-                                className="rounded-3xl border border-white/10 bg-[#101c30]/82 p-5"
+                                className="rounded-lg border border-slate-200 bg-white p-5"
                               >
                                 <div className="flex flex-wrap items-start justify-between gap-4">
                                   <div className="min-w-0 flex-1">
                                     <div className="flex flex-wrap items-center gap-2">
-                                      <p className="text-xl font-semibold text-white">
+                                      <p className="text-xl font-semibold text-slate-900">
                                         {message.subject || 'No subject provided'}
                                       </p>
                                       <span
-                                        className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${contactStatusPill[message.status]}`}
+                                        className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider ${contactStatusPill[message.status]}`}
                                       >
                                         {message.status.replace('_', ' ')}
                                       </span>
                                     </div>
-                                    <div className="mt-3 grid gap-3 text-sm text-white/70 md:grid-cols-2">
+                                    <div className="mt-3 grid gap-3 text-sm text-slate-600 md:grid-cols-2">
                                       <p>
-                                        <span className="text-white/45">From:</span> {message.name}
+                                        <span className="text-slate-500">From:</span> {message.name}
                                       </p>
                                       <p>
-                                        <span className="text-white/45">Email:</span> {message.email}
+                                        <span className="text-slate-500">Email:</span> {message.email}
                                       </p>
                                       <p>
-                                        <span className="text-white/45">Received:</span>{' '}
+                                        <span className="text-slate-500">Received:</span>{' '}
                                         {formatDate(message.created_at)}
                                       </p>
                                       <p>
-                                        <span className="text-white/45">Handled by:</span>{' '}
+                                        <span className="text-slate-500">Handled by:</span>{' '}
                                         {handledByLabel}
                                       </p>
                                     </div>
                                   </div>
-                                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/70">
-                                    <p className="text-white/45">Last update</p>
-                                    <p className="mt-1 font-medium text-white">
+                                  <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                                    <p className="text-slate-500">Last update</p>
+                                    <p className="mt-1 font-medium text-slate-900">
                                       {message.handled_at ? formatDate(message.handled_at) : 'Not yet handled'}
                                     </p>
                                   </div>
                                 </div>
 
-                                <div className="mt-4 rounded-2xl border border-white/10 bg-[#0b1729]/70 px-4 py-4">
-                                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/40">
+                                <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-4 py-4">
+                                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                                     User Message
                                   </p>
-                                  <p className="mt-3 text-sm leading-7 text-white/85">
+                                  <p className="mt-3 text-sm leading-7 text-slate-900">
                                     {message.message}
                                   </p>
                                 </div>
 
-                                <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                                <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
                                   <label
                                     htmlFor={`contact-notes-${message.id}`}
-                                    className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50"
+                                    className="text-xs font-semibold uppercase tracking-wider text-slate-500"
                                   >
                                     Librarian Notes
                                   </label>
-                                  <p className="mt-2 text-sm text-white/55">
+                                  <p className="mt-2 text-sm text-slate-600">
                                     Only staff can see these notes.
                                   </p>
                                   <textarea
@@ -3861,7 +3852,7 @@ export default function LibrarianDeskPage() {
                                     onChange={(event) =>
                                       updateContactMessageDraft(message.id, event.target.value)
                                     }
-                                    className="mt-3 w-full rounded-2xl border border-white/12 bg-[#0b1729]/70 px-4 py-3 text-sm text-white placeholder-white/35 focus:border-sky-300/35 focus:outline-none focus:ring-2 focus:ring-sky-300/20"
+                                    className="mt-3 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                                     placeholder="Add handling notes, follow-up details, or resolution notes."
                                   />
                                 </div>
@@ -3871,7 +3862,7 @@ export default function LibrarianDeskPage() {
                                     type="button"
                                     disabled={contactActionBusyId === message.id}
                                     onClick={() => void handleContactMessageAction(message.id)}
-                                    className="rounded-2xl border border-white/15 bg-white/[0.05] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-white/25 hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-60"
+                                    className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
                                   >
                                     Save notes
                                   </button>
@@ -3881,7 +3872,7 @@ export default function LibrarianDeskPage() {
                                     onClick={() =>
                                       void handleContactMessageAction(message.id, 'IN_PROGRESS')
                                     }
-                                    className="rounded-2xl border border-sky-300/25 bg-sky-400/10 px-4 py-2.5 text-sm font-semibold text-sky-100 transition hover:bg-sky-400/15 disabled:cursor-not-allowed disabled:opacity-60"
+                                    className="rounded-lg border border-sky-200 bg-sky-50 px-4 py-2.5 text-sm font-semibold text-sky-700 transition hover:bg-sky-100 disabled:cursor-not-allowed disabled:opacity-60"
                                   >
                                     {contactActionBusyId === message.id && message.status !== 'RESOLVED'
                                       ? 'Updating...'
@@ -3893,7 +3884,7 @@ export default function LibrarianDeskPage() {
                                     onClick={() =>
                                       void handleContactMessageAction(message.id, 'RESOLVED')
                                     }
-                                    className="rounded-2xl border border-emerald-300/25 bg-emerald-500/10 px-4 py-2.5 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-500/15 disabled:cursor-not-allowed disabled:opacity-60"
+                                    className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
                                   >
                                     {contactActionBusyId === message.id && message.status === 'RESOLVED'
                                       ? 'Updating...'
@@ -3906,8 +3897,8 @@ export default function LibrarianDeskPage() {
                         </div>
                       )}
 
-                      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">
+                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-600">
                           Admin Shortcuts
                         </p>
                         <div className="mt-3 flex flex-wrap gap-3 text-sm">
@@ -3915,7 +3906,7 @@ export default function LibrarianDeskPage() {
                             href={adminLinks.contactMessages}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white/80 transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-slate-700 transition hover:bg-slate-50"
                           >
                             Open Django admin inbox
                             <ArrowUpRight className="h-4 w-4" />
@@ -3924,7 +3915,7 @@ export default function LibrarianDeskPage() {
                             href={adminLinks.notifications}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white/80 transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-slate-700 transition hover:bg-slate-50"
                           >
                             Open notification records
                             <ArrowUpRight className="h-4 w-4" />
@@ -3936,16 +3927,13 @@ export default function LibrarianDeskPage() {
                 )}
 
                 {resolvedActiveSectionId === 'desk-notifications' && (
-                  <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-6">
+                  <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-200/70">
-                          Communication
-                        </p>
-                        <h2 className="mt-2 text-2xl font-semibold text-white">
+                        <h2 className="text-2xl font-bold text-slate-900">
                           Notifications
                         </h2>
-                        <p className="mt-2 max-w-2xl text-sm text-white/65">
+                        <p className="mt-2 text-sm text-slate-600">
                           Review your librarian alerts and clear unread notifications when they have been handled.
                         </p>
                       </div>
@@ -3953,7 +3941,7 @@ export default function LibrarianDeskPage() {
                         <button
                           type="button"
                           onClick={loadNotifications}
-                          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                         >
                           <RefreshCw className="h-4 w-4" />
                           Refresh
@@ -3962,7 +3950,7 @@ export default function LibrarianDeskPage() {
                           type="button"
                           onClick={() => void handleMarkAllNotificationsRead()}
                           disabled={notificationActionBusy || notificationUnreadCount === 0}
-                          className="inline-flex items-center gap-2 rounded-2xl border border-sky-300/15 bg-sky-400/10 px-4 py-2.5 text-sm font-semibold text-sky-50 transition hover:bg-sky-400/15 disabled:cursor-not-allowed disabled:opacity-60"
+                          className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-700 transition hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           {notificationActionBusy ? (
                             <>
@@ -3980,25 +3968,25 @@ export default function LibrarianDeskPage() {
                     </div>
 
                     <div className="mt-6 grid gap-4 md:grid-cols-3">
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Unread</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">
+                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                        <p className="text-sm text-slate-600">Unread</p>
+                        <p className="mt-3 text-3xl font-semibold text-slate-900">
                           {notificationUnreadCount}
                         </p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Loaded</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">
+                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                        <p className="text-sm text-slate-600">Loaded</p>
+                        <p className="mt-3 text-3xl font-semibold text-slate-900">
                           {notifications.length}
                         </p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Admin Records</p>
+                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                        <p className="text-sm text-slate-600">Admin Records</p>
                         <a
                           href={adminLinks.notifications}
                           target="_blank"
                           rel="noreferrer"
-                          className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-sky-100"
+                          className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-blue-700"
                         >
                           Open full notification admin
                           <ArrowUpRight className="h-4 w-4" />
@@ -4008,19 +3996,19 @@ export default function LibrarianDeskPage() {
 
                     <div className="mt-6 space-y-4">
                       {notificationsState === 'loading' && (
-                        <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 px-4 py-8 text-center text-sm text-white/55">
+                        <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-600">
                           Loading notifications...
                         </div>
                       )}
                       {notificationsError && notificationsState !== 'loading' && (
-                        <div className="rounded-3xl border border-rose-300/20 bg-rose-400/10 px-4 py-4 text-sm text-rose-100">
+                        <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-4 text-sm text-rose-700">
                           {notificationsError}
                         </div>
                       )}
                       {notificationsState !== 'loading' &&
                         !notificationsError &&
                         notifications.length === 0 && (
-                          <div className="rounded-3xl border border-dashed border-white/10 bg-[#0b1729]/88 px-4 py-8 text-center text-sm text-white/55">
+                          <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-600">
                             No notifications found for this account.
                           </div>
                         )}
@@ -4030,25 +4018,25 @@ export default function LibrarianDeskPage() {
                             type="button"
                             key={notification.id}
                             onClick={() => handleNotificationClick(notification)}
-                            className="block w-full rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5 text-left transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                            className="block w-full rounded-lg border border-slate-200 bg-white p-5 text-left transition hover:bg-slate-50"
                           >
                             <div className="flex flex-wrap items-start justify-between gap-4">
                               <div className="min-w-0">
                                 <div className="flex items-center gap-3">
-                                  <h3 className="truncate text-lg font-semibold text-white">
+                                  <h3 className="truncate text-lg font-semibold text-slate-900">
                                     {notification.title}
                                   </h3>
                                   {!notification.is_read && (
-                                    <span className="rounded-full bg-sky-400/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-100">
+                                    <span className="rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-blue-700">
                                       Unread
                                     </span>
                                   )}
                                 </div>
-                                <p className="mt-2 text-sm text-white/60">
+                                <p className="mt-2 text-sm text-slate-600">
                                   {notification.message}
                                 </p>
                               </div>
-                              <p className="text-xs uppercase tracking-[0.22em] text-white/40">
+                              <p className="text-xs uppercase tracking-wider text-slate-400">
                                 {formatDate(notification.created_at)}
                               </p>
                             </div>
