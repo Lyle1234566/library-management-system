@@ -120,19 +120,19 @@ function getNotificationHref(notification: Notification) {
 
 function getToneClasses(category: ReturnType<typeof getNotificationCategory>, isRead: boolean) {
   const base = isRead
-    ? 'border-white/10 bg-white/[0.03]'
-    : 'border-sky-300/25 bg-sky-500/[0.09] shadow-[0_18px_40px_rgba(14,165,233,0.12)]';
+    ? 'border-line bg-white/40'
+    : 'border-sky-300/30 bg-sky-500/10 shadow-lg';
 
   if (category === 'reservation') {
-    return `${base} before:bg-emerald-400`;
+    return `${base} before:bg-emerald-500`;
   }
   if (category === 'reminder') {
-    return `${base} before:bg-amber-400`;
+    return `${base} before:bg-amber-500`;
   }
   if (category === 'account') {
-    return `${base} before:bg-violet-400`;
+    return `${base} before:bg-violet-500`;
   }
-  return `${base} before:bg-sky-400`;
+  return `${base} before:bg-sky-500`;
 }
 
 export default function NotificationsPage() {
@@ -256,48 +256,48 @@ export default function NotificationsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="theme-login min-h-screen bg-[#0b1324] text-white">
-        <Navbar variant="dark" />
+      <div className="min-h-screen bg-[#f8f9fb] text-ink">
+        <Navbar variant="light" />
         <main className="relative overflow-hidden pt-16">
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -left-24 top-10 h-80 w-80 rounded-full bg-sky-500/12 blur-3xl" />
-            <div className="absolute right-0 top-1/4 h-[28rem] w-[28rem] rounded-full bg-amber-400/10 blur-3xl" />
+            <div className="absolute -left-24 top-10 h-80 w-80 rounded-full bg-sky-300/16 blur-3xl" />
+            <div className="absolute right-0 top-1/4 h-[28rem] w-[28rem] rounded-full bg-amber-300/12 blur-3xl" />
           </div>
 
-          <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#091120] via-[#0d172b] to-[#0b1324]">
+          <section className="relative overflow-hidden border-b border-line bg-gradient-to-br from-[#f0f4f8] via-[#e8f0f7] to-[#f8f9fb]">
             <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-              <p className="text-xs uppercase tracking-[0.35em] text-sky-200/70">Account Center</p>
+              <p className="text-xs uppercase tracking-[0.35em] text-[color:var(--accent-cool-strong)]/70">Account Center</p>
               <div className="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_minmax(300px,0.95fr)] lg:items-end">
                 <div>
-                  <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                  <h1 className="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
                     Notifications and library updates
                   </h1>
-                  <p className="mt-4 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-ink-muted sm:text-base">
                     Track approvals, due-date reminders, reservations, and account updates in one place.
                     Mark items as read as you clear them.
                   </p>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-[1.8rem] border border-white/10 bg-white/6 p-5 backdrop-blur-xl">
+                  <div className="public-panel-soft rounded-[1.8rem] p-5">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-200">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-500/20 text-sky-700">
                         <Bell className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="text-xs uppercase tracking-[0.24em] text-white/45">Unread</p>
-                        <p className="text-2xl font-semibold text-white">{unreadCount}</p>
+                        <p className="text-xs uppercase tracking-[0.24em] text-ink-muted">Unread</p>
+                        <p className="text-2xl font-semibold text-ink">{unreadCount}</p>
                       </div>
                     </div>
                   </div>
-                  <div className="rounded-[1.8rem] border border-white/10 bg-white/6 p-5 backdrop-blur-xl">
+                  <div className="public-panel-soft rounded-[1.8rem] p-5">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-500/15 text-amber-100">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-500/20 text-amber-700">
                         <CheckCheck className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="text-xs uppercase tracking-[0.24em] text-white/45">Total</p>
-                        <p className="text-2xl font-semibold text-white">{summary.total}</p>
+                        <p className="text-xs uppercase tracking-[0.24em] text-ink-muted">Total</p>
+                        <p className="text-2xl font-semibold text-ink">{summary.total}</p>
                       </div>
                     </div>
                   </div>
@@ -306,59 +306,59 @@ export default function NotificationsPage() {
             </div>
           </section>
 
-          <section className="relative -mt-10 z-10 mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
-            <div className="rounded-[2rem] border border-white/12 bg-[linear-gradient(180deg,rgba(10,19,36,0.92)_0%,rgba(12,22,41,0.96)_100%)] p-6 shadow-[0_30px_80px_rgba(2,8,23,0.46)] backdrop-blur-2xl sm:p-8">
+          <section className="relative -mt-10 z-10 mx-auto max-w-6xl px-4 pb-16 sm:-mt-16 sm:px-6 lg:px-8">
+            <div className="public-panel rounded-[2rem] p-6 sm:p-8">
               <div className="grid gap-4 md:grid-cols-4">
-                <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4">
+                <div className="public-panel-soft rounded-[1.5rem] p-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-500/12 text-sky-200">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-700">
                       <BookOpen className="h-4 w-4" />
                     </div>
                     <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-white/45">Circulation</p>
-                      <p className="text-xl font-semibold text-white">{summary.circulation}</p>
+                      <p className="text-xs uppercase tracking-[0.24em] text-ink-muted">Circulation</p>
+                      <p className="text-xl font-semibold text-ink">{summary.circulation}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4">
+                <div className="public-panel-soft rounded-[1.5rem] p-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-500/12 text-emerald-200">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-700">
                       <CalendarClock className="h-4 w-4" />
                     </div>
                     <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-white/45">Reservations</p>
-                      <p className="text-xl font-semibold text-white">{summary.reservation}</p>
+                      <p className="text-xs uppercase tracking-[0.24em] text-ink-muted">Reservations</p>
+                      <p className="text-xl font-semibold text-ink">{summary.reservation}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4">
+                <div className="public-panel-soft rounded-[1.5rem] p-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-500/12 text-amber-100">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-500/15 text-amber-700">
                       <CircleAlert className="h-4 w-4" />
                     </div>
                     <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-white/45">Reminders</p>
-                      <p className="text-xl font-semibold text-white">{summary.reminder}</p>
+                      <p className="text-xs uppercase tracking-[0.24em] text-ink-muted">Reminders</p>
+                      <p className="text-xl font-semibold text-ink">{summary.reminder}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4">
+                <div className="public-panel-soft rounded-[1.5rem] p-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-500/12 text-violet-100">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-500/15 text-violet-700">
                       <ShieldCheck className="h-4 w-4" />
                     </div>
                     <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-white/45">Account</p>
-                      <p className="text-xl font-semibold text-white">{summary.account}</p>
+                      <p className="text-xs uppercase tracking-[0.24em] text-ink-muted">Account</p>
+                      <p className="text-xl font-semibold text-ink">{summary.account}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-wrap gap-3">
                   {(Object.keys(filterLabels) as FilterMode[]).map((value) => (
                     <button
@@ -367,8 +367,8 @@ export default function NotificationsPage() {
                       onClick={() => setFilter(value)}
                       className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                         filter === value
-                          ? 'bg-amber-400 text-[#10203a]'
-                          : 'border border-white/12 bg-white/6 text-white/75 hover:bg-white/10 hover:text-white'
+                          ? 'bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] text-[#1a1b1f]'
+                          : 'border border-line bg-white/60 text-ink-muted hover:bg-white hover:text-ink'
                       }`}
                     >
                       {filterLabels[value]}
@@ -380,7 +380,7 @@ export default function NotificationsPage() {
                   type="button"
                   onClick={() => void handleMarkAllRead()}
                   disabled={markingAll || unreadCount === 0}
-                  className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white/82 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
+                  className="inline-flex items-center justify-center rounded-full border border-line bg-white/60 px-4 py-2 text-sm font-semibold text-ink transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   {markingAll ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCheck className="mr-2 h-4 w-4" />}
                   Mark all as read
@@ -388,30 +388,30 @@ export default function NotificationsPage() {
               </div>
 
               {loading && (
-                <div className="mt-8 flex items-center gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.03] px-5 py-4 text-white/70">
-                  <Loader2 className="h-5 w-5 animate-spin text-sky-300" />
+                <div className="mt-8 flex items-center gap-3 public-panel-soft rounded-[1.5rem] px-5 py-4 text-ink-muted">
+                  <Loader2 className="h-5 w-5 animate-spin text-sky-600" />
                   Loading notifications...
                 </div>
               )}
 
               {error && !loading && (
-                <div className="mt-8 rounded-[1.5rem] border border-rose-300/25 bg-rose-500/12 px-5 py-4 text-sm text-rose-100">
+                <div className="mt-8 rounded-[1.5rem] border border-rose-400/40 bg-rose-500/20 px-5 py-4 text-sm text-rose-700">
                   {error}
                 </div>
               )}
 
               {!loading && !error && notifications.length === 0 && (
-                <div className="mt-8 rounded-[1.8rem] border border-dashed border-white/15 bg-[#10203a]/62 px-6 py-10 text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.05] text-sky-200">
+                <div className="mt-8 public-panel-soft rounded-[1.8rem] border-dashed px-6 py-10 text-center">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-700">
                     <Bell className="h-6 w-6" />
                   </div>
-                  <h2 className="mt-4 text-xl font-semibold text-white">No notifications yet</h2>
-                  <p className="mt-2 text-sm text-white/65">
+                  <h2 className="mt-4 text-xl font-semibold text-ink">No notifications yet</h2>
+                  <p className="mt-2 text-sm text-ink-muted">
                     Once the library sends updates for borrowing, returns, reservations, or reminders, they will appear here.
                   </p>
                   <Link
                     href="/books"
-                    className="mt-5 inline-flex items-center rounded-full bg-amber-400 px-4 py-2 text-sm font-semibold text-[#132036] transition hover:bg-amber-300"
+                    className="mt-5 inline-flex items-center rounded-full bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-4 py-2 text-sm font-semibold text-[#1a1b1f] transition hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)]"
                   >
                     Browse books
                   </Link>
@@ -434,27 +434,27 @@ export default function NotificationsPage() {
                               <span
                                 className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] ${
                                   notification.is_read
-                                    ? 'border border-white/10 bg-white/[0.04] text-white/55'
-                                    : 'bg-sky-400/15 text-sky-100 ring-1 ring-sky-300/20'
+                                    ? 'border border-line bg-white/60 text-ink-muted'
+                                    : 'bg-sky-400/20 text-sky-700 ring-1 ring-sky-300/30'
                                 }`}
                               >
                                 {notification.is_read ? 'Read' : 'Unread'}
                               </span>
-                              <span className="text-xs uppercase tracking-[0.22em] text-white/42">
+                              <span className="text-xs uppercase tracking-[0.22em] text-ink-muted/60">
                                 {notification.notification_type.replaceAll('_', ' ')}
                               </span>
                             </div>
 
-                            <h2 className="mt-3 text-lg font-semibold text-white">{notification.title}</h2>
-                            <p className="mt-2 max-w-3xl text-sm leading-7 text-white/72">{notification.message}</p>
+                            <h2 className="mt-3 text-lg font-semibold text-ink">{notification.title}</h2>
+                            <p className="mt-2 max-w-3xl text-sm leading-7 text-ink-muted">{notification.message}</p>
 
-                            <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-white/45">
+                            <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-ink-muted/70">
                               <span>{formatRelativeTime(notification.created_at)}</span>
-                              <span className="h-1 w-1 rounded-full bg-white/20" />
+                              <span className="h-1 w-1 rounded-full bg-ink-muted/30" />
                               <span>{formatTimestamp(notification.created_at)}</span>
                               {notification.read_at && (
                                 <>
-                                  <span className="h-1 w-1 rounded-full bg-white/20" />
+                                  <span className="h-1 w-1 rounded-full bg-ink-muted/30" />
                                   <span>Read {formatRelativeTime(notification.read_at)}</span>
                                 </>
                               )}
@@ -464,7 +464,7 @@ export default function NotificationsPage() {
                           <div className="flex shrink-0 flex-wrap gap-3">
                             <Link
                               href={href}
-                              className="inline-flex items-center rounded-full border border-white/12 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white/82 transition hover:bg-white/10 hover:text-white"
+                              className="inline-flex items-center rounded-full border border-line bg-white/60 px-4 py-2 text-sm font-semibold text-ink transition hover:bg-white"
                             >
                               Open related page
                               <ArrowRight className="ml-2 h-4 w-4" />
@@ -474,7 +474,7 @@ export default function NotificationsPage() {
                                 type="button"
                                 onClick={() => void handleMarkAsRead(notification.id)}
                                 disabled={markingId === notification.id}
-                                className="inline-flex items-center rounded-full bg-amber-400 px-4 py-2 text-sm font-semibold text-[#112038] transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-60"
+                                className="inline-flex items-center rounded-full bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-4 py-2 text-sm font-semibold text-[#1a1b1f] transition hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] disabled:cursor-not-allowed disabled:opacity-60"
                               >
                                 {markingId === notification.id ? (
                                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
