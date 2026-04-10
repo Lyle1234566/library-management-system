@@ -2251,12 +2251,7 @@ export default function LibrarianDeskPage() {
 
   return (
     <ProtectedRoute requiredRoles={['LIBRARIAN', 'WORKING', 'STAFF', 'ADMIN']}>
-      <div className="min-h-screen bg-[#f8f9fb] text-ink">
-        <div className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div className="absolute -left-28 top-0 h-80 w-80 rounded-full bg-sky-300/26 blur-3xl" />
-          <div className="absolute right-0 top-1/4 h-[26rem] w-[26rem] rounded-full bg-amber-300/18 blur-3xl" />
-          <div className="absolute bottom-0 left-1/3 h-[24rem] w-[24rem] rounded-full bg-sky-200/12 blur-3xl" />
-        </div>
+      <div className="min-h-screen bg-gray-50 text-gray-900">
 
         <div className="relative flex min-h-screen">
           <button
@@ -2269,7 +2264,7 @@ export default function LibrarianDeskPage() {
           />
 
           <aside
-            className={`fixed inset-y-0 left-0 z-40 flex w-[280px] flex-col overflow-y-auto border-r border-line bg-white shadow-lg transition-transform duration-300 md:translate-x-0 ${
+            className={`fixed inset-y-0 left-0 z-40 flex w-[280px] flex-col overflow-y-auto border-r border-gray-200 bg-white transition-transform duration-300 md:translate-x-0 ${
               isDeskMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
           >
@@ -2315,21 +2310,21 @@ export default function LibrarianDeskPage() {
               </Link>
             </div>
 
-            <div className="mt-6 rounded-3xl border border-line bg-white p-4 shadow-sm">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-600">
+            <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                 Desk Summary
               </p>
-              <p className="mt-2 text-sm text-ink-muted">{deskTagline}</p>
+              <p className="mt-2 text-sm text-gray-600">{deskTagline}</p>
               <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-2xl border border-line bg-[#f8f9fb] p-3">
-                  <p className="text-ink-muted">Open queue</p>
-                  <p className="mt-2 text-2xl font-semibold text-ink">
+                <div className="rounded-lg border border-gray-200 bg-white p-3">
+                  <p className="text-gray-500">Open queue</p>
+                  <p className="mt-2 text-2xl font-semibold text-gray-900">
                     {dashboardQueueCount}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-line bg-[#f8f9fb] p-3">
-                  <p className="text-ink-muted">Unread alerts</p>
-                  <p className="mt-2 text-2xl font-semibold text-ink">
+                <div className="rounded-lg border border-gray-200 bg-white p-3">
+                  <p className="text-gray-500">Unread alerts</p>
+                  <p className="mt-2 text-2xl font-semibold text-gray-900">
                     {notificationUnreadCount}
                   </p>
                 </div>
@@ -2394,7 +2389,7 @@ export default function LibrarianDeskPage() {
           </aside>
 
           <div className="flex min-h-screen flex-1 flex-col bg-[#f8f9fb] md:pl-[280px]">
-            <header className="sticky top-0 z-20 border-b border-line bg-white shadow-sm">
+            <header className="sticky top-0 z-20 border-b border-gray-200 bg-white">
               <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
                 <div className="flex min-w-0 items-start gap-3">
                   <button
@@ -2639,24 +2634,23 @@ export default function LibrarianDeskPage() {
             </header>
 
             <main className="min-h-[calc(100vh-89px)] flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-              <div className="flex min-h-[calc(100vh-137px)] flex-col rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-4 shadow-[0_28px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl sm:p-5 lg:p-6">
-                <div className="min-w-0 flex-1 space-y-8">
+              <div className="flex min-h-[calc(100vh-137px)] flex-col space-y-6">
                 {resolvedActiveSectionId === 'desk-dashboard' && (
                   <div className="space-y-6">
-                    <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-7 xl:p-8">
+                    <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                       <div className="flex flex-wrap items-start justify-between gap-4">
                         <div>
-                          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-sky-200/70">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                             Operations Overview
                           </p>
-                          <h2 className="mt-3 text-2xl font-semibold text-white md:text-3xl">
+                          <h2 className="mt-3 text-2xl font-semibold text-gray-900 md:text-3xl">
                             Welcome back, {(user?.full_name ?? 'Librarian').split(' ')[0]}
                           </h2>
-                          <p className="mt-2 max-w-2xl text-sm text-white/65 md:text-base">
+                          <p className="mt-2 max-w-2xl text-sm text-gray-600 md:text-base">
                             Monitor circulation, clear pending work, and keep the library desk moving.
                           </p>
                         </div>
-                        <div className="rounded-2xl border border-emerald-300/15 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-100">
+                        <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
                           {overdueRequests.length > 0
                             ? `${overdueRequests.length} overdue cases need review`
                             : 'No overdue alerts right now'}
@@ -2664,91 +2658,91 @@ export default function LibrarianDeskPage() {
                       </div>
 
                       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                        <article className="rounded-3xl border border-sky-300/15 bg-gradient-to-br from-sky-400/16 via-sky-300/10 to-transparent p-5">
+                        <article className="rounded-lg border border-blue-100 bg-blue-50 p-5">
                           <div className="flex items-center justify-between gap-3">
-                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-400/15 text-sky-100">
+                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
                               <LayoutDashboard className="h-5 w-5" />
                             </span>
-                            <span className="text-xs uppercase tracking-[0.24em] text-white/45">
+                            <span className="text-xs uppercase tracking-wider text-gray-500">
                               Queue
                             </span>
                           </div>
-                          <p className="mt-5 text-3xl font-semibold text-white">
+                          <p className="mt-5 text-3xl font-semibold text-gray-900">
                             {dashboardQueueCount}
                           </p>
-                          <p className="mt-2 text-sm text-white/65">
+                          <p className="mt-2 text-sm text-gray-600">
                             Pending borrow, renewal, and return decisions.
                           </p>
                         </article>
 
-                        <article className="rounded-3xl border border-amber-300/15 bg-gradient-to-br from-amber-300/16 via-amber-200/10 to-transparent p-5">
+                        <article className="rounded-lg border border-amber-100 bg-amber-50 p-5">
                           <div className="flex items-center justify-between gap-3">
-                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-300/15 text-amber-100">
+                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
                               <Archive className="h-5 w-5" />
                             </span>
-                            <span className="text-xs uppercase tracking-[0.24em] text-white/45">
+                            <span className="text-xs uppercase tracking-wider text-gray-500">
                               Borrowed
                             </span>
                           </div>
-                          <p className="mt-5 text-3xl font-semibold text-white">
+                          <p className="mt-5 text-3xl font-semibold text-gray-900">
                             {activeBorrowedRequests.length}
                           </p>
-                          <p className="mt-2 text-sm text-white/65">
+                          <p className="mt-2 text-sm text-gray-600">
                             Books currently checked out by readers.
                           </p>
                         </article>
 
-                        <article className="rounded-3xl border border-rose-300/15 bg-gradient-to-br from-rose-300/16 via-rose-200/10 to-transparent p-5">
+                        <article className="rounded-lg border border-rose-100 bg-rose-50 p-5">
                           <div className="flex items-center justify-between gap-3">
-                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-300/15 text-rose-100">
+                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-rose-100 text-rose-600">
                               <Clock3 className="h-5 w-5" />
                             </span>
-                            <span className="text-xs uppercase tracking-[0.24em] text-white/45">
+                            <span className="text-xs uppercase tracking-wider text-gray-500">
                               Overdue
                             </span>
                           </div>
-                          <p className="mt-5 text-3xl font-semibold text-white">
+                          <p className="mt-5 text-3xl font-semibold text-gray-900">
                             {overdueRequests.length}
                           </p>
-                          <p className="mt-2 text-sm text-white/65">
+                          <p className="mt-2 text-sm text-gray-600">
                             Estimated exposure {formatCurrency(totalOverdueFees)}.
                           </p>
                         </article>
 
-                        <article className="rounded-3xl border border-indigo-300/15 bg-gradient-to-br from-indigo-300/16 via-indigo-200/10 to-transparent p-5">
+                        <article className="rounded-lg border border-indigo-100 bg-indigo-50 p-5">
                           <div className="flex items-center justify-between gap-3">
-                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-300/15 text-indigo-100">
+                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600">
                               <ReceiptText className="h-5 w-5" />
                             </span>
-                            <span className="text-xs uppercase tracking-[0.24em] text-white/45">
+                            <span className="text-xs uppercase tracking-wider text-gray-500">
                               Finance
                             </span>
                           </div>
-                          <p className="mt-5 text-3xl font-semibold text-white">
+                          <p className="mt-5 text-3xl font-semibold text-gray-900">
                             {finePayments.length}
                           </p>
-                          <p className="mt-2 text-sm text-white/65">
+                          <p className="mt-2 text-sm text-gray-600">
                             Pending fines totaling {formatCurrency(pendingFineTotal)}.
                           </p>
                         </article>
                       </div>
 
                       {isDashboardQuiet && (
-                        <div className="mt-6 rounded-3xl border border-sky-300/15 bg-[linear-gradient(135deg,rgba(56,189,248,0.14),rgba(15,23,42,0.48)_45%,rgba(251,191,36,0.12))] p-5 shadow-xl shadow-black/20">
+                        <div className="mt-6 rounded-lg border border-blue-200 bg-blue-50 p-5">
                           <div className="flex flex-wrap items-start justify-between gap-4">
                             <div className="max-w-2xl">
-                              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky-100/70">
+                              <p className="text-xs font-semibold uppercase tracking-wider text-blue-600">
                                 Desk Setup
                               </p>
-                              <h3 className="mt-2 text-xl font-semibold text-white">
+                              <h3 className="mt-2 text-xl font-semibold text-gray-900">
                                 Your {roleLabel.toLowerCase()} workspace is live
                               </h3>
-                              <p className="mt-2 text-sm text-white/70">
+                              <p className="mt-2 text-sm text-gray-600">
                                 The desk is connected and ready. Start by adding catalog records, reviewing pending
                                 accounts, or opening notifications so the first circulation activity has somewhere to go.
                               </p>
                             </div>
-                            <span className="rounded-full border border-emerald-300/20 bg-emerald-400/12 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100">
+                            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-700">
                               Ready
                             </span>
                           </div>
@@ -2761,7 +2755,7 @@ export default function LibrarianDeskPage() {
                                   setActiveSectionId('desk-books');
                                   setIsAddBookOpen(true);
                                 }}
-                                className="inline-flex items-center gap-2 rounded-2xl border border-sky-300/20 bg-sky-400/12 px-4 py-3 text-sm font-semibold text-sky-50 transition hover:bg-sky-400/18"
+                                className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"
                               >
                                 <Plus className="h-4 w-4" />
                                 Add first book
@@ -2771,7 +2765,7 @@ export default function LibrarianDeskPage() {
                               <button
                                 type="button"
                                 onClick={() => setActiveSectionId('desk-accounts')}
-                                className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/[0.06] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.1]"
+                                className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
                               >
                                 <UserPlus className="h-4 w-4" />
                                 Review accounts
@@ -2780,7 +2774,7 @@ export default function LibrarianDeskPage() {
                             <button
                               type="button"
                               onClick={openNotificationCenter}
-                              className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/[0.06] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.1]"
+                              className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
                             >
                               <BellRing className="h-4 w-4" />
                               Open notifications
@@ -2790,13 +2784,13 @@ export default function LibrarianDeskPage() {
                       )}
 
                       <div className="mt-6 grid gap-4 xl:grid-cols-12 xl:items-start">
-                        <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5 xl:col-span-7 2xl:col-span-8">
+                        <div className="rounded-lg border border-gray-200 bg-white p-5 xl:col-span-7 2xl:col-span-8">
                           <div className="flex items-center justify-between gap-3">
                             <div>
-                              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
+                              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                                 Desk Priorities
                               </p>
-                              <h3 className="mt-2 text-lg font-semibold text-white">
+                              <h3 className="mt-2 text-lg font-semibold text-gray-900">
                                 What needs attention first
                               </h3>
                             </div>
@@ -2806,7 +2800,7 @@ export default function LibrarianDeskPage() {
                                 setActiveSectionId(reviewQueueTargetId);
                                 setIsProfileMenuOpen(false);
                               }}
-                              className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-semibold text-white transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                              className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
                             >
                               Review queue
                               <ArrowUpRight className="h-4 w-4" />
@@ -2815,13 +2809,13 @@ export default function LibrarianDeskPage() {
 
                           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
                             {canApproveStudents && (
-                              <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-300/12 text-amber-100">
+                              <div className="flex items-start gap-3 rounded-lg border border-amber-100 bg-amber-50 p-4">
+                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
                                   <UserPlus className="h-4 w-4" />
                                 </span>
                                 <div className="min-w-0 flex-1">
-                                  <p className="font-medium text-white">Pending Accounts</p>
-                                  <p className="mt-1 text-sm text-white/60">
+                                  <p className="font-medium text-gray-900">Pending Accounts</p>
+                                  <p className="mt-1 text-sm text-gray-600">
                                     {pendingStudents.length === 0
                                       ? 'All student and teacher accounts are approved.'
                                       : `${pendingStudents.length} account${pendingStudents.length === 1 ? '' : 's'} awaiting approval.`}
@@ -2830,13 +2824,13 @@ export default function LibrarianDeskPage() {
                               </div>
                             )}
 
-                            <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-300/12 text-sky-100">
+                            <div className="flex items-start gap-3 rounded-lg border border-blue-100 bg-blue-50 p-4">
+                              <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
                                 <BookDown className="h-4 w-4" />
                               </span>
                               <div className="min-w-0 flex-1">
-                                <p className="font-medium text-white">Borrow Queue</p>
-                                <p className="mt-1 text-sm text-white/60">
+                                <p className="font-medium text-gray-900">Borrow Queue</p>
+                                <p className="mt-1 text-sm text-gray-600">
                                   {borrowRequests.length === 0
                                     ? 'No pending borrow requests right now.'
                                     : `${borrowRequests.length} pending borrow request${borrowRequests.length === 1 ? '' : 's'} ready for review.`}
@@ -2844,13 +2838,13 @@ export default function LibrarianDeskPage() {
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-300/12 text-rose-100">
+                            <div className="flex items-start gap-3 rounded-lg border border-rose-100 bg-rose-50 p-4">
+                              <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-rose-100 text-rose-600">
                                 <Clock3 className="h-4 w-4" />
                               </span>
                               <div className="min-w-0 flex-1">
-                                <p className="font-medium text-white">Overdue Exposure</p>
-                                <p className="mt-1 text-sm text-white/60">
+                                <p className="font-medium text-gray-900">Overdue Exposure</p>
+                                <p className="mt-1 text-sm text-gray-600">
                                   {overdueRequests.length === 0
                                     ? 'No overdue loans need intervention.'
                                     : `${overdueRequests.length} overdue item${overdueRequests.length === 1 ? '' : 's'} with ${formatCurrency(totalOverdueFees)} in estimated penalties.`}
@@ -2860,8 +2854,8 @@ export default function LibrarianDeskPage() {
                           </div>
                         </div>
 
-                        <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-5 xl:col-span-5 2xl:col-span-4">
-                          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
+                        <div className="rounded-lg border border-gray-200 bg-white p-5 xl:col-span-5 2xl:col-span-4">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                             Quick Actions
                           </p>
                           <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
@@ -2869,7 +2863,7 @@ export default function LibrarianDeskPage() {
                               <button
                                 type="button"
                                 onClick={() => setActiveSectionId('desk-accounts')}
-                                className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-white transition hover:border-amber-300/20 hover:bg-amber-400/10"
+                                className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
                               >
                                 Pending Accounts
                                 <ArrowUpRight className="h-4 w-4" />
@@ -2878,7 +2872,7 @@ export default function LibrarianDeskPage() {
                             <button
                               type="button"
                               onClick={() => setActiveSectionId('desk-borrows')}
-                              className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-white transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                              className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
                             >
                               Borrow Requests
                               <ArrowUpRight className="h-4 w-4" />
@@ -2886,7 +2880,7 @@ export default function LibrarianDeskPage() {
                             <button
                               type="button"
                               onClick={() => setActiveSectionId('desk-returns')}
-                              className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-white transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                              className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
                             >
                               Return Requests
                               <ArrowUpRight className="h-4 w-4" />
@@ -2894,7 +2888,7 @@ export default function LibrarianDeskPage() {
                             <button
                               type="button"
                               onClick={() => setActiveSectionId('desk-renewals')}
-                              className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-white transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                              className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
                             >
                               Renewal Requests
                               <ArrowUpRight className="h-4 w-4" />
@@ -2906,7 +2900,7 @@ export default function LibrarianDeskPage() {
                                   setActiveSectionId('desk-books');
                                   setIsAddBookOpen(true);
                                 }}
-                                className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-white transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                                className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
                               >
                                 Books and Catalog
                                 <ArrowUpRight className="h-4 w-4" />
@@ -2916,7 +2910,7 @@ export default function LibrarianDeskPage() {
                               <button
                                 type="button"
                                 onClick={() => setActiveSectionId('desk-fines')}
-                                className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-white transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                                className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
                               >
                                 Fine Payments
                                 <ArrowUpRight className="h-4 w-4" />
@@ -2928,40 +2922,40 @@ export default function LibrarianDeskPage() {
                     </section>
 
                     <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
-                      <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-6 xl:p-7">
+                      <section className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                         <div className="flex items-center gap-3">
-                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-400/12 text-sky-100">
+                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
                             <BarChart3 className="h-5 w-5" />
                           </span>
                           <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
+                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                               Collection Activity
                             </p>
-                            <h3 className="mt-1 text-lg font-semibold text-white">
+                            <h3 className="mt-1 text-lg font-semibold text-gray-900">
                               High-traffic books
                             </h3>
                           </div>
                         </div>
                         <div className="mt-5 space-y-3">
                           {mostBorrowedBooks.length === 0 ? (
-                            <p className="rounded-2xl border border-dashed border-white/10 px-4 py-5 text-sm text-white/55">
+                            <p className="rounded-lg border border-dashed border-gray-200 px-4 py-5 text-sm text-gray-500">
                               Borrow analytics will appear here after approved circulation activity.
                             </p>
                           ) : (
                             mostBorrowedBooks.slice(0, 4).map((book, index) => (
                               <div
                                 key={book.id}
-                                className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#0b1729]/88 px-4 py-3"
+                                className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3"
                               >
                                 <div className="min-w-0">
-                                  <p className="truncate text-sm font-semibold text-white">
+                                  <p className="truncate text-sm font-semibold text-gray-900">
                                     {index + 1}. {book.title}
                                   </p>
-                                  <p className="truncate text-xs text-white/55">
+                                  <p className="truncate text-xs text-gray-500">
                                     {book.author}
                                   </p>
                                 </div>
-                                <span className="rounded-full bg-sky-400/10 px-2.5 py-1 text-xs font-semibold text-sky-100">
+                                <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
                                   {book.count} loans
                                 </span>
                               </div>
@@ -2970,41 +2964,41 @@ export default function LibrarianDeskPage() {
                         </div>
                       </section>
 
-                      <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-6 xl:p-7">
+                      <section className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                         <div className="flex items-center gap-3">
-                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/8 text-white">
+                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 text-gray-700">
                             <Users className="h-5 w-5" />
                           </span>
                           <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45">
+                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                               Reader Activity
                             </p>
-                            <h3 className="mt-1 text-lg font-semibold text-white">
+                            <h3 className="mt-1 text-lg font-semibold text-gray-900">
                               Most active borrowers
                             </h3>
                           </div>
                         </div>
                         <div className="mt-5 space-y-3">
                           {mostActiveStudents.length === 0 ? (
-                            <p className="rounded-2xl border border-dashed border-white/10 px-4 py-5 text-sm text-white/55">
+                            <p className="rounded-lg border border-dashed border-gray-200 px-4 py-5 text-sm text-gray-500">
                               Borrow activity will populate after circulation starts.
                             </p>
                           ) : (
                             mostActiveStudents.slice(0, 4).map((student) => (
                               <div
                                 key={student.id}
-                                className="rounded-2xl border border-white/10 bg-[#0b1729]/88 px-4 py-3"
+                                className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3"
                               >
                                 <div className="flex items-center justify-between gap-3">
                                   <div className="min-w-0">
-                                    <p className="truncate text-sm font-semibold text-white">
+                                    <p className="truncate text-sm font-semibold text-gray-900">
                                       {student.fullName}
                                     </p>
-                                    <p className="truncate text-xs text-white/55">
+                                    <p className="truncate text-xs text-gray-500">
                                       {student.studentId}
                                     </p>
                                   </div>
-                                  <span className="rounded-full bg-white/8 px-2.5 py-1 text-xs font-semibold text-white/75">
+                                  <span className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700">
                                     {student.requests} loans
                                   </span>
                                 </div>
@@ -3018,16 +3012,16 @@ export default function LibrarianDeskPage() {
                 )}
 
                 {canManageBooks && resolvedActiveSectionId === 'desk-books' && (
-                  <section className="rounded-[28px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl md:p-6">
+                  <section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-200/70">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                           Library Management
                         </p>
-                        <h2 className="mt-2 text-2xl font-semibold text-white">
+                        <h2 className="mt-2 text-2xl font-semibold text-gray-900">
                           Catalog and Books
                         </h2>
-                        <p className="mt-2 max-w-2xl text-sm text-white/65">
+                        <p className="mt-2 max-w-2xl text-sm text-gray-600">
                           Update metadata, adjust availability, and add new titles without leaving the desk.
                         </p>
                       </div>
@@ -3035,7 +3029,7 @@ export default function LibrarianDeskPage() {
                         <button
                           type="button"
                           onClick={loadCatalogBooks}
-                          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-sky-300/20 hover:bg-sky-400/10"
+                          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
                         >
                           <RefreshCw className="h-4 w-4" />
                           Refresh
@@ -3043,7 +3037,7 @@ export default function LibrarianDeskPage() {
                         <button
                           type="button"
                           onClick={() => setIsAddBookOpen((prev) => !prev)}
-                          className="inline-flex items-center gap-2 rounded-2xl border border-sky-300/15 bg-sky-400/10 px-4 py-2.5 text-sm font-semibold text-sky-50 transition hover:bg-sky-400/15"
+                          className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"
                         >
                           <Plus className="h-4 w-4" />
                           {isAddBookOpen ? 'Hide add form' : 'Add new book'}
@@ -3052,21 +3046,21 @@ export default function LibrarianDeskPage() {
                     </div>
 
                     <div className="mt-6 grid gap-4 md:grid-cols-3">
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Catalog Titles</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">
+                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                        <p className="text-sm text-gray-600">Catalog Titles</p>
+                        <p className="mt-3 text-3xl font-semibold text-gray-900">
                           {catalogBooks.length}
                         </p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Total Copies</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">
+                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                        <p className="text-sm text-gray-600">Total Copies</p>
+                        <p className="mt-3 text-3xl font-semibold text-gray-900">
                           {totalCatalogCopies}
                         </p>
                       </div>
-                      <div className="rounded-3xl border border-white/10 bg-[#0b1729]/88 p-4">
-                        <p className="text-sm text-white/55">Available Now</p>
-                        <p className="mt-3 text-3xl font-semibold text-white">
+                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                        <p className="text-sm text-gray-600">Available Now</p>
+                        <p className="mt-3 text-3xl font-semibold text-gray-900">
                           {totalAvailableCopies}
                         </p>
                       </div>
