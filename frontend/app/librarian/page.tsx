@@ -2251,546 +2251,547 @@ export default function LibrarianDeskPage() {
 
   return (
     <ProtectedRoute requiredRoles={['LIBRARIAN', 'WORKING', 'STAFF', 'ADMIN']}>
-      <div className="min-h-screen bg-gray-50 text-gray-900">
-
+      <div className="public-shell min-h-screen text-ink">
         <div className="relative flex min-h-screen">
           <button
             type="button"
             aria-label="Close navigation"
             onClick={() => setIsDeskMenuOpen(false)}
-            className={`fixed inset-0 z-30 bg-[#020611]/70 backdrop-blur-sm transition-opacity md:hidden ${
+            className={`fixed inset-0 z-30 bg-[#0d1b2a]/40 backdrop-blur-sm transition-opacity md:hidden ${
               isDeskMenuOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
             }`}
           />
 
           <aside
-            className={`fixed inset-y-0 left-0 z-40 flex w-[280px] flex-col overflow-y-auto border-r border-gray-200 bg-white transition-transform duration-300 md:translate-x-0 ${
+            className={`fixed inset-y-0 left-0 z-40 w-[320px] overflow-y-auto border-r border-white/60 bg-white/70 shadow-[0_24px_70px_rgba(16,47,84,0.16)] backdrop-blur-2xl transition-transform duration-300 md:translate-x-0 ${
               isDeskMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
           >
-            <div className="flex flex-col gap-4 px-4 py-6">
-              <div className="flex items-start justify-between gap-3">
+            <div className="flex min-h-full flex-col gap-6 p-4 sm:p-5">
+              <div className="public-panel rounded-[30px] border border-white/80 p-5 shadow-card">
+                <div className="flex items-start justify-between gap-3">
+                  <Link
+                    href="/"
+                    onClick={() => setIsDeskMenuOpen(false)}
+                    className="flex items-center gap-3 rounded-2xl transition hover:opacity-90"
+                  >
+                    <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
+                      <Image
+                        src="/logo%20lib.png"
+                        alt="SCSIT Digital Library logo"
+                        fill
+                        sizes="48px"
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-ink">SCSIT Digital Library</p>
+                      <p className="truncate text-[11px] uppercase tracking-[0.28em] text-ink-muted">
+                        {deskLabel}
+                      </p>
+                    </div>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setIsDeskMenuOpen(false)}
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink md:hidden"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+
                 <Link
                   href="/"
                   onClick={() => setIsDeskMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-2xl transition hover:bg-sky-50"
+                  className="mt-5 inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-4 py-3 text-sm font-medium text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink"
                 >
-                  <div className="relative h-11 w-11 overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
-                    <Image
-                      src="/logo%20lib.png"
-                      alt="SCSIT Digital Library logo"
-                      fill
-                      sizes="44px"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-ink">SCSIT Digital Library</p>
-                    <p className="text-xs uppercase tracking-[0.28em] text-ink-muted">
-                      {deskLabel}
-                    </p>
-                  </div>
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Landing Page
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => setIsDeskMenuOpen(false)}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:bg-sky-50 hover:text-ink md:hidden"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
 
-              <Link
-                href="/"
-                onClick={() => setIsDeskMenuOpen(false)}
-                className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Back to Landing Page
-              </Link>
-            </div>
-
-            <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Desk Summary
-              </p>
-              <p className="mt-2 text-sm text-gray-600">{deskTagline}</p>
-              <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-lg border border-gray-200 bg-white p-3">
-                  <p className="text-gray-500">Open queue</p>
-                  <p className="mt-2 text-2xl font-semibold text-gray-900">
-                    {dashboardQueueCount}
+                <div className="mt-5 rounded-[28px] border border-sky-100/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.92),rgba(225,239,255,0.95))] p-4 shadow-sm">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/75">
+                    Desk Summary
                   </p>
-                </div>
-                <div className="rounded-lg border border-gray-200 bg-white p-3">
-                  <p className="text-gray-500">Unread alerts</p>
-                  <p className="mt-2 text-2xl font-semibold text-gray-900">
-                    {notificationUnreadCount}
-                  </p>
+                  <p className="mt-2 text-sm leading-6 text-ink-muted">{deskTagline}</p>
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl border border-white/80 bg-white/80 p-3 shadow-sm">
+                      <p className="text-xs uppercase tracking-[0.2em] text-ink-muted">Open Queue</p>
+                      <p className="mt-2 text-2xl font-semibold text-ink">{dashboardQueueCount}</p>
+                    </div>
+                    <div className="rounded-2xl border border-white/80 bg-white/80 p-3 shadow-sm">
+                      <p className="text-xs uppercase tracking-[0.2em] text-ink-muted">Unread Alerts</p>
+                      <p className="mt-2 text-2xl font-semibold text-ink">{notificationUnreadCount}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <nav className="mt-6 space-y-5 px-4 pb-6">
-              {dashboardNavGroups.map((group) => (
-                <div key={group.label}>
-                  <p className="px-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-ink-muted">
-                    {group.label}
-                  </p>
-                  <div className="mt-2 space-y-1.5">
-                    {group.items.map((item) => {
-                      const Icon = item.icon;
-                      const isActive = resolvedActiveSectionId === item.id;
+              <nav className="flex-1 space-y-5 overflow-y-auto pr-1">
+                {dashboardNavGroups.map((group) => (
+                  <div key={group.label}>
+                    <p className="px-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-700/70">
+                      {group.label}
+                    </p>
+                    <div className="mt-2 space-y-1.5">
+                      {group.items.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = resolvedActiveSectionId === item.id;
 
-                      return (
-                        <button
-                          type="button"
-                          key={item.id}
-                          onClick={() => {
-                            setActiveSectionId(item.id);
-                            setIsDeskMenuOpen(false);
-                          }}
-                          className={`flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition ${
-                            isActive
-                              ? 'border-sky-300 bg-sky-50 text-ink shadow-sm'
-                              : 'border-transparent bg-white text-ink-muted hover:border-line hover:bg-[#f8f9fb] hover:text-ink'
-                          }`}
-                        >
-                          <span
-                            className={`inline-flex h-10 w-10 items-center justify-center rounded-2xl ${
+                        return (
+                          <button
+                            type="button"
+                            key={item.id}
+                            onClick={() => {
+                              setActiveSectionId(item.id);
+                              setIsDeskMenuOpen(false);
+                            }}
+                            className={`flex w-full items-center gap-3 rounded-[24px] border px-3 py-3 text-left transition ${
                               isActive
-                                ? 'bg-sky-100 text-sky-700 ring-1 ring-sky-200'
-                                : 'bg-[#f8f9fb] text-ink-muted'
+                                ? 'border-sky-200 bg-white text-ink shadow-[0_14px_30px_rgba(0,102,179,0.14)]'
+                                : 'border-transparent bg-white/55 text-ink-muted hover:border-line hover:bg-white hover:text-ink'
                             }`}
                           >
-                            <Icon className="h-4 w-4" />
-                          </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-sm font-medium">{item.label}</span>
-                          </span>
-                          {item.badge !== undefined && (
                             <span
-                              className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                              className={`inline-flex h-11 w-11 items-center justify-center rounded-2xl ${
                                 isActive
-                                  ? 'bg-sky-100 text-sky-700'
-                                  : 'bg-[#f8f9fb] text-ink-muted'
+                                  ? 'bg-sky-100 text-sky-700 ring-1 ring-sky-200'
+                                  : 'bg-slate-100/80 text-ink-muted'
                               }`}
                             >
-                              {item.badge}
+                              <Icon className="h-4 w-4" />
                             </span>
-                          )}
-                        </button>
-                      );
-                    })}
+                            <span className="min-w-0 flex-1">
+                              <span className="block truncate text-sm font-medium">{item.label}</span>
+                            </span>
+                            {item.badge !== undefined && (
+                              <span
+                                className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                                  isActive
+                                    ? 'bg-sky-100 text-sky-700'
+                                    : 'bg-slate-100/80 text-ink-muted'
+                                }`}
+                              >
+                                {item.badge}
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </nav>
+                ))}
+              </nav>
+            </div>
           </aside>
 
-          <div className="flex min-h-screen flex-1 flex-col bg-[#f8f9fb] md:pl-[280px]">
-            <header className="sticky top-0 z-20 border-b border-gray-200 bg-white">
-              <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-                <div className="flex min-w-0 items-start gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setIsDeskMenuOpen(true)}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:bg-sky-50 hover:text-ink md:hidden"
-                  >
-                    <PanelLeft className="h-4 w-4" />
-                  </button>
-                  <div className="min-w-0">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-600">
-                      {deskLabel}
-                    </p>
-                    <h1 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
-                      {activeSectionTitle}
-                    </h1>
-                    <p className="mt-1 max-w-2xl text-sm text-ink-muted">
-                      {activeSectionDescription}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Link
-                    href="/"
-                    aria-label="Back to landing page"
-                    className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-3 py-2.5 text-sm font-medium text-ink-muted transition hover:bg-sky-50 hover:text-ink"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                    <span className="hidden sm:inline">Back</span>
-                  </Link>
-                  <div ref={notificationMenuRef} className="relative">
+          <div className="flex min-h-screen flex-1 flex-col md:pl-[320px]">
+            <header className="sticky top-0 z-20 border-b border-white/60 bg-[rgba(248,251,255,0.82)] backdrop-blur-xl">
+              <div className="px-4 py-4 sm:px-6 lg:px-8">
+                <div className="public-panel flex flex-wrap items-center justify-between gap-4 rounded-[30px] border border-white/80 px-4 py-4 shadow-card sm:px-5">
+                  <div className="flex min-w-0 items-start gap-3">
                     <button
                       type="button"
-                      aria-label="Open notifications"
-                      aria-expanded={isNotificationMenuOpen}
-                      onClick={() => {
-                        setIsNotificationMenuOpen((prev) => !prev);
-                        setIsProfileMenuOpen(false);
-                      }}
-                      className="relative inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:bg-sky-50 hover:text-ink"
+                      onClick={() => setIsDeskMenuOpen(true)}
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink md:hidden"
                     >
-                      <BellRing className="h-4 w-4" />
-                      {notificationUnreadCount > 0 && (
-                        <span className="absolute right-2 top-2 min-w-[18px] rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-semibold text-[#1a1b1f]">
-                          {notificationUnreadCount}
-                        </span>
-                      )}
+                      <PanelLeft className="h-4 w-4" />
                     </button>
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-sky-700/80">
+                        {deskLabel}
+                      </p>
+                      <h1 className="mt-1 truncate text-2xl font-semibold tracking-tight text-ink">
+                        {activeSectionTitle}
+                      </h1>
+                      <p className="mt-1 max-w-2xl text-sm text-ink-muted">
+                        {activeSectionDescription}
+                      </p>
+                    </div>
+                  </div>
 
-                    {isNotificationMenuOpen && (
-                      <div className="absolute right-0 top-[calc(100%+0.75rem)] z-30 w-[22rem] max-w-[calc(100vw-2rem)] rounded-3xl border border-line bg-white p-3 shadow-xl">
-                        <div className="rounded-2xl border border-line bg-[#f8f9fb] p-4">
-                          <div className="flex items-start justify-between gap-3">
-                            <div>
-                              <p className="text-sm font-semibold text-ink">Notifications</p>
-                              <p className="mt-1 text-xs text-ink-muted">
-                                {notificationUnreadCount > 0
-                                  ? `${notificationUnreadCount} unread alert${notificationUnreadCount === 1 ? '' : 's'}`
-                                  : 'All caught up'}
-                              </p>
+                  <div className="flex items-center gap-3">
+                    <Link
+                      href="/"
+                      aria-label="Back to landing page"
+                      className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-3.5 py-2.5 text-sm font-medium text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      <span className="hidden sm:inline">Back</span>
+                    </Link>
+
+                    <div ref={notificationMenuRef} className="relative">
+                      <button
+                        type="button"
+                        aria-label="Open notifications"
+                        aria-expanded={isNotificationMenuOpen}
+                        onClick={() => {
+                          setIsNotificationMenuOpen((prev) => !prev);
+                          setIsProfileMenuOpen(false);
+                        }}
+                        className="relative inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink"
+                      >
+                        <BellRing className="h-4 w-4" />
+                        {notificationUnreadCount > 0 && (
+                          <span className="absolute right-2 top-2 min-w-[18px] rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-semibold text-[#1a1b1f]">
+                            {notificationUnreadCount}
+                          </span>
+                        )}
+                      </button>
+
+                      {isNotificationMenuOpen && (
+                        <div className="public-panel absolute right-0 top-[calc(100%+0.75rem)] z-30 w-[23rem] max-w-[calc(100vw-2rem)] rounded-[28px] border border-white/80 p-3 shadow-card">
+                          <div className="rounded-[24px] border border-line bg-white/70 p-4">
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <p className="text-sm font-semibold text-ink">Notifications</p>
+                                <p className="mt-1 text-xs text-ink-muted">
+                                  {notificationUnreadCount > 0
+                                    ? `${notificationUnreadCount} unread alert${notificationUnreadCount === 1 ? '' : 's'}`
+                                    : 'All caught up'}
+                                </p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={openNotificationCenter}
+                                className="inline-flex items-center gap-1 rounded-full border border-sky-300 bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700 transition hover:bg-sky-100"
+                              >
+                                View all
+                                <ArrowUpRight className="h-3.5 w-3.5" />
+                              </button>
                             </div>
-                            <button
-                              type="button"
-                              onClick={openNotificationCenter}
-                              className="inline-flex items-center gap-1 rounded-full border border-sky-300 bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700 transition hover:bg-sky-100"
-                            >
-                              View all
-                              <ArrowUpRight className="h-3.5 w-3.5" />
-                            </button>
+
+                            <div className="mt-4 flex flex-wrap gap-2">
+                              <button
+                                type="button"
+                                onClick={loadNotifications}
+                                className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-3 py-2 text-xs font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
+                              >
+                                <RefreshCw
+                                  className={`h-3.5 w-3.5 ${
+                                    notificationsState === 'loading' ? 'animate-spin' : ''
+                                  }`}
+                                />
+                                Refresh
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => void handleMarkAllNotificationsRead()}
+                                disabled={notificationActionBusy || notificationUnreadCount === 0}
+                                className="inline-flex items-center gap-2 rounded-2xl border border-sky-300 bg-sky-50 px-3 py-2 text-xs font-semibold text-sky-700 transition hover:bg-sky-100 disabled:cursor-not-allowed disabled:opacity-60"
+                              >
+                                {notificationActionBusy ? (
+                                  <>
+                                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                    Clearing...
+                                  </>
+                                ) : (
+                                  <>
+                                    <CheckCircle2 className="h-3.5 w-3.5" />
+                                    Mark all read
+                                  </>
+                                )}
+                              </button>
+                            </div>
                           </div>
 
-                          <div className="mt-4 flex flex-wrap gap-2">
-                            <button
-                              type="button"
-                              onClick={loadNotifications}
-                              className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-3 py-2 text-xs font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
-                            >
-                              <RefreshCw
-                                className={`h-3.5 w-3.5 ${
-                                  notificationsState === 'loading' ? 'animate-spin' : ''
-                                }`}
-                              />
-                              Refresh
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => void handleMarkAllNotificationsRead()}
-                              disabled={notificationActionBusy || notificationUnreadCount === 0}
-                              className="inline-flex items-center gap-2 rounded-2xl border border-sky-300 bg-sky-50 px-3 py-2 text-xs font-semibold text-sky-700 transition hover:bg-sky-100 disabled:cursor-not-allowed disabled:opacity-60"
-                            >
-                              {notificationActionBusy ? (
-                                <>
-                                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                                  Clearing...
-                                </>
-                              ) : (
-                                <>
-                                  <CheckCircle2 className="h-3.5 w-3.5" />
-                                  Mark all read
-                                </>
-                              )}
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="mt-3 space-y-2">
-                          {notificationsState === 'loading' && (
-                            <div className="rounded-2xl border border-line bg-white px-4 py-6 text-sm text-ink-muted">
-                              Loading notifications...
-                            </div>
-                          )}
-
-                          {notificationsError && notificationsState !== 'loading' && (
-                            <div className="rounded-2xl border border-rose-300 bg-rose-50 px-4 py-4 text-sm text-rose-700">
-                              {notificationsError}
-                            </div>
-                          )}
-
-                          {notificationsState !== 'loading' &&
-                            !notificationsError &&
-                            recentNotifications.length === 0 && (
-                              <div className="rounded-2xl border border-dashed border-line bg-white px-4 py-6 text-sm text-ink-muted">
-                                No notifications found for this account.
+                          <div className="mt-3 space-y-2">
+                            {notificationsState === 'loading' && (
+                              <div className="rounded-2xl border border-line bg-white/80 px-4 py-6 text-sm text-ink-muted">
+                                Loading notifications...
                               </div>
                             )}
 
-                          {notificationsState !== 'loading' &&
-                            !notificationsError &&
-                            recentNotifications.map((notification) => (
-                              <button
-                                type="button"
-                                key={notification.id}
-                                onClick={() => handleNotificationClick(notification)}
-                                className="block w-full rounded-2xl border border-line bg-white px-4 py-3 text-left transition hover:border-sky-300 hover:bg-sky-50"
-                              >
-                                <div className="flex items-start justify-between gap-3">
-                                  <div className="min-w-0">
-                                    <div className="flex items-center gap-2">
-                                      <p className="truncate text-sm font-semibold text-white">
-                                        {notification.title}
+                            {notificationsError && notificationsState !== 'loading' && (
+                              <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-4 text-sm text-rose-700">
+                                {notificationsError}
+                              </div>
+                            )}
+
+                            {notificationsState !== 'loading' &&
+                              !notificationsError &&
+                              recentNotifications.length === 0 && (
+                                <div className="rounded-2xl border border-dashed border-line bg-white/80 px-4 py-6 text-sm text-ink-muted">
+                                  No notifications found for this account.
+                                </div>
+                              )}
+
+                            {notificationsState !== 'loading' &&
+                              !notificationsError &&
+                              recentNotifications.map((notification) => (
+                                <button
+                                  type="button"
+                                  key={notification.id}
+                                  onClick={() => handleNotificationClick(notification)}
+                                  className="block w-full rounded-2xl border border-line bg-white/85 px-4 py-3 text-left transition hover:border-sky-300 hover:bg-sky-50"
+                                >
+                                  <div className="flex items-start justify-between gap-3">
+                                    <div className="min-w-0">
+                                      <div className="flex items-center gap-2">
+                                        <p className="truncate text-sm font-semibold text-ink">
+                                          {notification.title}
+                                        </p>
+                                        {!notification.is_read && (
+                                          <span className="rounded-full bg-sky-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-700">
+                                            New
+                                          </span>
+                                        )}
+                                      </div>
+                                      <p className="mt-1 text-xs text-ink-muted">
+                                        {notification.message}
                                       </p>
-                                      {!notification.is_read && (
-                                        <span className="rounded-full bg-sky-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-100">
-                                          New
-                                        </span>
-                                      )}
                                     </div>
-                                    <p className="mt-1 text-xs text-white/60">
-                                      {notification.message}
+                                    <p className="shrink-0 text-[10px] uppercase tracking-[0.18em] text-slate-400">
+                                      {formatDate(notification.created_at)}
                                     </p>
                                   </div>
-                                  <p className="shrink-0 text-[10px] uppercase tracking-[0.18em] text-white/35">
-                                    {formatDate(notification.created_at)}
-                                  </p>
-                                </div>
-                              </button>
-                            ))}
+                                </button>
+                              ))}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
 
-                  <div ref={profileMenuRef} className="relative">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsProfileMenuOpen((prev) => !prev);
-                        setIsNotificationMenuOpen(false);
-                      }}
-                      className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] px-3 py-2.5 text-left transition hover:bg-white/[0.09]"
-                    >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400/90 to-cyan-300 text-sm font-bold text-[#05111f]">
-                        {(user?.full_name ?? 'L')
-                          .split(' ')
-                          .filter(Boolean)
-                          .slice(0, 2)
-                          .map((part) => part[0]?.toUpperCase() ?? '')
-                          .join('')}
-                      </div>
-                      <div className="hidden min-w-0 sm:block">
-                        <p className="truncate text-sm font-semibold text-white">
-                          {user?.full_name ?? 'Library Staff'}
-                        </p>
-                        <p className="truncate text-xs uppercase tracking-[0.2em] text-white/45">
-                          {roleLabel}
-                        </p>
-                      </div>
-                      <ChevronDown className="hidden h-4 w-4 text-white/50 sm:block" />
-                    </button>
-
-                    {isProfileMenuOpen && (
-                      <div className="absolute right-0 top-[calc(100%+0.75rem)] w-72 rounded-3xl border border-white/10 bg-[#081221]/95 p-3 shadow-2xl shadow-black/40 backdrop-blur-2xl">
-                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                          <p className="text-sm font-semibold text-white">
+                    <div ref={profileMenuRef} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsProfileMenuOpen((prev) => !prev);
+                          setIsNotificationMenuOpen(false);
+                        }}
+                        className="flex items-center gap-3 rounded-2xl border border-line bg-white px-3 py-2.5 text-left transition hover:border-sky-300 hover:bg-sky-50"
+                      >
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[linear-gradient(145deg,#7fbfe7,#f2c96b)] text-sm font-bold text-[#17314e]">
+                          {(user?.full_name ?? 'L')
+                            .split(' ')
+                            .filter(Boolean)
+                            .slice(0, 2)
+                            .map((part) => part[0]?.toUpperCase() ?? '')
+                            .join('')}
+                        </div>
+                        <div className="hidden min-w-0 sm:block">
+                          <p className="truncate text-sm font-semibold text-ink">
                             {user?.full_name ?? 'Library Staff'}
                           </p>
-                          <p className="mt-1 text-xs text-white/55">
-                            {user?.email ?? 'No email on file'}
-                          </p>
-                          <p className="mt-3 text-[11px] uppercase tracking-[0.28em] text-sky-200/70">
-                            {roleLabel} - {formatUserIdentifier(user)}
+                          <p className="truncate text-xs uppercase tracking-[0.2em] text-ink-muted">
+                            {roleLabel}
                           </p>
                         </div>
-                        <div className="mt-3 space-y-1">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              openNotificationCenter();
-                            }}
-                            className="flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-sm text-white/75 transition hover:bg-white/[0.06] hover:text-white"
-                          >
-                            Notification Center
-                            <ArrowUpRight className="h-4 w-4" />
-                          </button>
-                          <a
-                            href={adminLinks.dashboard}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="flex items-center justify-between rounded-2xl px-3 py-2.5 text-sm text-white/75 transition hover:bg-white/[0.06] hover:text-white"
-                          >
-                            Django Admin
-                            <ArrowUpRight className="h-4 w-4" />
-                          </a>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setIsProfileMenuOpen(false);
-                              logout();
-                            }}
-                            className="flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-sm text-rose-100 transition hover:bg-rose-400/10"
-                          >
-                            Sign out
-                            <X className="h-4 w-4" />
-                          </button>
+                        <ChevronDown className="hidden h-4 w-4 text-ink-muted sm:block" />
+                      </button>
+
+                      {isProfileMenuOpen && (
+                        <div className="public-panel absolute right-0 top-[calc(100%+0.75rem)] z-30 w-72 rounded-[28px] border border-white/80 p-3 shadow-card">
+                          <div className="rounded-[24px] border border-line bg-white/75 p-4">
+                            <p className="text-sm font-semibold text-ink">
+                              {user?.full_name ?? 'Library Staff'}
+                            </p>
+                            <p className="mt-1 text-xs text-ink-muted">
+                              {user?.email ?? 'No email on file'}
+                            </p>
+                            <p className="mt-3 text-[11px] uppercase tracking-[0.28em] text-sky-700/75">
+                              {roleLabel} - {formatUserIdentifier(user)}
+                            </p>
+                          </div>
+                          <div className="mt-3 space-y-1">
+                            <button
+                              type="button"
+                              onClick={openNotificationCenter}
+                              className="flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-sm text-ink-muted transition hover:bg-sky-50 hover:text-ink"
+                            >
+                              Notification Center
+                              <ArrowUpRight className="h-4 w-4" />
+                            </button>
+                            <a
+                              href={adminLinks.dashboard}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex items-center justify-between rounded-2xl px-3 py-2.5 text-sm text-ink-muted transition hover:bg-sky-50 hover:text-ink"
+                            >
+                              Django Admin
+                              <ArrowUpRight className="h-4 w-4" />
+                            </a>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsProfileMenuOpen(false);
+                                logout();
+                              }}
+                              className="flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-sm text-rose-700 transition hover:bg-rose-50"
+                            >
+                              Sign out
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </header>
 
-            <main className="min-h-[calc(100vh-89px)] flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-              <div className="flex min-h-[calc(100vh-137px)] flex-col space-y-6">
+            <main className="min-h-[calc(100vh-108px)] flex-1 px-4 pb-8 pt-4 sm:px-6 lg:px-8 lg:pb-10 lg:pt-6">
+              <div className="flex min-h-[calc(100vh-156px)] flex-col space-y-6">
                 {resolvedActiveSectionId === 'desk-dashboard' && (
                   <div className="space-y-6">
-                    <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                      <div className="flex flex-wrap items-start justify-between gap-4">
-                        <div>
-                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                            Operations Overview
-                          </p>
-                          <h2 className="mt-3 text-2xl font-semibold text-gray-900 md:text-3xl">
-                            Welcome back, {(user?.full_name ?? 'Librarian').split(' ')[0]}
-                          </h2>
-                          <p className="mt-2 max-w-2xl text-sm text-gray-600 md:text-base">
-                            Monitor circulation, clear pending work, and keep the library desk moving.
-                          </p>
+                    <section className="public-panel relative overflow-hidden rounded-[34px] border border-white/80 p-6 shadow-card md:p-8">
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(126,191,231,0.22),transparent_38%),radial-gradient(circle_at_bottom_right,rgba(217,175,88,0.16),transparent_34%)]" />
+                      <div className="relative">
+                        <div className="flex flex-wrap items-start justify-between gap-4">
+                          <div className="max-w-3xl">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-sky-700/75">
+                              Operations Overview
+                            </p>
+                            <h2 className="mt-3 text-3xl font-semibold text-ink md:text-4xl">
+                              Welcome back, {(user?.full_name ?? 'Librarian').split(' ')[0]}
+                            </h2>
+                            <p className="mt-3 max-w-2xl text-sm leading-7 text-ink-muted md:text-base">
+                              Keep circulation moving with a cleaner desk view for queue pressure,
+                              overdue exposure, and the actions that need attention first.
+                            </p>
+                          </div>
+                          <div className="public-panel-soft rounded-[26px] border border-white/80 px-4 py-3 shadow-sm">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/75">
+                              Desk Pulse
+                            </p>
+                            <p className="mt-2 text-sm font-semibold text-ink">
+                              {overdueRequests.length > 0
+                                ? `${overdueRequests.length} overdue case${overdueRequests.length === 1 ? '' : 's'} need review`
+                                : 'No overdue alerts right now'}
+                            </p>
+                          </div>
                         </div>
-                        <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
-                          {overdueRequests.length > 0
-                            ? `${overdueRequests.length} overdue cases need review`
-                            : 'No overdue alerts right now'}
-                        </div>
-                      </div>
 
-                      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                        <article className="rounded-lg border border-blue-100 bg-blue-50 p-5">
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
-                              <LayoutDashboard className="h-5 w-5" />
-                            </span>
-                            <span className="text-xs uppercase tracking-wider text-gray-500">
-                              Queue
-                            </span>
-                          </div>
-                          <p className="mt-5 text-3xl font-semibold text-gray-900">
-                            {dashboardQueueCount}
-                          </p>
-                          <p className="mt-2 text-sm text-gray-600">
-                            Pending borrow, renewal, and return decisions.
-                          </p>
-                        </article>
-
-                        <article className="rounded-lg border border-amber-100 bg-amber-50 p-5">
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
-                              <Archive className="h-5 w-5" />
-                            </span>
-                            <span className="text-xs uppercase tracking-wider text-gray-500">
-                              Borrowed
-                            </span>
-                          </div>
-                          <p className="mt-5 text-3xl font-semibold text-gray-900">
-                            {activeBorrowedRequests.length}
-                          </p>
-                          <p className="mt-2 text-sm text-gray-600">
-                            Books currently checked out by readers.
-                          </p>
-                        </article>
-
-                        <article className="rounded-lg border border-rose-100 bg-rose-50 p-5">
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-rose-100 text-rose-600">
-                              <Clock3 className="h-5 w-5" />
-                            </span>
-                            <span className="text-xs uppercase tracking-wider text-gray-500">
-                              Overdue
-                            </span>
-                          </div>
-                          <p className="mt-5 text-3xl font-semibold text-gray-900">
-                            {overdueRequests.length}
-                          </p>
-                          <p className="mt-2 text-sm text-gray-600">
-                            Estimated exposure {formatCurrency(totalOverdueFees)}.
-                          </p>
-                        </article>
-
-                        <article className="rounded-lg border border-indigo-100 bg-indigo-50 p-5">
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600">
-                              <ReceiptText className="h-5 w-5" />
-                            </span>
-                            <span className="text-xs uppercase tracking-wider text-gray-500">
-                              Finance
-                            </span>
-                          </div>
-                          <p className="mt-5 text-3xl font-semibold text-gray-900">
-                            {finePayments.length}
-                          </p>
-                          <p className="mt-2 text-sm text-gray-600">
-                            Pending fines totaling {formatCurrency(pendingFineTotal)}.
-                          </p>
-                        </article>
-                      </div>
-
-                      {isDashboardQuiet && (
-                        <div className="mt-6 rounded-lg border border-blue-200 bg-blue-50 p-5">
-                          <div className="flex flex-wrap items-start justify-between gap-4">
-                            <div className="max-w-2xl">
-                              <p className="text-xs font-semibold uppercase tracking-wider text-blue-600">
-                                Desk Setup
-                              </p>
-                              <h3 className="mt-2 text-xl font-semibold text-gray-900">
-                                Your {roleLabel.toLowerCase()} workspace is live
-                              </h3>
-                              <p className="mt-2 text-sm text-gray-600">
-                                The desk is connected and ready. Start by adding catalog records, reviewing pending
-                                accounts, or opening notifications so the first circulation activity has somewhere to go.
-                              </p>
+                        <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                          <article className="rounded-[28px] border border-sky-100 bg-[linear-gradient(145deg,rgba(229,244,255,0.96),rgba(244,249,255,0.96))] p-5 shadow-sm">
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-100 text-sky-700 ring-1 ring-sky-200">
+                                <LayoutDashboard className="h-5 w-5" />
+                              </span>
+                              <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/70">
+                                Queue
+                              </span>
                             </div>
-                            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-700">
-                              Ready
-                            </span>
-                          </div>
+                            <p className="mt-5 text-3xl font-semibold text-ink">{dashboardQueueCount}</p>
+                            <p className="mt-2 text-sm text-ink-muted">
+                              Pending borrow, renewal, and return decisions.
+                            </p>
+                          </article>
 
-                          <div className="mt-5 flex flex-wrap gap-3">
-                            {canManageBooks && (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setActiveSectionId('desk-books');
-                                  setIsAddBookOpen(true);
-                                }}
-                                className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"
-                              >
-                                <Plus className="h-4 w-4" />
-                                Add first book
-                              </button>
-                            )}
-                            {canApproveStudents && (
-                              <button
-                                type="button"
-                                onClick={() => setActiveSectionId('desk-accounts')}
-                                className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
-                              >
-                                <UserPlus className="h-4 w-4" />
-                                Review accounts
-                              </button>
-                            )}
-                            <button
-                              type="button"
-                              onClick={openNotificationCenter}
-                              className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
-                            >
-                              <BellRing className="h-4 w-4" />
-                              Open notifications
-                            </button>
-                          </div>
+                          <article className="rounded-[28px] border border-amber-100 bg-[linear-gradient(145deg,rgba(255,247,227,0.98),rgba(255,252,244,0.96))] p-5 shadow-sm">
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 ring-1 ring-amber-200">
+                                <Archive className="h-5 w-5" />
+                              </span>
+                              <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-amber-700/70">
+                                Borrowed
+                              </span>
+                            </div>
+                            <p className="mt-5 text-3xl font-semibold text-ink">
+                              {activeBorrowedRequests.length}
+                            </p>
+                            <p className="mt-2 text-sm text-ink-muted">
+                              Books currently checked out by readers.
+                            </p>
+                          </article>
+
+                          <article className="rounded-[28px] border border-rose-100 bg-[linear-gradient(145deg,rgba(255,239,242,0.98),rgba(255,249,250,0.96))] p-5 shadow-sm">
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-100 text-rose-700 ring-1 ring-rose-200">
+                                <Clock3 className="h-5 w-5" />
+                              </span>
+                              <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-rose-700/70">
+                                Overdue
+                              </span>
+                            </div>
+                            <p className="mt-5 text-3xl font-semibold text-ink">{overdueRequests.length}</p>
+                            <p className="mt-2 text-sm text-ink-muted">
+                              Estimated exposure {formatCurrency(totalOverdueFees)}.
+                            </p>
+                          </article>
+
+                          <article className="rounded-[28px] border border-indigo-100 bg-[linear-gradient(145deg,rgba(238,240,255,0.98),rgba(248,249,255,0.96))] p-5 shadow-sm">
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-700 ring-1 ring-indigo-200">
+                                <ReceiptText className="h-5 w-5" />
+                              </span>
+                              <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-indigo-700/70">
+                                Finance
+                              </span>
+                            </div>
+                            <p className="mt-5 text-3xl font-semibold text-ink">{finePayments.length}</p>
+                            <p className="mt-2 text-sm text-ink-muted">
+                              Pending fines totaling {formatCurrency(pendingFineTotal)}.
+                            </p>
+                          </article>
                         </div>
-                      )}
+
+                        {isDashboardQuiet && (
+                          <div className="public-panel-soft mt-6 rounded-[30px] border border-white/80 p-5 shadow-sm">
+                            <div className="flex flex-wrap items-start justify-between gap-4">
+                              <div className="max-w-2xl">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/75">
+                                  Desk Setup
+                                </p>
+                                <h3 className="mt-2 text-xl font-semibold text-ink">
+                                  Your {roleLabel.toLowerCase()} workspace is ready
+                                </h3>
+                                <p className="mt-2 text-sm leading-6 text-ink-muted">
+                                  Start with catalog records, pending accounts, or the notification
+                                  center so the first circulation activity lands in a desk that is
+                                  already organized.
+                                </p>
+                              </div>
+                              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">
+                                Ready
+                              </span>
+                            </div>
+
+                            <div className="mt-5 flex flex-wrap gap-3">
+                              {canManageBooks && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActiveSectionId('desk-books');
+                                    setIsAddBookOpen(true);
+                                  }}
+                                  className="inline-flex items-center gap-2 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm font-semibold text-sky-700 transition hover:bg-sky-100"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                  Add first book
+                                </button>
+                              )}
+                              {canApproveStudents && (
+                                <button
+                                  type="button"
+                                  onClick={() => setActiveSectionId('desk-accounts')}
+                                  className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
+                                >
+                                  <UserPlus className="h-4 w-4" />
+                                  Review accounts
+                                </button>
+                              )}
+                              <button
+                                type="button"
+                                onClick={openNotificationCenter}
+                                className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
+                              >
+                                <BellRing className="h-4 w-4" />
+                                Open notifications
+                              </button>
+                            </div>
+                          </div>
+                        )}
 
                       <div className="mt-6 grid gap-4 xl:grid-cols-12 xl:items-start">
-                        <div className="rounded-lg border border-gray-200 bg-white p-5 xl:col-span-7 2xl:col-span-8">
-                          <div className="flex items-center justify-between gap-3">
+                        <div className="public-panel-soft rounded-[30px] border border-white/80 p-5 shadow-sm xl:col-span-7 2xl:col-span-8">
+                          <div className="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/75">
                                 Desk Priorities
                               </p>
-                              <h3 className="mt-2 text-lg font-semibold text-gray-900">
+                              <h3 className="mt-2 text-xl font-semibold text-ink">
                                 What needs attention first
                               </h3>
                             </div>
@@ -2800,7 +2801,7 @@ export default function LibrarianDeskPage() {
                                 setActiveSectionId(reviewQueueTargetId);
                                 setIsProfileMenuOpen(false);
                               }}
-                              className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
+                              className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
                             >
                               Review queue
                               <ArrowUpRight className="h-4 w-4" />
@@ -2809,53 +2810,59 @@ export default function LibrarianDeskPage() {
 
                           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
                             {canApproveStudents && (
-                              <div className="flex items-start gap-3 rounded-lg border border-amber-100 bg-amber-50 p-4">
-                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
-                                  <UserPlus className="h-4 w-4" />
-                                </span>
-                                <div className="min-w-0 flex-1">
-                                  <p className="font-medium text-gray-900">Pending Accounts</p>
-                                  <p className="mt-1 text-sm text-gray-600">
-                                    {pendingStudents.length === 0
-                                      ? 'All student and teacher accounts are approved.'
-                                      : `${pendingStudents.length} account${pendingStudents.length === 1 ? '' : 's'} awaiting approval.`}
-                                  </p>
+                              <div className="rounded-[24px] border border-amber-100 bg-white/85 p-4 shadow-sm">
+                                <div className="flex items-start gap-3">
+                                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+                                    <UserPlus className="h-4 w-4" />
+                                  </span>
+                                  <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-semibold text-ink">Pending Accounts</p>
+                                    <p className="mt-1 text-sm leading-6 text-ink-muted">
+                                      {pendingStudents.length === 0
+                                        ? 'All student and teacher accounts are approved.'
+                                        : `${pendingStudents.length} account${pendingStudents.length === 1 ? '' : 's'} awaiting approval.`}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             )}
 
-                            <div className="flex items-start gap-3 rounded-lg border border-blue-100 bg-blue-50 p-4">
-                              <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
-                                <BookDown className="h-4 w-4" />
-                              </span>
-                              <div className="min-w-0 flex-1">
-                                <p className="font-medium text-gray-900">Borrow Queue</p>
-                                <p className="mt-1 text-sm text-gray-600">
-                                  {borrowRequests.length === 0
-                                    ? 'No pending borrow requests right now.'
-                                    : `${borrowRequests.length} pending borrow request${borrowRequests.length === 1 ? '' : 's'} ready for review.`}
-                                </p>
+                            <div className="rounded-[24px] border border-sky-100 bg-white/85 p-4 shadow-sm">
+                              <div className="flex items-start gap-3">
+                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-100 text-sky-700">
+                                  <BookDown className="h-4 w-4" />
+                                </span>
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-sm font-semibold text-ink">Borrow Queue</p>
+                                  <p className="mt-1 text-sm leading-6 text-ink-muted">
+                                    {borrowRequests.length === 0
+                                      ? 'No pending borrow requests right now.'
+                                      : `${borrowRequests.length} pending borrow request${borrowRequests.length === 1 ? '' : 's'} ready for review.`}
+                                  </p>
+                                </div>
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3 rounded-lg border border-rose-100 bg-rose-50 p-4">
-                              <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-rose-100 text-rose-600">
-                                <Clock3 className="h-4 w-4" />
-                              </span>
-                              <div className="min-w-0 flex-1">
-                                <p className="font-medium text-gray-900">Overdue Exposure</p>
-                                <p className="mt-1 text-sm text-gray-600">
-                                  {overdueRequests.length === 0
-                                    ? 'No overdue loans need intervention.'
-                                    : `${overdueRequests.length} overdue item${overdueRequests.length === 1 ? '' : 's'} with ${formatCurrency(totalOverdueFees)} in estimated penalties.`}
-                                </p>
+                            <div className="rounded-[24px] border border-rose-100 bg-white/85 p-4 shadow-sm">
+                              <div className="flex items-start gap-3">
+                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-100 text-rose-700">
+                                  <Clock3 className="h-4 w-4" />
+                                </span>
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-sm font-semibold text-ink">Overdue Exposure</p>
+                                  <p className="mt-1 text-sm leading-6 text-ink-muted">
+                                    {overdueRequests.length === 0
+                                      ? 'No overdue loans need intervention.'
+                                      : `${overdueRequests.length} overdue item${overdueRequests.length === 1 ? '' : 's'} with ${formatCurrency(totalOverdueFees)} in estimated penalties.`}
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
 
-                        <div className="rounded-lg border border-gray-200 bg-white p-5 xl:col-span-5 2xl:col-span-4">
-                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        <div className="public-panel-soft rounded-[30px] border border-white/80 p-5 shadow-sm xl:col-span-5 2xl:col-span-4">
+                          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/75">
                             Quick Actions
                           </p>
                           <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
@@ -2863,7 +2870,7 @@ export default function LibrarianDeskPage() {
                               <button
                                 type="button"
                                 onClick={() => setActiveSectionId('desk-accounts')}
-                                className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
+                                className="flex items-center justify-between rounded-[22px] border border-line bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
                               >
                                 Pending Accounts
                                 <ArrowUpRight className="h-4 w-4" />
@@ -2872,7 +2879,7 @@ export default function LibrarianDeskPage() {
                             <button
                               type="button"
                               onClick={() => setActiveSectionId('desk-borrows')}
-                              className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
+                              className="flex items-center justify-between rounded-[22px] border border-line bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
                             >
                               Borrow Requests
                               <ArrowUpRight className="h-4 w-4" />
@@ -2880,7 +2887,7 @@ export default function LibrarianDeskPage() {
                             <button
                               type="button"
                               onClick={() => setActiveSectionId('desk-returns')}
-                              className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
+                              className="flex items-center justify-between rounded-[22px] border border-line bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
                             >
                               Return Requests
                               <ArrowUpRight className="h-4 w-4" />
@@ -2888,7 +2895,7 @@ export default function LibrarianDeskPage() {
                             <button
                               type="button"
                               onClick={() => setActiveSectionId('desk-renewals')}
-                              className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
+                              className="flex items-center justify-between rounded-[22px] border border-line bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
                             >
                               Renewal Requests
                               <ArrowUpRight className="h-4 w-4" />
@@ -2900,7 +2907,7 @@ export default function LibrarianDeskPage() {
                                   setActiveSectionId('desk-books');
                                   setIsAddBookOpen(true);
                                 }}
-                                className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
+                                className="flex items-center justify-between rounded-[22px] border border-line bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
                               >
                                 Books and Catalog
                                 <ArrowUpRight className="h-4 w-4" />
@@ -2910,52 +2917,49 @@ export default function LibrarianDeskPage() {
                               <button
                                 type="button"
                                 onClick={() => setActiveSectionId('desk-fines')}
-                                className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
+                                className="flex items-center justify-between rounded-[22px] border border-line bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:border-sky-300 hover:bg-sky-50"
                               >
                                 Fine Payments
                                 <ArrowUpRight className="h-4 w-4" />
                               </button>
                             )}
                           </div>
+                          </div>
                         </div>
                       </div>
                     </section>
 
                     <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
-                      <section className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+                      <section className="public-panel rounded-[30px] border border-white/80 p-5 shadow-card">
                         <div className="flex items-center gap-3">
-                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-100 text-sky-700">
                             <BarChart3 className="h-5 w-5" />
                           </span>
                           <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/75">
                               Collection Activity
                             </p>
-                            <h3 className="mt-1 text-lg font-semibold text-gray-900">
-                              High-traffic books
-                            </h3>
+                            <h3 className="mt-1 text-xl font-semibold text-ink">High-traffic books</h3>
                           </div>
                         </div>
                         <div className="mt-5 space-y-3">
                           {mostBorrowedBooks.length === 0 ? (
-                            <p className="rounded-lg border border-dashed border-gray-200 px-4 py-5 text-sm text-gray-500">
+                            <p className="rounded-[22px] border border-dashed border-line bg-white/80 px-4 py-5 text-sm text-ink-muted">
                               Borrow analytics will appear here after approved circulation activity.
                             </p>
                           ) : (
                             mostBorrowedBooks.slice(0, 4).map((book, index) => (
                               <div
                                 key={book.id}
-                                className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3"
+                                className="flex items-center justify-between gap-3 rounded-[22px] border border-line bg-white/80 px-4 py-3"
                               >
                                 <div className="min-w-0">
-                                  <p className="truncate text-sm font-semibold text-gray-900">
+                                  <p className="truncate text-sm font-semibold text-ink">
                                     {index + 1}. {book.title}
                                   </p>
-                                  <p className="truncate text-xs text-gray-500">
-                                    {book.author}
-                                  </p>
+                                  <p className="truncate text-xs text-ink-muted">{book.author}</p>
                                 </div>
-                                <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                                <span className="rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-700">
                                   {book.count} loans
                                 </span>
                               </div>
@@ -2964,41 +2968,41 @@ export default function LibrarianDeskPage() {
                         </div>
                       </section>
 
-                      <section className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+                      <section className="public-panel rounded-[30px] border border-white/80 p-5 shadow-card">
                         <div className="flex items-center gap-3">
-                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
                             <Users className="h-5 w-5" />
                           </span>
                           <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/75">
                               Reader Activity
                             </p>
-                            <h3 className="mt-1 text-lg font-semibold text-gray-900">
+                            <h3 className="mt-1 text-xl font-semibold text-ink">
                               Most active borrowers
                             </h3>
                           </div>
                         </div>
                         <div className="mt-5 space-y-3">
                           {mostActiveStudents.length === 0 ? (
-                            <p className="rounded-lg border border-dashed border-gray-200 px-4 py-5 text-sm text-gray-500">
+                            <p className="rounded-[22px] border border-dashed border-line bg-white/80 px-4 py-5 text-sm text-ink-muted">
                               Borrow activity will populate after circulation starts.
                             </p>
                           ) : (
                             mostActiveStudents.slice(0, 4).map((student) => (
                               <div
                                 key={student.id}
-                                className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3"
+                                className="rounded-[22px] border border-line bg-white/80 px-4 py-3"
                               >
                                 <div className="flex items-center justify-between gap-3">
                                   <div className="min-w-0">
-                                    <p className="truncate text-sm font-semibold text-gray-900">
+                                    <p className="truncate text-sm font-semibold text-ink">
                                       {student.fullName}
                                     </p>
-                                    <p className="truncate text-xs text-gray-500">
+                                    <p className="truncate text-xs text-ink-muted">
                                       {student.studentId}
                                     </p>
                                   </div>
-                                  <span className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700">
+                                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
                                     {student.requests} loans
                                   </span>
                                 </div>
@@ -6728,7 +6732,6 @@ export default function LibrarianDeskPage() {
               </div>
             )}
                 </div>
-              </div>
             </main>
           </div>
         </div>
