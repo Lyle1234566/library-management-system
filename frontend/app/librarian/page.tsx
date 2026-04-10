@@ -2251,42 +2251,42 @@ export default function LibrarianDeskPage() {
 
   return (
     <ProtectedRoute requiredRoles={['LIBRARIAN', 'WORKING', 'STAFF', 'ADMIN']}>
-      <div className="public-shell min-h-screen text-ink">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100">
         <div className="relative flex min-h-screen">
           <button
             type="button"
             aria-label="Close navigation"
             onClick={() => setIsDeskMenuOpen(false)}
-            className={`fixed inset-0 z-30 bg-[#0d1b2a]/40 backdrop-blur-sm transition-opacity md:hidden ${
+            className={`fixed inset-0 z-30 bg-slate-900/20 backdrop-blur-sm transition-opacity md:hidden ${
               isDeskMenuOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
             }`}
           />
 
           <aside
-            className={`fixed inset-y-0 left-0 z-40 w-[320px] overflow-y-auto border-r border-white/60 bg-white/70 shadow-[0_24px_70px_rgba(16,47,84,0.16)] backdrop-blur-2xl transition-transform duration-300 md:translate-x-0 ${
+            className={`fixed inset-y-0 left-0 z-40 w-[280px] overflow-y-auto border-r border-slate-200 bg-white shadow-xl transition-transform duration-300 md:translate-x-0 ${
               isDeskMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
           >
-            <div className="flex min-h-full flex-col gap-6 p-4 sm:p-5">
-              <div className="public-panel rounded-[30px] border border-white/80 p-5 shadow-card">
+            <div className="flex min-h-full flex-col gap-4 p-4">
+              <div className="rounded-lg border border-slate-200 bg-gradient-to-br from-blue-600 to-blue-700 p-4 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
                   <Link
                     href="/"
                     onClick={() => setIsDeskMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-2xl transition hover:opacity-90"
+                    className="flex items-center gap-3 transition hover:opacity-90"
                   >
-                    <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
+                    <div className="relative h-10 w-10 overflow-hidden rounded-lg border-2 border-white/20 bg-white shadow-sm">
                       <Image
                         src="/logo%20lib.png"
-                        alt="SCSIT Digital Library logo"
+                        alt="Salazar Library System logo"
                         fill
-                        sizes="48px"
+                        sizes="40px"
                         className="object-cover"
                       />
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-ink">SCSIT Digital Library</p>
-                      <p className="truncate text-[11px] uppercase tracking-[0.28em] text-ink-muted">
+                      <p className="truncate text-sm font-bold text-white">Salazar Library</p>
+                      <p className="truncate text-[10px] font-semibold uppercase tracking-wider text-blue-100">
                         {deskLabel}
                       </p>
                     </div>
@@ -2294,46 +2294,31 @@ export default function LibrarianDeskPage() {
                   <button
                     type="button"
                     onClick={() => setIsDeskMenuOpen(false)}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink md:hidden"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white transition hover:bg-white/20 md:hidden"
                   >
                     <X className="h-4 w-4" />
                   </button>
                 </div>
 
-                <Link
-                  href="/"
-                  onClick={() => setIsDeskMenuOpen(false)}
-                  className="mt-5 inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-4 py-3 text-sm font-medium text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Back to Landing Page
-                </Link>
-
-                <div className="mt-5 rounded-[28px] border border-sky-100/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.92),rgba(225,239,255,0.95))] p-4 shadow-sm">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/75">
-                    Desk Summary
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-ink-muted">{deskTagline}</p>
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <div className="rounded-2xl border border-white/80 bg-white/80 p-3 shadow-sm">
-                      <p className="text-xs uppercase tracking-[0.2em] text-ink-muted">Open Queue</p>
-                      <p className="mt-2 text-2xl font-semibold text-ink">{dashboardQueueCount}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/80 bg-white/80 p-3 shadow-sm">
-                      <p className="text-xs uppercase tracking-[0.2em] text-ink-muted">Unread Alerts</p>
-                      <p className="mt-2 text-2xl font-semibold text-ink">{notificationUnreadCount}</p>
-                    </div>
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <div className="rounded-lg bg-white/10 backdrop-blur-sm p-2.5">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-blue-100">Queue</p>
+                    <p className="mt-1 text-xl font-bold text-white">{dashboardQueueCount}</p>
+                  </div>
+                  <div className="rounded-lg bg-white/10 backdrop-blur-sm p-2.5">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-blue-100">Alerts</p>
+                    <p className="mt-1 text-xl font-bold text-white">{notificationUnreadCount}</p>
                   </div>
                 </div>
               </div>
 
-              <nav className="flex-1 space-y-5 overflow-y-auto pr-1">
+              <nav className="flex-1 space-y-1 overflow-y-auto">
                 {dashboardNavGroups.map((group) => (
-                  <div key={group.label}>
-                    <p className="px-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-700/70">
+                  <div key={group.label} className="mb-4">
+                    <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       {group.label}
                     </p>
-                    <div className="mt-2 space-y-1.5">
+                    <div className="mt-2 space-y-0.5">
                       {group.items.map((item) => {
                         const Icon = item.icon;
                         const isActive = resolvedActiveSectionId === item.id;
@@ -2346,30 +2331,20 @@ export default function LibrarianDeskPage() {
                               setActiveSectionId(item.id);
                               setIsDeskMenuOpen(false);
                             }}
-                            className={`flex w-full items-center gap-3 rounded-[24px] border px-3 py-3 text-left transition ${
+                            className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition ${
                               isActive
-                                ? 'border-sky-200 bg-white text-ink shadow-[0_14px_30px_rgba(0,102,179,0.14)]'
-                                : 'border-transparent bg-white/55 text-ink-muted hover:border-line hover:bg-white hover:text-ink'
+                                ? 'bg-blue-50 text-blue-700 shadow-sm'
+                                : 'text-slate-700 hover:bg-slate-50'
                             }`}
                           >
-                            <span
-                              className={`inline-flex h-11 w-11 items-center justify-center rounded-2xl ${
-                                isActive
-                                  ? 'bg-sky-100 text-sky-700 ring-1 ring-sky-200'
-                                  : 'bg-slate-100/80 text-ink-muted'
-                              }`}
-                            >
-                              <Icon className="h-4 w-4" />
-                            </span>
-                            <span className="min-w-0 flex-1">
-                              <span className="block truncate text-sm font-medium">{item.label}</span>
-                            </span>
-                            {item.badge !== undefined && (
+                            <Icon className="h-4 w-4" />
+                            <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                            {item.badge !== undefined && item.badge !== '0' && (
                               <span
-                                className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                                className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
                                   isActive
-                                    ? 'bg-sky-100 text-sky-700'
-                                    : 'bg-slate-100/80 text-ink-muted'
+                                    ? 'bg-blue-100 text-blue-700'
+                                    : 'bg-slate-100 text-slate-600'
                                 }`}
                               >
                                 {item.badge}
@@ -2385,41 +2360,29 @@ export default function LibrarianDeskPage() {
             </div>
           </aside>
 
-          <div className="flex min-h-screen flex-1 flex-col md:pl-[320px]">
-            <header className="sticky top-0 z-20 border-b border-white/60 bg-[rgba(248,251,255,0.82)] backdrop-blur-xl">
-              <div className="px-4 py-4 sm:px-6 lg:px-8">
-                <div className="public-panel flex flex-wrap items-center justify-between gap-4 rounded-[30px] border border-white/80 px-4 py-4 shadow-card sm:px-5">
-                  <div className="flex min-w-0 items-start gap-3">
+          <div className="flex min-h-screen flex-1 flex-col md:pl-[280px]">
+            <header className="sticky top-0 z-20 border-b border-slate-200 bg-white shadow-sm">
+              <div className="px-4 py-3 sm:px-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex min-w-0 items-center gap-3">
                     <button
                       type="button"
                       onClick={() => setIsDeskMenuOpen(true)}
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink md:hidden"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 md:hidden"
                     >
                       <PanelLeft className="h-4 w-4" />
                     </button>
                     <div className="min-w-0">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-sky-700/80">
-                        {deskLabel}
-                      </p>
-                      <h1 className="mt-1 truncate text-2xl font-semibold tracking-tight text-ink">
+                      <h1 className="truncate text-xl font-bold text-slate-900">
                         {activeSectionTitle}
                       </h1>
-                      <p className="mt-1 max-w-2xl text-sm text-ink-muted">
+                      <p className="mt-0.5 text-xs text-slate-500">
                         {activeSectionDescription}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <Link
-                      href="/"
-                      aria-label="Back to landing page"
-                      className="inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-3.5 py-2.5 text-sm font-medium text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink"
-                    >
-                      <ArrowLeft className="h-4 w-4" />
-                      <span className="hidden sm:inline">Back</span>
-                    </Link>
-
+                  <div className="flex items-center gap-2">
                     <div ref={notificationMenuRef} className="relative">
                       <button
                         type="button"
@@ -2429,11 +2392,11 @@ export default function LibrarianDeskPage() {
                           setIsNotificationMenuOpen((prev) => !prev);
                           setIsProfileMenuOpen(false);
                         }}
-                        className="relative inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white text-ink-muted transition hover:border-sky-300 hover:bg-sky-50 hover:text-ink"
+                        className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50"
                       >
                         <BellRing className="h-4 w-4" />
                         {notificationUnreadCount > 0 && (
-                          <span className="absolute right-2 top-2 min-w-[18px] rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-semibold text-[#1a1b1f]">
+                          <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white">
                             {notificationUnreadCount}
                           </span>
                         )}
@@ -2559,9 +2522,9 @@ export default function LibrarianDeskPage() {
                           setIsProfileMenuOpen((prev) => !prev);
                           setIsNotificationMenuOpen(false);
                         }}
-                        className="flex items-center gap-3 rounded-2xl border border-line bg-white px-3 py-2.5 text-left transition hover:border-sky-300 hover:bg-sky-50"
+                        className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-left transition hover:bg-slate-50"
                       >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[linear-gradient(145deg,#7fbfe7,#f2c96b)] text-sm font-bold text-[#17314e]">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-xs font-bold text-white">
                           {(user?.full_name ?? 'L')
                             .split(' ')
                             .filter(Boolean)
@@ -2570,14 +2533,14 @@ export default function LibrarianDeskPage() {
                             .join('')}
                         </div>
                         <div className="hidden min-w-0 sm:block">
-                          <p className="truncate text-sm font-semibold text-ink">
+                          <p className="truncate text-xs font-semibold text-slate-900">
                             {user?.full_name ?? 'Library Staff'}
                           </p>
-                          <p className="truncate text-xs uppercase tracking-[0.2em] text-ink-muted">
+                          <p className="truncate text-[10px] text-slate-500">
                             {roleLabel}
                           </p>
                         </div>
-                        <ChevronDown className="hidden h-4 w-4 text-ink-muted sm:block" />
+                        <ChevronDown className="hidden h-3 w-3 text-slate-400 sm:block" />
                       </button>
 
                       {isProfileMenuOpen && (
@@ -2631,101 +2594,85 @@ export default function LibrarianDeskPage() {
               </div>
             </header>
 
-            <main className="min-h-[calc(100vh-108px)] flex-1 px-4 pb-8 pt-4 sm:px-6 lg:px-8 lg:pb-10 lg:pt-6">
-              <div className="flex min-h-[calc(100vh-156px)] flex-col space-y-6">
+            <main className="flex-1 bg-slate-50 px-4 pb-8 pt-4 sm:px-6">
+              <div className="mx-auto max-w-7xl space-y-6">
                 {resolvedActiveSectionId === 'desk-dashboard' && (
                   <div className="space-y-6">
-                    <section className="public-panel relative overflow-hidden rounded-[34px] border border-white/80 p-6 shadow-card md:p-8">
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(126,191,231,0.22),transparent_38%),radial-gradient(circle_at_bottom_right,rgba(217,175,88,0.16),transparent_34%)]" />
-                      <div className="relative">
-                        <div className="flex flex-wrap items-start justify-between gap-4">
-                          <div className="max-w-3xl">
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-sky-700/75">
-                              Operations Overview
-                            </p>
-                            <h2 className="mt-3 text-3xl font-semibold text-ink md:text-4xl">
-                              Welcome back, {(user?.full_name ?? 'Librarian').split(' ')[0]}
-                            </h2>
-                            <p className="mt-3 max-w-2xl text-sm leading-7 text-ink-muted md:text-base">
-                              Keep circulation moving with a cleaner desk view for queue pressure,
-                              overdue exposure, and the actions that need attention first.
-                            </p>
-                          </div>
-                          <div className="public-panel-soft rounded-[26px] border border-white/80 px-4 py-3 shadow-sm">
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/75">
-                              Desk Pulse
-                            </p>
-                            <p className="mt-2 text-sm font-semibold text-ink">
-                              {overdueRequests.length > 0
-                                ? `${overdueRequests.length} overdue case${overdueRequests.length === 1 ? '' : 's'} need review`
-                                : 'No overdue alerts right now'}
-                            </p>
-                          </div>
+                    <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                      <div className="flex flex-wrap items-start justify-between gap-4">
+                        <div>
+                          <h2 className="text-2xl font-bold text-slate-900">
+                            Welcome back, {(user?.full_name ?? 'Librarian').split(' ')[0]}
+                          </h2>
+                          <p className="mt-2 text-sm text-slate-600">
+                            {deskTagline}
+                          </p>
                         </div>
+                      </div>
 
-                        <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                          <article className="rounded-[28px] border border-sky-100 bg-[linear-gradient(145deg,rgba(229,244,255,0.96),rgba(244,249,255,0.96))] p-5 shadow-sm">
-                            <div className="flex items-center justify-between gap-3">
-                              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-100 text-sky-700 ring-1 ring-sky-200">
-                                <LayoutDashboard className="h-5 w-5" />
-                              </span>
-                              <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-700/70">
-                                Queue
-                              </span>
+                      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        <article className="rounded-lg border border-blue-100 bg-gradient-to-br from-blue-50 to-blue-100/50 p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500 text-white">
+                              <LayoutDashboard className="h-5 w-5" />
                             </div>
-                            <p className="mt-5 text-3xl font-semibold text-ink">{dashboardQueueCount}</p>
-                            <p className="mt-2 text-sm text-ink-muted">
-                              Pending borrow, renewal, and return decisions.
-                            </p>
-                          </article>
+                            <span className="text-xs font-semibold uppercase tracking-wider text-blue-700">
+                              Queue
+                            </span>
+                          </div>
+                          <p className="mt-4 text-3xl font-bold text-slate-900">{dashboardQueueCount}</p>
+                          <p className="mt-2 text-xs text-slate-600">
+                            Pending requests
+                          </p>
+                        </article>
 
-                          <article className="rounded-[28px] border border-amber-100 bg-[linear-gradient(145deg,rgba(255,247,227,0.98),rgba(255,252,244,0.96))] p-5 shadow-sm">
-                            <div className="flex items-center justify-between gap-3">
-                              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 ring-1 ring-amber-200">
-                                <Archive className="h-5 w-5" />
-                              </span>
-                              <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-amber-700/70">
-                                Borrowed
-                              </span>
+                        <article className="rounded-lg border border-amber-100 bg-gradient-to-br from-amber-50 to-amber-100/50 p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500 text-white">
+                              <Archive className="h-5 w-5" />
                             </div>
-                            <p className="mt-5 text-3xl font-semibold text-ink">
-                              {activeBorrowedRequests.length}
-                            </p>
-                            <p className="mt-2 text-sm text-ink-muted">
-                              Books currently checked out by readers.
-                            </p>
-                          </article>
+                            <span className="text-xs font-semibold uppercase tracking-wider text-amber-700">
+                              Borrowed
+                            </span>
+                          </div>
+                          <p className="mt-4 text-3xl font-bold text-slate-900">
+                            {activeBorrowedRequests.length}
+                          </p>
+                          <p className="mt-2 text-xs text-slate-600">
+                            Books checked out
+                          </p>
+                        </article>
 
-                          <article className="rounded-[28px] border border-rose-100 bg-[linear-gradient(145deg,rgba(255,239,242,0.98),rgba(255,249,250,0.96))] p-5 shadow-sm">
-                            <div className="flex items-center justify-between gap-3">
-                              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-100 text-rose-700 ring-1 ring-rose-200">
-                                <Clock3 className="h-5 w-5" />
-                              </span>
-                              <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-rose-700/70">
-                                Overdue
-                              </span>
+                        <article className="rounded-lg border border-rose-100 bg-gradient-to-br from-rose-50 to-rose-100/50 p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-500 text-white">
+                              <Clock3 className="h-5 w-5" />
                             </div>
-                            <p className="mt-5 text-3xl font-semibold text-ink">{overdueRequests.length}</p>
-                            <p className="mt-2 text-sm text-ink-muted">
-                              Estimated exposure {formatCurrency(totalOverdueFees)}.
-                            </p>
-                          </article>
+                            <span className="text-xs font-semibold uppercase tracking-wider text-rose-700">
+                              Overdue
+                            </span>
+                          </div>
+                          <p className="mt-4 text-3xl font-bold text-slate-900">{overdueRequests.length}</p>
+                          <p className="mt-2 text-xs text-slate-600">
+                            {formatCurrency(totalOverdueFees)} in fines
+                          </p>
+                        </article>
 
-                          <article className="rounded-[28px] border border-indigo-100 bg-[linear-gradient(145deg,rgba(238,240,255,0.98),rgba(248,249,255,0.96))] p-5 shadow-sm">
-                            <div className="flex items-center justify-between gap-3">
-                              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-700 ring-1 ring-indigo-200">
-                                <ReceiptText className="h-5 w-5" />
-                              </span>
-                              <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-indigo-700/70">
-                                Finance
-                              </span>
+                        <article className="rounded-lg border border-indigo-100 bg-gradient-to-br from-indigo-50 to-indigo-100/50 p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-500 text-white">
+                              <ReceiptText className="h-5 w-5" />
                             </div>
-                            <p className="mt-5 text-3xl font-semibold text-ink">{finePayments.length}</p>
-                            <p className="mt-2 text-sm text-ink-muted">
-                              Pending fines totaling {formatCurrency(pendingFineTotal)}.
-                            </p>
-                          </article>
-                        </div>
+                            <span className="text-xs font-semibold uppercase tracking-wider text-indigo-700">
+                              Fines
+                            </span>
+                          </div>
+                          <p className="mt-4 text-3xl font-bold text-slate-900">{finePayments.length}</p>
+                          <p className="mt-2 text-xs text-slate-600">
+                            {formatCurrency(pendingFineTotal)} pending
+                          </p>
+                        </article>
+                      </div>
 
                         {isDashboardQuiet && (
                           <div className="public-panel-soft mt-6 rounded-[30px] border border-white/80 p-5 shadow-sm">
