@@ -29,9 +29,9 @@ export default function CallToAction() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-200">
             <Link
               href="/register"
-              className="rounded-full bg-[color:var(--accent)] px-8 py-4 font-semibold text-[#17314e] shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] hover:text-[#17314e]"
+              className="rounded-full bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-8 py-4 font-semibold text-[#1a1b1f] shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f]"
             >
-              Create Free Account
+              Get Started
             </Link>
             <Link
               href="/about"

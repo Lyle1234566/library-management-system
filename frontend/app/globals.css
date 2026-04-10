@@ -7,22 +7,29 @@
   --font-bodoni-moda: "Bodoni MT", Didot, "Times New Roman", serif;
   --font-climate-crisis: "Climate Crisis", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   --background: #f8fbff;
-  --foreground: #17314e;
-  --page-bg: #eef6ff;
-  --page-bg-strong: #dcecff;
+  --foreground: #00447C;
+  --page-bg: #f0f7ff;
+  --page-bg-strong: #dcebff;
   --surface: #ffffff;
-  --surface-muted: #edf5ff;
-  --ink: #17314e;
-  --ink-muted: #60728a;
-  --accent: #d9af58;
-  --accent-strong: #b88831;
-  --accent-cool: #7ebfe7;
-  --accent-cool-strong: #2b5c87;
-  --line: #cfdeef;
-  --shadow-soft: 0 18px 40px rgba(31, 53, 84, 0.08);
-  --shadow-card: 0 16px 36px rgba(31, 53, 84, 0.12);
-  --nav-bg: rgba(246, 250, 255, 0.9);
-  --nav-shadow: 0 12px 34px rgba(31, 53, 84, 0.08);
+  --surface-muted: #eef5ff;
+  --ink: #00447C;
+  --ink-muted: #0066B3;
+  --accent: #00447C;
+  --accent-strong: #003366;
+  --accent-cool: #0066B3;
+  --accent-cool-strong: #00447C;
+  --line: #d5e4f5;
+  --shadow-soft: 0 18px 40px rgba(0, 68, 124, 0.1);
+  --shadow-card: 0 16px 36px rgba(0, 68, 124, 0.14);
+  --nav-bg: rgba(0, 68, 124, 0.95);
+  --nav-shadow: 0 18px 40px rgba(0, 68, 124, 0.22);
+  --header-bg-start: #00447C;
+  --header-bg-end: #003366;
+  --header-border: rgba(201, 225, 255, 0.22);
+  --header-text: #d8eeff;
+  --header-text-muted: rgba(216, 238, 255, 0.76);
+  --header-button-bg: rgba(255, 255, 255, 0.1);
+  --header-active-bg: rgba(255, 255, 255, 0.16);
 }
 
 html,
@@ -45,60 +52,113 @@ body {
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #f8fbff;
-    --foreground: #17314e;
-    --page-bg: #eef6ff;
-    --page-bg-strong: #dcecff;
+    --foreground: #00447C;
+    --page-bg: #f0f7ff;
+    --page-bg-strong: #dcebff;
     --surface: #ffffff;
-    --surface-muted: #edf5ff;
-    --ink: #17314e;
-    --ink-muted: #60728a;
-    --accent: #d9af58;
-    --accent-strong: #b88831;
-    --accent-cool: #7ebfe7;
-    --accent-cool-strong: #2b5c87;
-    --line: #cfdeef;
-    --shadow-soft: 0 18px 40px rgba(31, 53, 84, 0.08);
-    --shadow-card: 0 16px 36px rgba(31, 53, 84, 0.12);
-    --nav-bg: rgba(246, 250, 255, 0.9);
-    --nav-shadow: 0 12px 34px rgba(31, 53, 84, 0.08);
+    --surface-muted: #eef5ff;
+    --ink: #00447C;
+    --ink-muted: #0066B3;
+    --accent: #00447C;
+    --accent-strong: #003366;
+    --accent-cool: #0066B3;
+    --accent-cool-strong: #00447C;
+    --line: #d5e4f5;
+    --shadow-soft: 0 18px 40px rgba(0, 68, 124, 0.1);
+    --shadow-card: 0 16px 36px rgba(0, 68, 124, 0.14);
+    --nav-bg: rgba(0, 68, 124, 0.95);
+    --nav-shadow: 0 18px 40px rgba(0, 68, 124, 0.22);
+    --header-bg-start: #00447C;
+    --header-bg-end: #003366;
+    --header-border: rgba(201, 225, 255, 0.22);
+    --header-text: #d8eeff;
+    --header-text-muted: rgba(216, 238, 255, 0.76);
+    --header-button-bg: rgba(255, 255, 255, 0.1);
+    --header-active-bg: rgba(255, 255, 255, 0.16);
   }
 }
 
-.theme-login {
-  --background: #0b1324;
-  --foreground: #e8f1ff;
-  --page-bg: #0b1324;
-  --page-bg-strong: #0f1b2f;
-  --surface: #111b30;
-  --surface-muted: #0f1a2d;
-  --ink: #e8f1ff;
-  --ink-muted: #b3c2d9;
-  --accent: #fbbf24;
-  --accent-strong: #f59e0b;
-  --accent-cool: #7dd3fc;
-  --accent-cool-strong: #38bdf8;
-  --line: #22324a;
-  --shadow-soft: 0 18px 40px rgba(5, 8, 15, 0.45);
-  --shadow-card: 0 14px 30px rgba(5, 8, 15, 0.6);
-  --nav-bg: rgba(11, 19, 36, 0.88);
-  --nav-shadow: 0 16px 34px rgba(2, 6, 23, 0.6);
+.theme-login,
+.royal-app {
+  --background: #0d1847;
+  --foreground: #9fd5ff;
+  --page-bg: #0d1847;
+  --page-bg-strong: #12215d;
+  --surface: #152661;
+  --surface-muted: #122158;
+  --ink: #00447C;
+  --ink-muted: #0066B3;
+  --accent: #d4af37;
+  --accent-strong: #c19b2e;
+  --accent-cool: #8fcbef;
+  --accent-cool-strong: #6aaef0;
+  --line: #2d4488;
+  --shadow-soft: 0 18px 40px rgba(8, 12, 30, 0.44);
+  --shadow-card: 0 14px 30px rgba(8, 12, 30, 0.52);
+  --nav-bg: rgba(43, 67, 170, 0.94);
+  --nav-shadow: 0 18px 40px rgba(20, 30, 91, 0.42);
+  --header-bg-start: #00447C;
+  --header-bg-end: #003366;
+  --header-border: rgba(201, 225, 255, 0.18);
+  --header-text: #d8eeff;
+  --header-text-muted: rgba(216, 238, 255, 0.76);
+  --header-button-bg: rgba(255, 255, 255, 0.08);
+  --header-active-bg: rgba(255, 255, 255, 0.14);
+  background-color: var(--page-bg);
+  color: var(--foreground);
   color-scheme: dark;
 }
 
 .auth-input::placeholder {
-  color: rgba(232, 241, 255, 0.55);
+  color: rgba(159, 213, 255, 0.58);
 }
 
 .auth-input:-webkit-autofill,
 .auth-input:-webkit-autofill:hover,
 .auth-input:-webkit-autofill:focus,
 .auth-input:-webkit-autofill:active {
-  -webkit-text-fill-color: #e8f1ff;
-  caret-color: #e8f1ff;
-  border: 1px solid rgba(125, 211, 252, 0.24);
-  -webkit-box-shadow: 0 0 0 1000px rgba(17, 24, 39, 0.96) inset;
-  box-shadow: 0 0 0 1000px rgba(17, 24, 39, 0.96) inset;
+  -webkit-text-fill-color: #9fd5ff;
+  caret-color: #9fd5ff;
+  border: 1px solid rgba(143, 203, 239, 0.24);
+  -webkit-box-shadow: 0 0 0 1000px rgba(21, 38, 97, 0.96) inset;
+  box-shadow: 0 0 0 1000px rgba(21, 38, 97, 0.96) inset;
   transition: background-color 9999s ease-in-out 0s;
+}
+
+.theme-login.text-white,
+.royal-app.text-white {
+  color: var(--foreground);
+}
+
+.theme-login .text-white,
+.royal-app .text-white {
+  color: var(--ink) !important;
+}
+
+.theme-login [class*='text-white/'],
+.royal-app [class*='text-white/'] {
+  color: var(--ink-muted) !important;
+}
+
+.theme-login [class*='placeholder:text-white/']::placeholder,
+.royal-app [class*='placeholder:text-white/']::placeholder {
+  color: rgba(159, 213, 255, 0.52) !important;
+}
+
+.theme-login input.text-white,
+.theme-login textarea.text-white,
+.theme-login select.text-white,
+.royal-app input.text-white,
+.royal-app textarea.text-white,
+.royal-app select.text-white {
+  color: var(--ink) !important;
+}
+
+.theme-login [class*='hover:text-white']:hover,
+.theme-login [class*='hover:text-sky-200']:hover,
+.royal-app [class*='hover:text-white']:hover,
+.royal-app [class*='hover:text-sky-200']:hover {
+  color: var(--ink) !important;
 }
 
 body {
@@ -174,11 +234,11 @@ h3 {
   }
 
   .bg-hero {
-    background-color: #0284c7;
+    background-color: #00447C;
   }
 
   .bg-hero-soft {
-    background-color: #0ea5e9;
+    background-color: #0066B3;
   }
 
   .public-shell {

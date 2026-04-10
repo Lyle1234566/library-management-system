@@ -154,25 +154,16 @@ export default function Features({ showBookFeatures = false }: FeaturesProps) {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mx-auto mb-10 max-w-3xl text-center">
-          <div className="public-panel relative overflow-hidden rounded-[1.7rem] px-5 py-6 backdrop-blur-xl sm:px-7 sm:py-7">
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute inset-x-16 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
-              <div className="absolute -left-12 top-6 h-24 w-24 rounded-full bg-sky-300/18 blur-3xl" />
-              <div className="absolute -right-10 bottom-2 h-20 w-20 rounded-full bg-amber-300/16 blur-3xl" />
-            </div>
-            <div className="relative">
-              <span className="public-pill inline-flex items-center rounded-full px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] animate-fade-up sm:px-4 sm:py-2 sm:text-[11px]">
-                Core Features
-              </span>
-              <h2 className="mt-4 text-3xl font-bold text-ink md:text-4xl text-balance animate-fade-up">
-                Why Choose SCSIT Digital Library?
-              </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-ink-muted animate-fade-up delay-100 sm:text-lg">
-                Experience the future of library management with our feature-rich platform
-                designed for modern readers.
-              </p>
-            </div>
-          </div>
+          <span className="public-pill inline-flex items-center rounded-full px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] animate-fade-up sm:px-4 sm:py-2 sm:text-[11px]">
+            Core Features
+          </span>
+          <h2 className="mt-4 text-3xl font-bold text-ink md:text-4xl text-balance animate-fade-up">
+            Why Choose Salazar Library System?
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-ink-muted animate-fade-up delay-100 sm:text-lg">
+            Experience the future of library management with our feature-rich platform
+            designed for modern readers.
+          </p>
         </div>
 
         {/* Features Grid */}

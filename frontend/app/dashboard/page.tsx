@@ -220,7 +220,7 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-[#0b1324] text-white">
+      <div className="royal-app min-h-screen bg-[#0b1324] text-white">
         <Navbar variant="dark" />
         <main className="relative overflow-hidden pt-16">
           <div className="pointer-events-none absolute inset-0">

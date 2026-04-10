@@ -196,7 +196,7 @@ function ForgotPasswordPageContent() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-hero px-4 py-10 sm:px-6 lg:px-8">
+    <div className="royal-app flex min-h-screen items-center justify-center bg-hero px-4 py-10 sm:px-6 lg:px-8">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -517,7 +517,7 @@ export default function ForgotPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-hero text-white">
+        <div className="royal-app flex min-h-screen items-center justify-center bg-hero text-white">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-white border-r-transparent" />
         </div>
       }
@@ -526,6 +526,5 @@ export default function ForgotPasswordPage() {
     </Suspense>
   );
 }
-
 
 

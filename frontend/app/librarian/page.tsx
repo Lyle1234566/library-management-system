@@ -2251,7 +2251,7 @@ export default function LibrarianDeskPage() {
 
   return (
     <ProtectedRoute requiredRoles={['LIBRARIAN', 'WORKING', 'STAFF', 'ADMIN']}>
-      <div className="min-h-screen bg-[#060b16] text-white">
+      <div className="royal-app min-h-screen bg-[#060b16] text-white">
         <div className="pointer-events-none fixed inset-0 overflow-hidden">
           <div className="absolute -left-28 top-0 h-80 w-80 rounded-full bg-sky-500/12 blur-3xl" />
           <div className="absolute right-0 top-1/4 h-[26rem] w-[26rem] rounded-full bg-cyan-500/10 blur-3xl" />

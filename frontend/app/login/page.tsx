@@ -128,73 +128,55 @@ function LoginPageContent() {
   };
 
   return (
-    <div className="theme-login relative min-h-screen overflow-hidden bg-[#0b1324] text-white">
+    <div className="public-shell relative min-h-screen overflow-hidden text-ink">
       <div className="absolute inset-0">
-        <div className="absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-sky-500/20 blur-3xl animate-float" />
-        <div className="absolute bottom-[-4rem] right-[-2rem] h-[28rem] w-[28rem] rounded-full bg-amber-500/20 blur-3xl animate-float-slow" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(56,189,248,0.24),transparent_34%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_86%_72%,rgba(251,191,36,0.16),transparent_36%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(7,18,35,0.96),rgba(11,19,36,0.88)_45%,rgba(15,28,49,0.98))]" />
-        <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.7)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.7)_1px,transparent_1px)] [background-size:88px_88px]" />
+        <div className="absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-sky-300/26 blur-3xl animate-float" />
+        <div className="absolute bottom-[-4rem] right-[-2rem] h-[28rem] w-[28rem] rounded-full bg-amber-300/18 blur-3xl animate-float-slow" />
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-[1380px] items-center px-4 py-4 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
         <div className="grid w-full gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,580px)] xl:gap-8">
           <div className="space-y-6 lg:pr-4 animate-fade-up">
-            <Link href="/" className="inline-flex items-center gap-3 text-white">
+            <Link href="/" className="inline-flex items-center gap-3 text-ink">
               <Image
                 src="/logo-lib-transparent.png"
-                alt="SCSIT Digital Library logo"
+                alt="Salazar Library System logo"
                 width={72}
                 height={72}
                 priority
                 className="h-14 w-14 object-contain drop-shadow-[0_12px_20px_rgba(2,8,23,0.45)] sm:h-16 sm:w-16"
               />
-              <span className="text-xl font-semibold tracking-tight">SCSIT Digital Library</span>
+              <span className="text-xl font-semibold tracking-tight">Salazar Library System</span>
             </Link>
 
-            <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] p-6 shadow-[0_32px_80px_rgba(2,6,23,0.45)] backdrop-blur-xl sm:p-8 xl:p-10">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.18),transparent_28%)]" />
-              <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02)_35%,transparent_65%)]" />
+            <div className="public-panel relative overflow-hidden rounded-[34px] p-6 backdrop-blur-xl sm:p-8 xl:p-10">
               <div className="relative space-y-6">
                 <div className="flex flex-wrap items-center gap-3">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/70">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-sky-200/60 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-ink">
                     Member Access Portal
                   </span>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-2 text-xs font-medium text-emerald-100">
-                    <span className="h-2 w-2 rounded-full bg-emerald-300" />
+                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-100 px-3 py-2 text-xs font-medium text-emerald-700">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
                     Secure session
                   </span>
                 </div>
 
                 <div className="space-y-4">
-                  <h1 className="max-w-3xl text-4xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-6xl lg:text-[4.25rem] xl:text-[5.1rem]">
+                  <h1 className="max-w-3xl text-4xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-6xl lg:text-[4.25rem] xl:text-[5.1rem]">
                     Borrow Smarter.
-                    <span className="block text-amber-200">Read with less Friction.</span>
+                    <span className="block" style={{ color: '#d4af37' }}>Read with less Friction.</span>
                   </h1>
-                  <p className="max-w-2xl text-base text-white/70 sm:text-lg">
+                  <p className="max-w-2xl text-base text-ink-muted sm:text-lg">
                     Sign in once with your approved library account. The platform detects your role, protects your
                     access flow, and sends you directly to the right workspace.
                   </p>
                 </div>
-
-                <div className="grid gap-3 sm:grid-cols-3">
-                  {LOGIN_HIGHLIGHTS.map((item) => (
-                    <div
-                      key={item.label}
-                      className="rounded-[24px] border border-white/10 bg-[#0d1729]/80 px-4 py-4 shadow-lg shadow-black/30"
-                    >
-                      <div className="text-2xl font-semibold text-white">{item.value}</div>
-                      <div className="mt-1 text-sm text-white/60">{item.label}</div>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
 
-            <div className="text-sm text-white/70">
+            <div className="text-sm text-ink-muted">
               New here?{' '}
-              <Link href={registerHref} className="font-semibold text-amber-300 hover:text-amber-200">
+              <Link href={registerHref} className="font-semibold text-[#d4af37] hover:text-[#c19b2e]">
                 Create an account
               </Link>
             </div>
@@ -202,51 +184,51 @@ function LoginPageContent() {
 
           <div className="animate-fade-up delay-200">
             <div className="relative">
-              <div className="absolute inset-x-10 top-4 h-28 rounded-full bg-sky-400/20 blur-3xl" />
-              <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-[1px] shadow-[0_38px_90px_rgba(2,6,23,0.58)]">
-                <div className="rounded-[33px] bg-[#0d1628]/96 p-5 backdrop-blur-2xl sm:p-7 lg:p-8">
+              <div className="absolute inset-x-10 top-4 h-28 rounded-full bg-sky-300/26 blur-3xl" />
+              <div className="public-panel relative overflow-hidden rounded-[34px] p-[1px] shadow-card">
+                <div className="rounded-[33px] bg-white/95 p-5 backdrop-blur-2xl sm:p-7 lg:p-8">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="space-y-2">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-sky-200/60 bg-white/80 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-ink-muted">
                         Secure sign in
                       </span>
                       <div>
-                        <h2 className="text-3xl font-semibold text-white">Welcome back</h2>
-                        <p className="mt-2 max-w-md text-sm leading-6 text-white/60">
+                        <h2 className="text-3xl font-semibold text-ink">Welcome back</h2>
+                        <p className="mt-2 max-w-md text-sm leading-6 text-ink-muted">
                           Use your student, faculty, or staff ID to continue. After sign in, the system routes you to
                           the correct library workspace.
                         </p>
                       </div>
                     </div>
 
-                    <div className="rounded-[24px] border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
+                    <div className="rounded-[24px] border border-emerald-300/40 bg-emerald-100 px-4 py-3 text-sm text-emerald-700">
                       OTP ready for first-time access
                     </div>
                   </div>
 
                   <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
                     {emailVerified && awaitingApproval ? (
-                      <div className="rounded-[22px] border border-emerald-400/30 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-100">
+                      <div className="rounded-[22px] border border-emerald-300/40 bg-emerald-100 px-4 py-3 text-sm text-emerald-700">
                         Email verified. Wait for staff approval before signing in.
                       </div>
                     ) : registered ? (
-                      <div className="rounded-[22px] border border-emerald-400/30 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-100">
+                      <div className="rounded-[22px] border border-emerald-300/40 bg-emerald-100 px-4 py-3 text-sm text-emerald-700">
                         Registration started. Check your email for the OTP step to finish creating the account.
                       </div>
                     ) : null}
 
                     {errors.general && (
-                      <div className="rounded-[22px] border border-red-500/40 bg-red-500/15 px-4 py-3 text-sm text-red-100">
+                      <div className="rounded-[22px] border border-red-300/40 bg-red-100 px-4 py-3 text-sm text-red-700">
                         {errors.general}
                       </div>
                     )}
 
                     <div className="space-y-2">
-                      <label htmlFor="studentId" className="text-sm font-medium text-white/80">
+                      <label htmlFor="studentId" className="text-sm font-medium text-ink">
                         {idLabel}
                       </label>
                       <div className="relative">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-white/65">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-ink-muted">
                           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
                           </svg>
@@ -258,21 +240,21 @@ function LoginPageContent() {
                           autoComplete="username"
                           value={formData.studentId}
                           onChange={handleChange}
-                          className={`auth-input w-full rounded-[22px] border bg-white/[0.045] py-3.5 pl-12 pr-4 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-all focus:border-sky-300/50 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-400/50 ${
-                            errors.studentId ? 'border-red-400/60' : 'border-white/[0.12] hover:border-sky-400/35'
+                          className={`w-full rounded-[22px] border bg-white py-3.5 pl-12 pr-4 text-ink shadow-inner transition-all focus:border-sky-400/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-400/30 ${
+                            errors.studentId ? 'border-red-400/60' : 'border-line hover:border-sky-400/35'
                           }`}
                           placeholder={idPlaceholder}
                         />
                       </div>
-                      {errors.studentId && <p className="text-xs text-red-300">{errors.studentId}</p>}
+                      {errors.studentId && <p className="text-xs text-red-600">{errors.studentId}</p>}
                     </div>
 
                     <div className="space-y-2">
-                      <label htmlFor="password" className="text-sm font-medium text-white/80">
+                      <label htmlFor="password" className="text-sm font-medium text-ink">
                         Password
                       </label>
                       <div className="relative">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-white/65">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-ink-muted">
                           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M12 11c.828 0 1.5-.672 1.5-1.5S12.828 8 12 8s-1.5.672-1.5 1.5S11.172 11 12 11zm6 0a6 6 0 10-12 0v4a2 2 0 002 2h8a2 2 0 002-2v-4z" />
                           </svg>
@@ -284,40 +266,40 @@ function LoginPageContent() {
                           autoComplete="current-password"
                           value={formData.password}
                           onChange={handleChange}
-                          className={`auth-input w-full rounded-[22px] border bg-white/[0.045] py-3.5 pl-12 pr-12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-all focus:border-sky-300/50 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-400/50 ${
-                            errors.password ? 'border-red-400/60' : 'border-white/[0.12] hover:border-sky-400/35'
+                          className={`w-full rounded-[22px] border bg-white py-3.5 pl-12 pr-12 text-ink shadow-inner transition-all focus:border-sky-400/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-400/30 ${
+                            errors.password ? 'border-red-400/60' : 'border-line hover:border-sky-400/35'
                           }`}
                           placeholder="Enter your password"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword((prev) => !prev)}
-                          className="absolute inset-y-0 right-0 flex items-center pr-4 text-xs font-semibold uppercase tracking-wider text-white/60 hover:text-white"
+                          className="absolute inset-y-0 right-0 flex items-center pr-4 text-xs font-semibold uppercase tracking-wider text-ink-muted hover:text-ink"
                           aria-label={showPassword ? 'Hide password' : 'Show password'}
                         >
                           {showPassword ? 'Hide' : 'Show'}
                         </button>
                       </div>
-                      {errors.password && <p className="text-xs text-red-300">{errors.password}</p>}
+                      {errors.password && <p className="text-xs text-red-600">{errors.password}</p>}
                     </div>
 
-                    <div className="flex items-center justify-between text-sm text-white/70">
+                    <div className="flex items-center justify-between text-sm text-ink-muted">
                       <label className="inline-flex items-center gap-2">
                         <input
                           type="checkbox"
                           name="rememberMe"
                           checked={formData.rememberMe}
                           onChange={handleChange}
-                          className="h-4 w-4 rounded border-white/30 bg-white/10 text-amber-400 focus:ring-2 focus:ring-amber-300/60"
+                          className="h-4 w-4 rounded border-line bg-white text-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/60"
                         />
                         Remember me
                       </label>
-                      <Link href="/forgot-password" className="text-amber-300 hover:text-amber-200">
+                      <Link href="/forgot-password" className="text-[#d4af37] hover:text-[#c19b2e]">
                         Forgot password?
                       </Link>
                     </div>
 
-                    <div className="rounded-[22px] border border-white/10 bg-white/[0.03] px-4 py-3 text-xs leading-5 text-white/55">
+                    <div className="rounded-[22px] border border-sky-200/60 bg-white/80 px-4 py-3 text-xs leading-5 text-ink-muted">
                       Role detection is automatic. Students and teachers go to My Books, while working desk and
                       librarian accounts go to their desk pages.
                     </div>
@@ -325,7 +307,7 @@ function LoginPageContent() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="group relative w-full overflow-hidden rounded-[22px] bg-amber-500 py-3.5 text-base font-semibold text-[#1a1b1f] shadow-lg shadow-amber-900/30 transition-all hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-300/60 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="group relative w-full overflow-hidden rounded-[22px] bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] py-3.5 text-base font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] focus:outline-none focus:ring-2 focus:ring-amber-300/60 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       <span className="relative z-10 flex items-center justify-center gap-3">
                         {isSubmitting ? (
@@ -343,16 +325,16 @@ function LoginPageContent() {
                       <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                     </button>
 
-                    <div className="relative text-center text-xs text-white/50">
+                    <div className="relative text-center text-xs text-ink-muted">
                       <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/10"></div>
+                        <div className="w-full border-t border-line"></div>
                       </div>
-                      <span className="relative bg-[#0d1628] px-3">or</span>
+                      <span className="relative bg-white px-3">or</span>
                     </div>
 
                     <Link
                       href={registerHref}
-                      className="block w-full rounded-[22px] border border-white/15 py-3.5 text-center text-sm font-semibold text-white/80 transition-colors hover:border-white/30 hover:bg-white/5"
+                      className="block w-full rounded-[22px] border border-line bg-white/65 py-3.5 text-center text-sm font-semibold text-ink transition-colors hover:border-sky-400/50 hover:bg-white"
                     >
                       Create an account
                     </Link>
@@ -361,8 +343,8 @@ function LoginPageContent() {
               </div>
             </div>
 
-            <div className="mt-6 text-center text-sm text-white/60">
-              <Link href="/" className="inline-flex items-center gap-2 hover:text-white">
+            <div className="mt-6 text-center text-sm text-ink-muted">
+              <Link href="/" className="inline-flex items-center gap-2 hover:text-ink">
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -380,8 +362,8 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="theme-login flex min-h-screen items-center justify-center bg-[#0b1324] text-white">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-amber-500 border-r-transparent" />
+        <div className="public-shell flex min-h-screen items-center justify-center text-ink">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#d4af37] border-r-transparent" />
         </div>
       }
     >

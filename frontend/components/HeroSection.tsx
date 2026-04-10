@@ -62,7 +62,7 @@ export default function HeroSection() {
                   lineHeight: 0.88,
                 }}
               >
-                SCSIT Digital
+                Salazar Library
               </span>
               <span
                 className="block text-[clamp(3.4rem,9.4vw,5.2rem)] lg:text-[clamp(5.4rem,6.3vw,6.7rem)] xl:text-[clamp(6.2rem,6.9vw,7.4rem)]"
@@ -73,7 +73,7 @@ export default function HeroSection() {
                   lineHeight: 0.9,
                 }}
               >
-                Library
+                System
               </span>
               <span
                 className="mt-2 block whitespace-nowrap text-[clamp(1.45rem,3.3vw,2.35rem)] font-medium italic text-[color:var(--accent-cool-strong)] lg:text-[clamp(1.85rem,2.55vw,2.85rem)]"
@@ -104,7 +104,7 @@ export default function HeroSection() {
                 />
                 <button
                   type="submit"
-                  className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-[linear-gradient(135deg,var(--accent)_0%,#e7c37c_100%)] px-5 py-3.5 text-base font-semibold text-[#17314e] shadow-lg shadow-amber-300/20 transition-all duration-300 active:scale-95 hover:bg-[linear-gradient(135deg,var(--accent-strong)_0%,var(--accent)_100%)] hover:text-[#17314e] sm:absolute sm:right-3 sm:top-1/2 sm:px-7 sm:py-2.5 sm:-translate-y-1/2"
+                  className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-5 py-3.5 text-base font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all duration-300 active:scale-95 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f] sm:absolute sm:right-3 sm:top-1/2 sm:px-7 sm:py-2.5 sm:-translate-y-1/2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -117,7 +117,7 @@ export default function HeroSection() {
             <div className="flex flex-col gap-4 animate-fade-up delay-300 sm:flex-row sm:gap-5">
               <Link
                 href="/books"
-                className="inline-flex items-center justify-center gap-3 rounded-xl bg-[linear-gradient(135deg,var(--accent)_0%,#e7c37c_100%)] px-7 py-4 font-semibold text-[#17314e] shadow-lg shadow-amber-300/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,var(--accent-strong)_0%,var(--accent)_100%)] hover:text-[#17314e] active:scale-[0.98] lg:rounded-2xl lg:px-9"
+                className="inline-flex items-center justify-center gap-3 rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-7 py-4 font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f] active:scale-[0.98] lg:rounded-2xl lg:px-9"
               >
                 Browse Collection
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,26 +128,11 @@ export default function HeroSection() {
               {!isLoading && !isAuthenticated ? (
                 <Link
                   href="/register"
-                  className="inline-flex items-center justify-center rounded-xl border border-line bg-white/65 px-7 py-4 font-medium text-ink backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white lg:rounded-2xl lg:px-9"
+                  className="inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-7 py-4 font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f] lg:rounded-2xl lg:px-9"
                 >
                   Create Free Account
                 </Link>
               ) : null}
-            </div>
-
-            <div className="flex flex-wrap gap-x-8 gap-y-4 text-sm text-ink-muted animate-fade-up delay-300">
-              <div className="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink">
-                <div className="h-2.5 w-2.5 rounded-full bg-sky-400" />
-                Real-time Availability
-              </div>
-              <div className="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink">
-                <div className="h-2.5 w-2.5 rounded-full bg-[color:var(--accent)]" />
-                Borrow receipts - always accessible
-              </div>
-              <div className="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink">
-                <div className="h-2.5 w-2.5 rounded-full bg-sky-300" />
-                Smart due-date Reminders
-              </div>
             </div>
           </div>
 

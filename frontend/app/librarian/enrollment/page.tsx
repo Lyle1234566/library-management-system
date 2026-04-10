@@ -140,7 +140,7 @@ export default function LibrarianEnrollmentPage() {
 
   return (
     <ProtectedRoute requiredRoles={['LIBRARIAN', 'ADMIN']}>
-      <div className="min-h-screen overflow-hidden bg-[#060b16] text-white">
+      <div className="royal-app min-h-screen overflow-hidden bg-[#060b16] text-white">
         <div className="pointer-events-none fixed inset-0 overflow-hidden">
           <div className="absolute -left-20 top-0 h-80 w-80 rounded-full bg-sky-500/12 blur-3xl" />
           <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-400/10 blur-3xl" />

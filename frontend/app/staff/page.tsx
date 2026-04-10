@@ -568,7 +568,7 @@ export default function StaffDeskPage() {
 
   return (
     <ProtectedRoute requiredRoles={['WORKING', 'STAFF', 'ADMIN']}>
-      <div className="min-h-screen bg-[#07101d] text-white">
+      <div className="royal-app min-h-screen bg-[#07101d] text-white">
         <Navbar variant="dark" />
         <main className="relative overflow-hidden pt-16">
           <div className="pointer-events-none absolute inset-0 overflow-hidden">

@@ -53,30 +53,18 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
       ? 'group flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium tracking-[0.01em] transition-all duration-300'
       : 'group relative inline-flex items-center rounded-full px-4.5 py-2.5 text-[0.92rem] font-medium tracking-[0.01em] transition-all duration-300';
 
-    if (isDark) {
-      return `${baseClasses} ${
-        isActive
-          ? 'bg-white/[0.08] text-sky-100 shadow-[inset_0_0_0_1px_rgba(125,211,252,0.18)]'
-          : 'text-white/68 hover:bg-white/[0.045] hover:text-sky-200'
-      }`;
-    }
-
     return `${baseClasses} ${
       isActive
-        ? 'bg-[color:var(--surface-muted)] text-[color:var(--accent-cool-strong)] shadow-[inset_0_0_0_1px_rgba(14,165,233,0.12)]'
-        : 'text-ink-muted hover:bg-white/80 hover:text-[color:var(--accent-cool-strong)]'
+        ? 'bg-[color:var(--header-active-bg)] text-[color:var(--header-text)] ring-1 ring-inset ring-white/15'
+        : 'text-[color:var(--header-text-muted)] hover:bg-[color:var(--header-button-bg)] hover:text-[color:var(--header-text)]'
     }`;
   };
 
   const getNavIndicatorClasses = (href: string) => {
     const isActive = isNavItemActive(href);
-    return isDark
-      ? isActive
-        ? 'opacity-100 scale-100 bg-gradient-to-r from-transparent via-sky-300 to-transparent shadow-[0_0_20px_rgba(56,189,248,0.55)]'
-        : 'opacity-0 scale-75 bg-gradient-to-r from-transparent via-sky-300/80 to-transparent group-hover:opacity-100 group-hover:scale-100'
-      : isActive
-        ? 'opacity-100 scale-100 bg-gradient-to-r from-transparent via-sky-500 to-transparent'
-        : 'opacity-0 scale-75 bg-gradient-to-r from-transparent via-sky-500/70 to-transparent group-hover:opacity-100 group-hover:scale-100';
+    return isActive
+      ? 'opacity-100 scale-100 bg-gradient-to-r from-transparent via-sky-200 to-transparent shadow-[0_0_20px_rgba(143,203,239,0.42)]'
+      : 'opacity-0 scale-75 bg-gradient-to-r from-transparent via-sky-200/80 to-transparent group-hover:opacity-100 group-hover:scale-100';
   };
 
   // Close profile dropdown when clicking outside
@@ -158,47 +146,30 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
 
   const avatarUrl = user?.avatar ? resolveMediaUrl(user.avatar) : null;
   const defaultAvatarUrl = '/student-avatar.svg';
-  const dropdownPanelClasses = isDark
-    ? 'bg-white border border-slate-200 shadow-[0_24px_60px_rgba(15,23,42,0.22)]'
-    : 'bg-paper border border-line shadow-card';
-  const dropdownBorderClasses = isDark ? 'border-slate-200' : 'border-line';
-  const dropdownPrimaryTextClasses = isDark ? 'text-slate-900' : 'text-ink';
-  const dropdownSecondaryTextClasses = isDark ? 'text-slate-500' : 'text-ink-muted';
-  const dropdownBadgeClasses = isDark
-    ? 'bg-sky-100 text-slate-800'
-    : 'bg-[color:var(--surface-muted)] text-ink';
-  const dropdownItemClasses = isDark
-    ? 'flex items-center px-4 py-2 text-sm text-slate-800 hover:bg-slate-50 transition-colors'
-    : 'flex items-center px-4 py-2 text-sm text-ink hover:bg-[color:var(--surface-muted)] transition-colors';
-  const dropdownSignOutClasses = isDark
-    ? 'flex items-center w-full px-4 py-2 text-sm text-rose-500 hover:bg-slate-50 transition-colors'
-    : 'flex items-center w-full px-4 py-2 text-sm text-rose-600 hover:bg-[color:var(--surface-muted)] transition-colors';
+  const dropdownPanelClasses =
+    'border border-white/12 bg-[linear-gradient(180deg,rgba(44,68,170,0.98)_0%,rgba(33,53,140,0.98)_100%)] shadow-[0_24px_60px_rgba(21,33,94,0.34)]';
+  const dropdownBorderClasses = 'border-white/12';
+  const dropdownPrimaryTextClasses = 'text-[color:var(--header-text)]';
+  const dropdownSecondaryTextClasses = 'text-[color:var(--header-text-muted)]';
+  const dropdownBadgeClasses = 'bg-white/12 text-[color:var(--header-text)]';
+  const dropdownItemClasses =
+    'flex items-center px-4 py-2 text-sm text-[color:var(--header-text)] transition-colors hover:bg-white/10';
+  const dropdownSignOutClasses =
+    'flex items-center w-full px-4 py-2 text-sm text-rose-100 transition-colors hover:bg-white/10';
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b shadow-[var(--nav-shadow)] ${
-        isDark
-          ? 'border-white/10 bg-[linear-gradient(180deg,rgba(4,12,31,0.96)_0%,rgba(10,18,38,0.94)_48%,rgba(13,24,48,0.92)_100%)] shadow-[0_20px_60px_rgba(2,8,23,0.34)]'
-          : 'bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(245,249,255,0.93)_100%)] border-line'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 border-b border-[color:var(--header-border)] bg-[linear-gradient(180deg,var(--header-bg-start)_0%,var(--header-bg-end)_100%)] shadow-[var(--nav-shadow)] backdrop-blur-xl"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
-          className={`absolute inset-x-0 bottom-0 h-px ${
-            isDark
-              ? 'bg-gradient-to-r from-transparent via-sky-300/30 to-transparent'
-              : 'bg-gradient-to-r from-transparent via-sky-500/20 to-transparent'
-          }`}
+          className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-sky-100/45 to-transparent"
         />
         <div
-          className={`absolute left-[12%] top-[-8rem] h-56 w-56 rounded-full blur-3xl ${
-            isDark ? 'bg-sky-500/12' : 'bg-sky-500/8'
-          }`}
+          className={`absolute left-[12%] top-[-8rem] h-56 w-56 rounded-full blur-3xl ${isDark ? 'bg-sky-300/20' : 'bg-sky-300/18'}`}
         />
         <div
-          className={`absolute right-[10%] top-[-9rem] h-64 w-64 rounded-full blur-3xl ${
-            isDark ? 'bg-cyan-400/8' : 'bg-cyan-400/6'
-          }`}
+          className={`absolute right-[10%] top-[-9rem] h-64 w-64 rounded-full blur-3xl ${isDark ? 'bg-blue-200/16' : 'bg-blue-200/14'}`}
         />
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -206,9 +177,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
           {/* Logo */}
           <Link href="/" className="group flex min-w-0 items-center gap-2.5 sm:gap-3">
             <div
-              className={`relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border shadow-soft sm:h-14 sm:w-14 ${
-                isDark ? 'border-white/15 bg-white/[0.04]' : 'border-white/70 bg-white/80'
-              }`}
+              className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-white/15 bg-white/10 shadow-soft sm:h-14 sm:w-14"
             >
               <Image
                 src="/logo%20lib.png"
@@ -219,23 +188,17 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
               />
             </div>
             <div className="min-w-0 leading-tight">
-              <span className={`block truncate text-[0.98rem] font-semibold tracking-tight sm:text-[1.08rem] ${isDark ? 'text-white' : 'text-ink'}`}>
-                SCSIT Digital Library
+              <span className="block truncate text-[0.98rem] font-semibold tracking-tight text-[color:var(--header-text)] sm:text-[1.08rem]">
+                Salazar Library System
               </span>
-              <span className={`hidden sm:block text-[0.62rem] font-medium uppercase tracking-[0.34em] ${isDark ? 'text-white/42' : 'text-ink-muted/75'}`}>
+              <span className="hidden text-[0.62rem] font-medium uppercase tracking-[0.34em] text-[color:var(--header-text-muted)] sm:block">
                 Library Management System
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div
-            className={`hidden md:flex items-center gap-1 rounded-full px-2.5 py-1.5 ${
-              isDark
-                ? 'bg-white/[0.028] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]'
-                : 'bg-white/88 shadow-[0_12px_30px_rgba(15,23,42,0.06)]'
-            }`}
-          >
+          <div className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/[0.08] px-2.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] md:flex">
             {navItems
               .filter((item) => !item.requireAuth || isAuthenticated)
               .map((item) => (
@@ -255,24 +218,20 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
           {/* Auth Section */}
           <div className="hidden md:flex items-center space-x-4">
             {isLoading ? (
-              <div className={`h-10 w-10 rounded-full animate-pulse ${isDark ? 'bg-white/10' : 'bg-gray-200'}`}></div>
+              <div className="h-10 w-10 animate-pulse rounded-full bg-white/12"></div>
             ) : isAuthenticated && user ? (
               /* Authenticated User - Profile Dropdown */
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className={`relative flex items-center space-x-2 rounded-full border px-2 py-1.5 transition-all focus:outline-none ${
-                    isDark
-                      ? 'border-white/10 bg-white/[0.04] hover:bg-white/[0.07]'
-                      : 'border-white/80 bg-white/85 hover:bg-white'
-                  }`}
+                  className="relative flex items-center space-x-2 rounded-full border border-white/12 bg-white/10 px-2 py-1.5 transition-all hover:bg-white/14 focus:outline-none"
                 >
                   {unreadCount > 0 && (
                     <span className="absolute -right-1 -top-1 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-amber-400 px-1.5 text-[10px] font-bold text-[#10203a] shadow-[0_10px_24px_rgba(251,191,36,0.35)]">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
-                  <div className="w-10 h-10 rounded-full bg-sky-500 flex items-center justify-center text-white font-semibold shadow-soft overflow-hidden">
+                  <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white/12 font-semibold text-[color:var(--header-text)] shadow-soft">
                     {avatarUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={avatarUrl} alt={user.full_name} className="h-full w-full object-cover" />
@@ -286,7 +245,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                     )}
                   </div>
                   <svg
-                    className={`w-4 h-4 text-ink-muted transition-transform ${
+                    className={`h-4 w-4 text-[color:var(--header-text-muted)] transition-transform ${
                       isProfileOpen ? 'rotate-180' : ''
                     }`}
                     fill="none"
@@ -387,19 +346,15 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                 <>
                   <Link
                     href="/login"
-                    className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                      isDark
-                        ? 'text-white/72 hover:bg-white/[0.05] hover:text-sky-200'
-                        : 'text-ink-muted hover:bg-white/80 hover:text-ink'
-                    }`}
+                    className="rounded-full px-4 py-2 text-sm font-medium text-[color:var(--header-text-muted)] transition-all hover:bg-white/10 hover:text-[color:var(--header-text)]"
                   >
                     Sign In
                   </Link>
                   <Link
                     href="/register"
-                    className="bg-[color:var(--accent)] text-[#1a1b1f] px-4 py-2 rounded-full hover:bg-[color:var(--accent-strong)] transition-colors font-semibold shadow-soft"
+                    className="bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] text-[#1a1b1f] px-4 py-2 rounded-full hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] transition-colors font-semibold shadow-soft"
                   >
-                    Create Account
+                    Get Started
                   </Link>
                 </>
               )
@@ -408,11 +363,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
 
           {/* Mobile Menu Button */}
           <button
-            className={`md:hidden rounded-full border p-2.5 transition-all ${
-              isDark
-                ? 'border-white/10 bg-white/[0.04] text-white/70 hover:bg-white/[0.08]'
-                : 'border-white/80 bg-white/85 text-ink-muted hover:bg-[color:var(--surface-muted)]'
-            }`}
+            className="rounded-full border border-white/12 bg-white/10 p-2.5 text-[color:var(--header-text-muted)] transition-all hover:bg-white/14 md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <svg
@@ -442,11 +393,9 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className={`md:hidden py-4 ${isDark ? 'border-t border-white/10' : 'border-t border-line'}`}>
+          <div className="border-t border-white/12 py-4 md:hidden">
             <div
-              className={`rounded-[1.75rem] border p-3 shadow-[0_22px_50px_rgba(2,8,23,0.24)] ${
-                isDark ? 'border-white/10 bg-white/[0.04]' : 'border-white/80 bg-white/92'
-              }`}
+              className="rounded-[1.75rem] border border-white/12 bg-white/[0.08] p-3 shadow-[0_22px_50px_rgba(21,33,94,0.3)]"
             >
               <div className="flex flex-col gap-2">
                 {navItems
@@ -460,19 +409,19 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                     onClick={(event) => handleNavLinkClick(event, item.href)}
                   >
                     <span>{item.label}</span>
-                    <span className={`text-xs font-semibold uppercase tracking-[0.24em] ${isNavItemActive(item.href) ? (isDark ? 'text-sky-200/80' : 'text-sky-600/80') : (isDark ? 'text-white/30' : 'text-ink-muted/50')}`}>
+                    <span className={`text-xs font-semibold uppercase tracking-[0.24em] ${isNavItemActive(item.href) ? 'text-sky-100/85' : 'text-[color:var(--header-text-muted)]'}`}>
                       {String(navItems.findIndex((nav) => nav.href === item.href) + 1).padStart(2, '0')}
                     </span>
                   </Link>
                 ))}
 
                 {/* Mobile Auth Section */}
-                <div className={`mt-4 pt-4 ${isDark ? 'border-t border-white/10' : 'border-t border-line'}`}>
+                <div className="mt-4 border-t border-white/12 pt-4">
                   {isAuthenticated && user ? (
                     <div className="space-y-4">
                       {/* User Info */}
                       <div className="flex min-w-0 items-center space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-sky-500 flex items-center justify-center text-white font-semibold shadow-soft overflow-hidden">
+                        <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white/12 font-semibold text-[color:var(--header-text)] shadow-soft">
                           {avatarUrl ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={avatarUrl} alt={user.full_name} className="h-full w-full object-cover" />
@@ -486,28 +435,24 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className={`truncate text-sm font-semibold ${isDark ? 'text-white' : 'text-ink'}`}>
+                          <p className="truncate text-sm font-semibold text-[color:var(--header-text)]">
                             {user.full_name}
                           </p>
-                          <p className={`truncate text-xs ${isDark ? 'text-white/60' : 'text-ink-muted'}`}>
+                          <p className="truncate text-xs text-[color:var(--header-text-muted)]">
                             {displayIdLabel}: {displayId}
                           </p>
                         </div>
                       </div>
                       <Link
                         href="/profile"
-                        className={`block transition-colors ${
-                          isDark ? 'text-white/70 hover:text-white' : 'text-ink-muted hover:text-[color:var(--accent-cool)]'
-                        }`}
+                        className="block text-[color:var(--header-text-muted)] transition-colors hover:text-[color:var(--header-text)]"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Profile
                       </Link>
                       <Link
                         href="/notifications"
-                        className={`block transition-colors ${
-                          isDark ? 'text-white/70 hover:text-white' : 'text-ink-muted hover:text-[color:var(--accent-cool)]'
-                        }`}
+                        className="block text-[color:var(--header-text-muted)] transition-colors hover:text-[color:var(--header-text)]"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Notifications {unreadCount > 0 ? `(${unreadCount > 9 ? '9+' : unreadCount})` : ''}
@@ -515,9 +460,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                       {showLibrarianDesk && (
                         <Link
                           href="/librarian"
-                          className={`block transition-colors ${
-                            isDark ? 'text-white/70 hover:text-white' : 'text-ink-muted hover:text-[color:var(--accent-cool)]'
-                          }`}
+                          className="block text-[color:var(--header-text-muted)] transition-colors hover:text-[color:var(--header-text)]"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           Librarian Desk
@@ -526,9 +469,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                       {showStaffDesk && (
                         <Link
                           href="/staff"
-                          className={`block transition-colors ${
-                            isDark ? 'text-white/70 hover:text-white' : 'text-ink-muted hover:text-[color:var(--accent-cool)]'
-                          }`}
+                          className="block text-[color:var(--header-text-muted)] transition-colors hover:text-[color:var(--header-text)]"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {staffDeskLabel}
@@ -547,21 +488,17 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                       <div className="flex flex-col gap-2">
                         <Link
                           href="/login"
-                          className={`rounded-full px-4 py-3 text-center text-sm font-medium transition-all ${
-                            isDark
-                              ? 'border border-white/10 text-white/80 hover:bg-white/[0.06] hover:text-sky-200'
-                              : 'border border-line text-ink-muted hover:bg-[color:var(--surface-muted)] hover:text-ink'
-                          }`}
+                          className="rounded-full border border-white/12 px-4 py-3 text-center text-sm font-medium text-[color:var(--header-text-muted)] transition-all hover:bg-white/10 hover:text-[color:var(--header-text)]"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           Sign In
                         </Link>
                         <Link
                           href="/register"
-                          className="bg-[color:var(--accent)] text-[#1a1b1f] px-4 py-3 rounded-full hover:bg-[color:var(--accent-strong)] transition-colors font-semibold text-center shadow-soft"
+                          className="bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] text-[#1a1b1f] px-4 py-3 rounded-full hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] transition-colors font-semibold text-center shadow-soft"
                           onClick={() => setIsMenuOpen(false)}
                         >
-                          Create Account
+                          Get Started
                         </Link>
                       </div>
                     )

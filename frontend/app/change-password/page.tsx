@@ -78,7 +78,7 @@ export default function ChangePasswordPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-[#0b1324] text-white">
+      <div className="royal-app min-h-screen bg-[#0b1324] text-white">
         <Navbar variant="dark" />
         <main className="pt-16">
           <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#0a1221] via-[#0e1629] to-[#0b1324]">
