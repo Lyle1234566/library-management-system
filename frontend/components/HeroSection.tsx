@@ -139,12 +139,12 @@ export default function HeroSection() {
                       Reading Desk
                     </h3>
                   </div>
-                  <div className="flex items-center gap-1.5 rounded-full border border-emerald-300/40 bg-gradient-to-br from-emerald-50/90 to-emerald-100/60 px-2.5 py-1 shadow-[0_2px_8px_rgba(16,185,129,0.15)]">
+                  <div className="flex items-center gap-1 rounded-full border border-emerald-300/40 bg-gradient-to-br from-emerald-50/90 to-emerald-100/60 px-2.5 py-1 shadow-[0_2px_8px_rgba(16,185,129,0.15)]">
                     <span className="relative flex h-1.5 w-1.5">
                       <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" style={{ animationDuration: '2s' }} />
                       <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
                     </span>
-                    <span className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-emerald-700">Live</span>
+                    <span className="text-[0.65rem] font-bold uppercase tracking-[0.08em] text-emerald-700">Live</span>
                   </div>
                 </div>
 
