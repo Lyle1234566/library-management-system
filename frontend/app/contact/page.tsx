@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Clock3, MapPin, MessageCircle } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { contactApi } from '@/lib/api';
@@ -82,7 +83,10 @@ const contactHighlights = [
   },
 ];
 
-const LIBRARIAN_NAME = 'EDITHA A. LABORATE LPT R...I';
+const LIBRARIAN_NAME = 'Editha A. Laborate';
+const LIBRARIAN_ROLE = 'Senior Librarian';
+const LIBRARIAN_LOCATION = '2F Learning Commons';
+const LIBRARIAN_HOURS = '8AM - 5PM';
 const CONTACT_FEATURE_PHOTO = '/contact-librarian.jpg';
 const CONTACT_FEATURE_FALLBACK = '/librarian-illustration.svg';
 
@@ -97,9 +101,18 @@ export default function ContactPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [usePhotoFallback, setUsePhotoFallback] = useState(false);
+  const librarianNameParts = LIBRARIAN_NAME.split(' ').filter(Boolean);
+  const librarianInitials = `${librarianNameParts[0]?.[0] ?? ''}${librarianNameParts[librarianNameParts.length - 1]?.[0] ?? ''}`;
 
   const handleLowerLinkClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleInquiryClick = () => {
+    document.getElementById('contact-form')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
   };
 
   const updateField = (field: keyof typeof formData) => (
@@ -156,52 +169,85 @@ export default function ContactPage() {
   return (
     <div className="public-shell relative min-h-screen overflow-hidden text-ink">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-sky-300/25 blur-3xl animate-float" />
-        <div className="absolute bottom-0 right-0 h-[26rem] w-[26rem] rounded-full bg-amber-300/18 blur-3xl animate-float-slow" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(126,191,231,0.18),transparent_45%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_70%,rgba(217,175,88,0.12),transparent_50%)]" />
+        <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-sky-300/28 blur-3xl animate-float" />
+        <div className="absolute bottom-0 right-0 h-[26rem] w-[26rem] rounded-full bg-sky-200/24 blur-3xl animate-float-slow" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.28),rgba(220,236,255,0.5))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(126,191,231,0.2),transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_72%,rgba(186,230,253,0.18),transparent_48%)]" />
       </div>
 
       <Navbar />
-      <main className="relative z-10 pt-24 pb-20 lg:pt-28 lg:pb-28">
-        <section className="mx-auto max-w-[1380px] px-5 sm:px-8 lg:px-10">
-          <div className="grid gap-14 lg:grid-cols-[minmax(0,1.06fr)_minmax(26rem,0.94fr)] lg:items-start xl:gap-20">
+      <main className="relative z-10 pt-24 pb-20 lg:pt-28 lg:pb-24">
+        <section className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(26rem,0.95fr)] lg:items-start xl:gap-14">
             <div className="space-y-8 animate-fade-up lg:space-y-9">
-              <span className="public-pill inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em]">
-                Contact
-              </span>
-              <h1 className="text-3xl font-extrabold leading-tight text-ink sm:text-5xl">
-                We&apos;re here to help your library run smoothly
-              </h1>
-              <p className="max-w-xl text-base text-ink-muted sm:text-lg">
-                Send us a note about borrowing, catalog updates, or account concerns. Our team
-                responds quickly and keeps you in the loop.
-              </p>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                {contactHighlights.map((item, index) => (
-                  <div
-                    key={item.label}
-                    style={{ animationDelay: `${index * 90 + 120}ms` }}
-                    className="public-panel-soft rounded-2xl p-5 animate-fade-up transition-all duration-300 hover:-translate-y-1 sm:p-6"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80">
-                        {item.icon}
-                      </span>
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--accent-cool-strong)]/85">{item.label}</p>
-                        <p className="mt-1 text-sm font-semibold text-ink">{item.value}</p>
-                      </div>
-                    </div>
-                    <p className="mt-3 text-xs text-ink-muted">{item.helper}</p>
-                  </div>
-                ))}
+              <div className="space-y-4">
+                <span className="public-pill inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em]">
+                  Contact
+                </span>
+                <h1 className="text-3xl font-extrabold leading-tight text-ink sm:text-5xl lg:text-[3.6rem]">
+                  We&apos;re here to help your library run smoothly
+                </h1>
+                <p className="max-w-xl text-base leading-7 text-ink-muted sm:text-lg sm:leading-7">
+                  Send us a note about borrowing, catalog updates, or account concerns. Our team
+                  responds quickly and keeps you in the loop.
+                </p>
               </div>
 
               <div className="space-y-4 sm:space-y-5">
-                <div className="public-panel overflow-hidden rounded-[2rem] backdrop-blur-xl animate-fade-up delay-200">
-                  <div className="relative h-[30rem] overflow-hidden sm:h-[38rem]">
+                <div className="rounded-[22px] border border-slate-200/75 bg-white/72 p-4 shadow-[0_10px_28px_rgba(19,44,78,0.06)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 sm:p-5">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex min-w-0 items-start gap-3">
+                      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-sky-200/70 bg-[linear-gradient(135deg,rgba(225,240,255,0.95),rgba(255,255,255,0.96))] text-sm font-semibold text-[#173b63] shadow-[0_6px_16px_rgba(23,59,99,0.08)]">
+                        {librarianInitials}
+                        <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-emerald-500 animate-pulse" />
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="text-[0.64rem] uppercase tracking-[0.32em] text-[color:var(--accent-cool-strong)]/72">
+                          Meet your librarian
+                        </p>
+                        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+                          <h3 className="text-lg font-semibold tracking-[-0.03em] text-[#173b63] sm:text-[1.15rem]">
+                            {LIBRARIAN_NAME}
+                          </h3>
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[0.68rem] font-semibold text-emerald-700">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            Online
+                          </span>
+                        </div>
+                        <p className="mt-1 text-[0.74rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--accent-cool-strong)]/78">
+                          {LIBRARIAN_ROLE}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-start gap-3 sm:items-end">
+                      <div className="flex flex-wrap items-center gap-2 text-[0.78rem] text-ink-muted sm:justify-end">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-100/80 bg-sky-50/70 px-2.5 py-1">
+                          <MapPin className="h-3.5 w-3.5 text-[color:var(--accent-cool-strong)]" />
+                          <span className="whitespace-nowrap">{LIBRARIAN_LOCATION}</span>
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-100/80 bg-emerald-50/75 px-2.5 py-1">
+                          <Clock3 className="h-3.5 w-3.5 text-emerald-600" />
+                          <span className="whitespace-nowrap">{LIBRARIAN_HOURS}</span>
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleInquiryClick}
+                        className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white px-3.5 py-1.5 text-[0.82rem] font-semibold text-[#173b63] shadow-[0_6px_16px_rgba(23,59,99,0.06)] transition-all duration-200 hover:border-sky-200 hover:bg-sky-50/70 hover:text-[color:var(--accent-cool-strong)]"
+                      >
+                        <MessageCircle className="h-3.5 w-3.5" />
+                        Inquiry
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="public-panel overflow-hidden rounded-[2.2rem] backdrop-blur-xl animate-fade-up delay-200">
+                  <div className="relative h-[25rem] overflow-hidden sm:h-[31rem]">
                     <Image
                       src={usePhotoFallback ? CONTACT_FEATURE_FALLBACK : CONTACT_FEATURE_PHOTO}
                       alt="SCSIT librarian ready to help at the library desk"
@@ -216,11 +262,11 @@ export default function ContactPage() {
                       onError={() => setUsePhotoFallback(true)}
                     />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,251,255,0.04),rgba(248,251,255,0.08)_28%,rgba(23,49,78,0.16)_58%,rgba(23,49,78,0.56))]" />
-                    <div className="absolute left-4 top-4 right-4 flex items-start justify-between gap-3 sm:left-6 sm:right-6 sm:top-6">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-white/55 bg-white/68 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink backdrop-blur-md">
+                    <div className="absolute left-4 right-4 top-4 flex items-start justify-between gap-3 sm:left-5 sm:right-5 sm:top-5">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-white/55 bg-white/68 px-3.5 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-ink backdrop-blur-md">
                         Library support desk
                       </span>
-                      <span className="inline-flex items-center gap-2 rounded-full border border-sky-300/30 bg-sky-100/80 px-3 py-2 text-xs font-medium text-[color:var(--accent-cool-strong)] backdrop-blur-md">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-sky-300/30 bg-sky-100/80 px-3 py-1.5 text-[11px] font-medium text-[color:var(--accent-cool-strong)] backdrop-blur-md">
                         <span className="h-2 w-2 rounded-full bg-sky-400" />
                         In-person assistance
                       </span>
@@ -229,41 +275,45 @@ export default function ContactPage() {
 
                 </div>
 
-                <div className="public-panel rounded-[28px] p-6 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 sm:p-8">
-                  <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="space-y-3">
-                      <p className="text-[0.68rem] uppercase tracking-[0.28em] text-[color:var(--accent-cool-strong)]/80">Meet your librarian</p>
-                      <div>
-                        <h3 className="text-[2rem] font-semibold tracking-[-0.02em] text-ink">{LIBRARIAN_NAME}</h3>
-                        <p className="mt-2 text-sm font-medium uppercase tracking-[0.18em] text-[color:var(--accent-cool-strong)]/80">Senior Librarian</p>
+                <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+                  {contactHighlights.map((item, index) => (
+                    <div
+                      key={item.label}
+                      style={{ animationDelay: `${index * 90 + 120}ms` }}
+                      className="public-panel-soft rounded-2xl p-5 animate-fade-up transition-all duration-300 hover:-translate-y-1 sm:p-6"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80">
+                          {item.icon}
+                        </span>
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--accent-cool-strong)]/85">{item.label}</p>
+                          <p className="mt-1 text-sm font-semibold text-ink">{item.value}</p>
+                        </div>
                       </div>
+                      <p className="mt-3 text-xs leading-5 text-ink-muted">{item.helper}</p>
                     </div>
-                    <div className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-300/40 bg-emerald-100 px-4 py-2.5 text-sm font-medium text-emerald-700">
-                      <span className="h-2 w-2 rounded-full bg-emerald-300" />
-                      Ready to assist on site
-                    </div>
-                  </div>
-
-                  <div className="mt-6 h-px w-full bg-[color:var(--line)]" />
-
-                  <p className="mt-6 max-w-2xl text-[0.97rem] leading-8 text-ink-muted">
-                    Direct support for borrowing concerns, account approvals, and catalog questions inside the library.
-                  </p>
+                  ))}
                 </div>
               </div>
 
             </div>
 
-            <div className="space-y-8 animate-fade-up delay-200 lg:pt-3">
-              <div className="public-panel rounded-[28px] p-6 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 sm:p-8 lg:p-10">
-                <p className="text-xs uppercase tracking-[0.3em] text-[color:var(--accent-cool-strong)]/80">Contact form</p>
-                <h3 className="mt-3 text-2xl font-semibold text-ink">Tell us how we can help</h3>
-                <p className="mt-4 text-sm leading-7 text-ink-muted">
-                  Share your question below and we will follow up shortly. Borrowing issues are
-                  usually resolved within 24 hours.
-                </p>
+            <div className="space-y-6 animate-fade-up delay-200 lg:pt-0">
+              <div
+                id="contact-form"
+                className="public-panel rounded-[28px] p-6 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 sm:p-7 lg:p-8"
+              >
+                <div className="space-y-3">
+                  <p className="text-xs uppercase tracking-[0.3em] text-[color:var(--accent-cool-strong)]/80">Contact form</p>
+                  <h3 className="text-2xl font-semibold text-ink sm:text-[1.8rem]">Tell us how we can help</h3>
+                  <p className="text-sm leading-6 text-ink-muted sm:text-base sm:leading-6">
+                    Share your question below and we will follow up shortly. Borrowing issues are
+                    usually resolved within 24 hours.
+                  </p>
+                </div>
 
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+                <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
                   {success && (
                     <div className="rounded-2xl border border-emerald-300/40 bg-emerald-100 px-4 py-3 text-sm text-emerald-700 animate-fade-up">
                       {success}
@@ -329,19 +379,21 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={updateField('message')}
                       placeholder="Tell us what you need help with..."
-                      className="mt-2 w-full rounded-2xl border border-line bg-white/85 px-4 py-3 text-sm text-ink placeholder:text-ink-muted/60 transition-[border-color,box-shadow,background-color] duration-200 hover:border-sky-300/60 focus:outline-none focus:ring-2 focus:ring-sky-300/40 focus:border-transparent"
+                      className="mt-2 w-full rounded-2xl border border-line bg-white/85 px-4 py-3 text-sm leading-6 text-ink placeholder:text-ink-muted/60 transition-[border-color,box-shadow,background-color] duration-200 hover:border-sky-300/60 focus:outline-none focus:ring-2 focus:ring-sky-300/40 focus:border-transparent"
                     />
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full rounded-full bg-[color:var(--accent)] px-5 py-3 text-sm font-semibold text-[#17314e] shadow-[0_18px_34px_rgba(217,175,88,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] hover:text-[#17314e] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
-                  >
-                    {isSubmitting ? 'Sending...' : 'Send message'}
-                  </button>
+                  <div className="pt-1">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full rounded-full bg-[#2f3e9e] px-6 py-3.5 text-base font-semibold text-[#FFFFFF] shadow-lg transition-all duration-200 hover:bg-[#253285] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-[#2f3e9e] disabled:hover:shadow-lg"
+                    >
+                      {isSubmitting ? 'Sending...' : 'Send message'}
+                    </button>
+                  </div>
 
-                  <p className="text-xs text-ink-muted">
+                  <p className="text-xs leading-5 text-ink-muted">
                     We only use your details to respond to this request.
                   </p>
                 </form>
@@ -350,14 +402,14 @@ export default function ContactPage() {
               <div className="public-panel-soft rounded-[28px] p-6 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 sm:p-7">
                 <p className="text-[0.68rem] uppercase tracking-[0.28em] text-[color:var(--accent-cool-strong)]/80">Support details</p>
 
-                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
                   {librarianDetails.map((detail) => (
                     <div
                       key={detail.label}
                       className="rounded-2xl border border-line bg-white/70 px-4 py-4 transition-all duration-300 hover:bg-white"
                     >
                       <p className="text-[0.65rem] uppercase tracking-widest text-[color:var(--accent-cool-strong)]/80">{detail.label}</p>
-                      <p className="mt-1 text-sm font-semibold text-ink">{detail.value}</p>
+                      <p className="mt-1.5 text-sm font-semibold text-ink">{detail.value}</p>
                     </div>
                   ))}
                 </div>

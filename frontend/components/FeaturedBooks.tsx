@@ -111,7 +111,7 @@ export default function FeaturedBooks() {
         <div className="relative z-10 mt-6 flex items-center justify-center text-center animate-fade-up delay-300">
           <Link
             href="/books"
-            className="inline-flex items-center gap-1.5 rounded-full border border-amber-200/40 bg-[color:var(--accent)] px-3.5 py-1.5 text-xs font-semibold text-[#17314e] shadow-[0_8px_16px_rgba(217,175,88,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] hover:text-[#17314e] sm:px-4 sm:py-2 sm:text-[13px]"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#2f3e9e] px-3.5 py-1.5 text-xs font-semibold text-[#FFFFFF] shadow-lg transition-all duration-200 hover:bg-[#253285] hover:shadow-xl sm:px-4 sm:py-2 sm:text-[13px]"
           >
             View All Books
             <svg

@@ -140,11 +140,11 @@ export default function LibrarianEnrollmentPage() {
 
   return (
     <ProtectedRoute requiredRoles={['LIBRARIAN', 'ADMIN']}>
-      <div className="royal-app min-h-screen overflow-hidden bg-[#060b16] text-white">
+      <div className="royal-app min-h-screen overflow-hidden bg-[linear-gradient(135deg,#061423_0%,#0a3d62_50%,#0b5f8a_100%)] text-white">
         <div className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div className="absolute -left-20 top-0 h-80 w-80 rounded-full bg-sky-500/12 blur-3xl" />
-          <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-400/10 blur-3xl" />
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(8,16,28,0.96),rgba(9,20,37,0.86)_48%,rgba(7,13,23,0.96))]" />
+          <div className="absolute -left-20 top-0 h-80 w-80 rounded-full bg-sky-400/18 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-cyan-300/16 blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(6,20,35,0.92),rgba(8,73,118,0.72)_48%,rgba(8,33,57,0.9))]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">

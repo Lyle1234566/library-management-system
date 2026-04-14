@@ -10,6 +10,7 @@ from .views import (
     ReservationViewSet,
     BookReviewViewSet,
     PublicStatsView,
+    ActiveStudentsMetricView,
     ExportReportsView,
 )
 
@@ -24,6 +25,7 @@ router.register(r'reservations', ReservationViewSet, basename='reservation')
 
 urlpatterns = [
     path('public-stats/', PublicStatsView.as_view(), name='books-public-stats'),
+    path('active-students-metric/', ActiveStudentsMetricView.as_view(), name='active-students-metric'),
     path('export/', ExportReportsView.as_view(), name='books-export'),
     path(
         'books/<int:book_id>/reviews/',

@@ -547,6 +547,25 @@ class MobileFlowEnhancementTests(TestCase):
         self.copy = BookCopy.objects.create(book=self.book, status=BookCopy.STATUS_AVAILABLE)
         self.client = APIClient()
 
+    def test_student_borrow_defaults_to_seven_days(self):
+        self.client.force_authenticate(user=self.student)
+        response = self.client.post(f'/api/books/books/{self.book.id}/borrow/', {}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        borrow_request = BorrowRequest.objects.get(pk=response.data['request']['id'])
+        self.assertEqual(borrow_request.requested_borrow_days, 7)
+
+    def test_student_cannot_request_more_than_seven_days(self):
+        self.client.force_authenticate(user=self.student)
+        response = self.client.post(
+            f'/api/books/books/{self.book.id}/borrow/',
+            {'borrow_days': 14},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['detail'], 'Students can only borrow books for 7 days.')
+
     @override_settings(MAX_UNPAID_FINE_AMOUNT=50.00, LATE_FEE_PER_DAY=5.00)
     def test_student_borrow_blocked_when_unpaid_fines_exceed_limit(self):
         overdue_book = Book.objects.create(
@@ -869,6 +888,7 @@ class WorkingStudentBorrowingTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['request']['status'], BorrowRequest.STATUS_PENDING)
+        self.assertEqual(response.data['request']['requested_borrow_days'], 7)
 
 
 class BookReviewApiTests(TestCase):

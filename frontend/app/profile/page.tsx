@@ -199,360 +199,333 @@ export default function ProfilePage() {
               <div className="absolute -left-20 top-10 h-72 w-72 rounded-full bg-sky-300/20 blur-3xl" />
               <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-300/15 blur-3xl" />
             </div>
-            <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-              <h1 className="text-3xl font-bold text-ink sm:text-4xl">Profile</h1>
-              <p className="mt-3 max-w-2xl text-ink-muted">
-                Review your library access, keep your contact details current, and manage account activity from one polished workspace.
-              </p>
+            <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+              <div className="flex items-center gap-6">
+                {/* Circular Avatar */}
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-sky-400 to-sky-500 text-3xl font-bold text-white shadow-[0_10px_30px_rgba(56,189,248,0.25)] sm:h-24 sm:w-24 sm:text-4xl">
+                  {user?.full_name?.charAt(0)?.toUpperCase() ?? 'U'}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-3xl font-bold text-ink sm:text-4xl">
+                    Welcome back, {user?.full_name?.split(' ')[0] ?? 'User'}
+                  </h1>
+                  <p className="mt-2 text-ink-muted">
+                    Manage your library profile, track borrowing activity, and keep your account details current.
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
 
-          <section className="relative z-10 -mt-12 mx-auto max-w-6xl px-4 sm:-mt-16 sm:px-6 lg:px-8">
-            <div className="public-panel rounded-[2rem] p-6 sm:p-10">
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.02fr_1.38fr]">
-                <div className="space-y-5">
-                  <div className="public-panel-soft relative overflow-hidden rounded-[1.9rem] p-6">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.08),transparent_40%)]" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(245,158,11,0.06),transparent_40%)]" />
-                    <div className="relative">
-                      <div className="space-y-4">
-                        <div className="space-y-3">
-                          <span className="inline-flex items-center rounded-full border border-sky-300/30 bg-sky-400/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700">
-                            Account Overview
-                          </span>
-                          <div>
-                            <h2 className="text-3xl font-semibold tracking-tight text-ink">
-                              {user?.full_name ?? 'Student'}
-                            </h2>
-                            <p className="mt-2 text-sm text-ink-muted">
-                              {user?.email ?? 'No email saved for reminders'}
-                            </p>
-                          </div>
-                        </div>
-                        <p className="max-w-xl text-sm leading-6 text-ink-muted">
-                          Your library role, active borrowing status, and access information are organized here for a cleaner and more professional account view.
-                        </p>
-                        
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          <div className="rounded-[1.2rem] border border-sky-300/30 bg-sky-400/[0.12] p-3.5">
-                            <p className="text-[10px] uppercase tracking-[0.2em] text-sky-700/80">{displayIdLabel}</p>
-                            <p className="mt-1.5 text-xl font-bold text-ink">{displayIdValue}</p>
-                          </div>
-                          <div className="rounded-[1.2rem] border border-amber-300/30 bg-amber-400/[0.12] p-3.5">
-                            <p className="text-[10px] uppercase tracking-[0.2em] text-amber-700/80">Role</p>
-                            <p className="mt-1.5 text-xl font-bold text-ink">{roleLabel}</p>
-                          </div>
-                        </div>
+          <section className="relative z-10 mx-auto max-w-[1200px] px-6 py-20 sm:px-8 lg:px-12">
+            {/* Power Sidebar Layout - 30-70 Split */}
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-[30%_70%]">
+              {/* LEFT SIDEBAR - Identity + Quick Actions */}
+              <div className="space-y-6">
+                <div className="rounded-[20px] border border-line bg-gradient-to-br from-[#f0f7fc] to-white p-6 shadow-[0_10px_40px_rgba(0,150,255,0.08)]">
+                  <div className="space-y-5">
+                    {/* Role Badge */}
+                    <div className="inline-flex items-center gap-2 rounded-full border border-amber-300/40 bg-gradient-to-r from-amber-400/20 to-amber-300/15 px-3 py-1.5 shadow-[0_4px_12px_rgba(245,158,11,0.15)]">
+                      <svg className="h-3.5 w-3.5 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <span className="text-xs font-bold uppercase tracking-wider text-amber-700">{roleLabel}</span>
+                    </div>
 
-                        <div className="flex flex-wrap gap-2">
-                          <span className="inline-flex items-center rounded-full border border-emerald-300/30 bg-emerald-400/15 px-3 py-1 text-xs font-medium text-emerald-700">
-                            {emailStatusLabel}
-                          </span>
-                          <span className="inline-flex items-center rounded-full border border-line bg-white/60 px-3 py-1 text-xs font-medium text-ink-muted">
-                            Member since {memberSince}
-                          </span>
-                        </div>
+                    {/* Student/Staff ID */}
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted">{displayIdLabel}</p>
+                      <p className="mt-1.5 text-2xl font-bold tracking-tight text-ink">{displayIdValue}</p>
+                    </div>
+
+                    {/* Membership Timeline */}
+                    <div className="rounded-[14px] border border-sky-200/60 bg-sky-50/50 p-3.5">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-sky-700">Member Since</p>
+                      <p className="mt-1.5 text-base font-bold text-ink">{memberSince}</p>
+                      <div className="mt-2.5 h-1.5 w-full rounded-full bg-sky-200">
+                        <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-sky-400 to-sky-500"></div>
                       </div>
+                      <p className="mt-1.5 text-[10px] text-ink-muted">Active library member</p>
+                    </div>
 
-                      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                        <div className="public-panel-soft rounded-[1.35rem] p-4">
-                          <div className="flex items-start justify-between gap-3">
-                            <div>
-                              <p className="text-xs uppercase tracking-[0.22em] text-ink-muted">Active Borrows</p>
-                              <p className="mt-2 text-3xl font-semibold text-ink">{activeBorrowCount}</p>
-                              <p className="mt-1 text-sm text-ink-muted">Books currently on your account.</p>
-                            </div>
-                            <span className="rounded-full border border-sky-300/30 bg-sky-400/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-700">
-                              Live
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="public-panel-soft rounded-[1.35rem] p-4">
-                          <div className="flex items-start justify-between gap-3">
-                            <div>
-                              <p className="text-xs uppercase tracking-[0.22em] text-ink-muted">Pending Requests</p>
-                              <p className="mt-2 text-3xl font-semibold text-ink">{pendingRequests.length}</p>
-                              <p className="mt-1 text-sm text-ink-muted">Requests waiting for approval.</p>
-                            </div>
-                            <span className="rounded-full border border-amber-300/30 bg-amber-400/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">
-                              Queue
-                            </span>
-                          </div>
-                        </div>
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="rounded-[14px] border border-sky-300/30 bg-sky-400/[0.08] p-3.5">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-sky-700">Active</p>
+                        <p className="mt-2 text-2xl font-bold text-ink">{activeBorrowCount}</p>
+                        <p className="mt-1 text-[10px] text-ink-muted">Books</p>
+                      </div>
+                      <div className="rounded-[14px] border border-amber-300/30 bg-amber-400/[0.08] p-3.5">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-amber-700">Returned</p>
+                        <p className="mt-2 text-2xl font-bold text-ink">{returnedBorrowCount}</p>
+                        <p className="mt-1 text-[10px] text-ink-muted">Total</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="public-panel-soft relative overflow-hidden rounded-[1.9rem] p-6">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.06),transparent_35%)]" />
-                  <div className="relative">
-                  <div className="flex flex-col gap-4 border-b border-line pb-5 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-[color:var(--accent-cool-strong)]/70">Editable Profile</p>
-                      <h3 className="mt-2 text-2xl font-semibold text-ink">Edit Account Details</h3>
-                      <p className="mt-2 max-w-2xl text-sm text-ink-muted">
-                        Update the personal details that can change while your system-assigned account details stay listed in Account Overview.
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-3">
-                      {!isEditingProfile ? (
-                        <button
-                          type="button"
-                          onClick={handleStartProfileEdit}
-                          className="inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-4 py-3 text-sm font-semibold text-[#1a1b1f] transition-all hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)]"
-                        >
-                          Edit Details
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={handleCancelProfileEdit}
-                          className="inline-flex items-center justify-center rounded-xl border border-line px-4 py-3 text-sm font-semibold text-ink-muted transition-all hover:bg-white/60"
-                        >
-                          Cancel
-                        </button>
-                      )}
-                      <Link
-                        href="/forgot-password"
-                        className="inline-flex items-center justify-center rounded-xl border border-line px-4 py-3 text-sm font-semibold text-ink-muted transition-all hover:bg-white/60"
-                      >
-                        Forgot Password
-                      </Link>
-                    </div>
+                {/* Quick Actions */}
+                <div className="rounded-[20px] border border-line bg-white p-6 shadow-[0_10px_40px_rgba(0,150,255,0.08)]">
+                  <div className="border-b border-line pb-4">
+                    <h3 className="text-lg font-bold text-ink">Quick Actions</h3>
+                    <p className="mt-1 text-xs text-ink-muted">
+                      Common account tasks.
+                    </p>
                   </div>
-
-                  <form className="mt-6 space-y-5" onSubmit={handleProfileSave}>
-                    {profileError && (
-                      <div className="rounded-2xl border border-rose-400/40 bg-rose-500/20 px-4 py-3 text-sm text-rose-700">
-                        {profileError}
-                      </div>
-                    )}
-                    {profileMessage && (
-                      <div className="rounded-2xl border border-emerald-400/40 bg-emerald-500/20 px-4 py-3 text-sm text-emerald-700">
-                        {profileMessage}
-                      </div>
-                    )}
-
-                    <div className="public-panel-soft rounded-[1.5rem] p-5">
-                      <div className="mb-4">
-                        <p className="text-xs uppercase tracking-[0.24em] text-ink-muted">Contact Details</p>
-                        <p className="mt-2 text-sm text-ink-muted">
-                          Keep these details accurate so account notices and recovery flows continue working properly.
-                        </p>
-                      </div>
-
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div>
-                        <label htmlFor="profile-full-name" className="block text-sm font-medium text-ink">
-                          Full Name
-                        </label>
-                        <input
-                          id="profile-full-name"
-                          type="text"
-                          value={fullNameValue}
-                          disabled={!isEditingProfile}
-                          onChange={(event) => {
-                            setDraftFullName(event.target.value);
-                            setProfileError(null);
-                          }}
-                          className="mt-2 w-full rounded-xl border border-line bg-white/80 px-4 py-3 text-ink placeholder:text-ink-muted/50 focus:border-sky-400/50 focus:outline-none focus:ring-2 focus:ring-sky-400/30 disabled:cursor-not-allowed disabled:opacity-70"
-                          placeholder="Enter your full name"
-                        />
-                        <p className="mt-2 text-xs text-ink-muted">
-                          This name appears across your account and borrow records.
-                        </p>
+                  <div className="mt-5 space-y-3">
+                    <Link
+                      href="/my-books"
+                      className="group block rounded-[14px] border border-line bg-gradient-to-br from-slate-50 to-white p-4 transition-all hover:-translate-y-1 hover:shadow-[0_6px_20px_rgba(0,150,255,0.12)]"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <h4 className="text-sm font-bold text-ink">My Books</h4>
+                          <p className="mt-1 text-[10px] text-ink-muted">Review pending, approved, and returned books.</p>
                         </div>
-
-                        <div>
-                        <label htmlFor="profile-email" className="block text-sm font-medium text-ink">
-                          Email Address
-                        </label>
-                        <input
-                          id="profile-email"
-                          type="email"
-                          value={emailValue}
-                          disabled={!isEditingProfile}
-                          onChange={(event) => {
-                            setDraftEmail(event.target.value);
-                            setProfileError(null);
-                          }}
-                          className="mt-2 w-full rounded-xl border border-line bg-white/80 px-4 py-3 text-ink placeholder:text-ink-muted/50 focus:border-sky-400/50 focus:outline-none focus:ring-2 focus:ring-sky-400/30 disabled:cursor-not-allowed disabled:opacity-70"
-                          placeholder="name@example.com"
-                        />
-                        <p className="mt-2 text-xs text-ink-muted">
-                          Due-date reminders and password reset messages will be sent here.
-                        </p>
+                        <svg className="h-4 w-4 shrink-0 text-ink-muted transition-colors group-hover:text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </Link>
+                    <Link
+                      href="/contact"
+                      className="group block rounded-[14px] border border-line bg-gradient-to-br from-slate-50 to-white p-4 transition-all hover:-translate-y-1 hover:shadow-[0_6px_20px_rgba(0,150,255,0.12)]"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <h4 className="text-sm font-bold text-ink">Contact Support</h4>
+                          <p className="mt-1 text-[10px] text-ink-muted">Reach the library team if you need help.</p>
+                        </div>
+                        <svg className="h-4 w-4 shrink-0 text-ink-muted transition-colors group-hover:text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </Link>
+                    <Link
+                      href="/change-password"
+                      className="group block rounded-[14px] border border-line bg-gradient-to-br from-slate-50 to-white p-4 transition-all hover:-translate-y-1 hover:shadow-[0_6px_20px_rgba(0,150,255,0.12)]"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <h4 className="text-sm font-bold text-ink">Change Password</h4>
+                          <p className="mt-1 text-[10px] text-ink-muted">Update your account security.</p>
+                        </div>
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-400/20">
+                          <svg className="h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clipRule="evenodd" />
+                          </svg>
                         </div>
                       </div>
-                    </div>
-
-                    <div className="public-panel-soft rounded-[1.5rem] px-5 py-4">
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                          <p className="text-sm font-semibold text-ink">Editing status</p>
-                          <p className="mt-1 text-sm text-ink-muted">
-                            {isEditingProfile
-                              ? 'You can update your editable details now.'
-                              : 'Click Edit Details to unlock the form and make changes.'}
-                          </p>
-                        </div>
-                        <button
-                          type="submit"
-                          disabled={!canSaveProfile || profileSubmitting}
-                          className="inline-flex min-w-[160px] items-center justify-center rounded-xl bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-5 py-3 text-sm font-semibold text-[#1a1b1f] shadow-lg shadow-amber-500/30 transition-all hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          {profileSubmitting ? 'Saving...' : 'Save Changes'}
-                        </button>
-                      </div>
-                    </div>
-                  </form>
+                    </Link>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
-                <div className="public-panel-soft rounded-[1.6rem] p-5">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              {/* RIGHT MAIN AREA - Account Details + Borrow Activity */}
+              <div className="space-y-6">
+                <div className="rounded-[20px] border border-line bg-white p-7 shadow-[0_10px_40px_rgba(0,150,255,0.08)]">
+                  <div className="flex items-start justify-between border-b border-line pb-5">
                     <div>
-                      <h3 className="text-lg font-semibold text-ink">Borrow Activity</h3>
-                      <p className="mt-1 text-sm text-ink-muted">
-                        Approved receipts and returned books are listed here for quick review.
+                      <h2 className="text-xl font-bold text-ink">Account Details</h2>
+                      <p className="mt-1.5 text-sm text-ink-muted">
+                        Update your editable information below.
                       </p>
                     </div>
-                    <div className="flex flex-wrap gap-2 text-xs font-medium">
-                      <span className="rounded-full border border-line bg-white/60 px-3 py-1 text-ink-muted">
-                        {approvedRequests.length} receipts
-                      </span>
-                      <span className="rounded-full border border-emerald-300/30 bg-emerald-400/15 px-3 py-1 text-emerald-700">
-                        {returnedBorrowCount} returned
+                    {!isEditingProfile ? (
+                      <button
+                        type="button"
+                        onClick={handleStartProfileEdit}
+                        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-5 py-2.5 text-sm font-bold text-white shadow-[0_6px_20px_rgba(245,158,11,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(245,158,11,0.4)]"
+                      >
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Edit
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleCancelProfileEdit}
+                        className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-muted transition-all hover:bg-slate-50"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
+
+                  <form className="mt-6 space-y-6" onSubmit={handleProfileSave}>
+                    {profileError && (
+                      <div className="rounded-[16px] border border-rose-400/40 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                        {profileError}
+                      </div>
+                    )}
+                    {profileMessage && (
+                      <div className="rounded-[16px] border border-emerald-400/40 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                        {profileMessage}
+                      </div>
+                    )}
+
+                    {/* Full Name - Editable */}
+                    <div>
+                      <label htmlFor="profile-full-name" className="block text-sm font-semibold text-ink">
+                        Full Name
+                      </label>
+                      <input
+                        id="profile-full-name"
+                        type="text"
+                        value={fullNameValue}
+                        disabled={!isEditingProfile}
+                        onChange={(event) => {
+                          setDraftFullName(event.target.value);
+                          setProfileError(null);
+                        }}
+                        className="mt-2 w-full rounded-[14px] border-2 border-amber-300/40 bg-white px-4 py-3 text-sm text-ink transition-all focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-400/20 disabled:cursor-not-allowed disabled:border-line disabled:bg-slate-50 disabled:opacity-70"
+                        placeholder="Enter your full name"
+                      />
+                      <p className="mt-2 text-xs text-ink-muted">
+                        This name appears on all your borrow records and receipts.
+                      </p>
+                    </div>
+
+                    {/* Email - Locked/Verified Display */}
+                    <div>
+                      <label className="block text-sm font-semibold text-ink">
+                        Institutional Email
+                      </label>
+                      <div className="mt-2 rounded-[14px] border-2 border-sky-200/60 bg-gradient-to-br from-sky-50/50 to-blue-50/30 px-4 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-400/20">
+                            <svg className="h-5 w-5 text-sky-600" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-semibold text-ink">{emailValue || 'No email set'}</p>
+                            <div className="mt-1.5 flex items-center gap-2">
+                              <svg className="h-3.5 w-3.5 text-sky-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
+                              <span className="text-[10px] font-semibold text-sky-700">Verified by institution</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="mt-2 text-[10px] text-sky-700">
+                        Managed by institution. Contact admin to change.
+                      </p>
+                    </div>
+
+                    {/* Save Button */}
+                    <div className="flex items-center justify-between rounded-[14px] border border-line bg-slate-50/50 px-5 py-4">
+                      <div>
+                        <p className="text-sm font-semibold text-ink">
+                          {isEditingProfile ? 'Editing enabled' : 'View mode'}
+                        </p>
+                        <p className="mt-1 text-xs text-ink-muted">
+                          {isEditingProfile
+                            ? 'Click Save to update your profile.'
+                            : 'Click Edit to make changes.'}
+                        </p>
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={!canSaveProfile || profileSubmitting}
+                        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-6 py-3 text-sm font-bold text-white shadow-[0_6px_20px_rgba(245,158,11,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(245,158,11,0.4)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+                      >
+                        {profileSubmitting ? 'Saving...' : 'Save Changes'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                {/* Borrow Activity */}
+                <div className="rounded-[20px] border border-line bg-white p-7 shadow-[0_10px_40px_rgba(0,150,255,0.08)]">
+                  <div className="flex items-center justify-between border-b border-line pb-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-ink">Borrow Activity</h3>
+                      <p className="mt-1 text-xs text-ink-muted">
+                        Your approved and returned books.
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="rounded-full border border-sky-300/40 bg-sky-50 px-2.5 py-1 text-[10px] font-bold text-sky-700">
+                        {approvedRequests.length} Total
                       </span>
                     </div>
                   </div>
-                  <div className="mt-4 space-y-4">
+                  <div className="mt-5 space-y-3">
                     {loading && (
                       <div className="flex items-center gap-3 text-ink-muted">
-                        <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-[color:var(--accent)]"></div>
-                        Loading borrow activity...
+                        <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-sky-400"></div>
+                        Loading activity...
                       </div>
                     )}
                     {error && (
-                      <div className="rounded-2xl border border-rose-400/40 bg-rose-500/20 px-4 py-3 text-sm text-rose-700">
+                      <div className="rounded-[16px] border border-rose-400/40 bg-rose-50 px-4 py-3 text-sm text-rose-700">
                         {error}
                       </div>
                     )}
                     {!loading && !error && approvedRequests.length === 0 && (
-                      <p className="rounded-2xl border border-dashed border-line bg-white/40 px-4 py-6 text-sm text-ink-muted">
-                        No approved borrow receipts yet.
+                      <p className="rounded-[16px] border border-dashed border-line bg-slate-50 px-4 py-8 text-center text-sm text-ink-muted">
+                        No borrow receipts yet.
                       </p>
                     )}
                     {!loading &&
                       !error &&
-                      approvedRequests.map((request) => (
-                        <div
-                          key={request.id}
-                          className="public-panel-soft rounded-2xl p-4"
-                        >
-                          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
-                              <p className="text-xs uppercase tracking-[0.22em] text-ink-muted">Receipt</p>
-                              <p className="mt-1 text-lg font-semibold text-ink">
-                                {request.receipt_number ?? 'Not issued'}
-                              </p>
-                              <p className="mt-2 text-sm text-ink-muted">{request.book.title}</p>
-                            </div>
-                            <div className="text-sm text-ink-muted">
-                              <p>Borrowed: {formatDate(request.processed_at ?? request.requested_at)}</p>
-                              <p>Due: {formatDate(request.due_date)}</p>
-                              <span
-                                className={`mt-3 inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                                  request.status === 'RETURNED'
-                                    ? 'border border-emerald-300/30 bg-emerald-400/15 text-emerald-700'
-                                    : 'border border-sky-300/30 bg-sky-400/15 text-sky-700'
-                                }`}
-                              >
-                                {request.status === 'RETURNED' ? 'Returned' : 'Borrowed'}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <div className="public-panel-soft rounded-[1.6rem] p-5">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-lg font-semibold text-ink">Quick Actions</h3>
-                        <p className="mt-1 text-sm text-ink-muted">
-                          Shortcuts for the most common account tasks.
-                        </p>
-                      </div>
-                      <span className="rounded-full border border-line bg-white/60 px-3 py-1 text-xs font-medium text-ink-muted">
-                        Friendly tools
-                      </span>
-                    </div>
-                    <div className="mt-5 grid gap-3">
-                      {accountActions.map((item) => (
-                        <Link
-                          key={item.title}
-                          href={item.href}
-                          className="group public-panel-soft rounded-2xl px-5 py-4 transition-all duration-300 hover:-translate-y-0.5"
-                        >
-                          <div className="flex items-start justify-between gap-3">
-                            <div>
-                              <h4 className="text-base font-semibold text-ink">{item.title}</h4>
-                              <p className="mt-2 text-sm text-ink-muted">{item.description}</p>
-                            </div>
-                            <span className="text-ink-muted/40 transition-colors group-hover:text-sky-600">
-                              -&gt;
-                            </span>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="public-panel-soft rounded-[1.6rem] p-5">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-lg font-semibold text-ink">Pending Requests</h3>
-                        <p className="mt-1 text-sm text-ink-muted">
-                          Track books that are still waiting for approval.
-                        </p>
-                      </div>
-                      <span className="rounded-full border border-amber-300/30 bg-amber-400/15 px-3 py-1 text-xs font-medium text-amber-700">
-                        {pendingRequests.length} pending
-                      </span>
-                    </div>
-                    <div className="mt-4 space-y-3">
-                      {!loading && pendingRequests.length === 0 && (
-                        <p className="rounded-2xl border border-dashed border-line bg-white/40 px-4 py-6 text-sm text-ink-muted">
-                          No pending borrow requests.
-                        </p>
-                      )}
-                      {!loading &&
-                        pendingRequests.map((request) => (
+                      approvedRequests.map((request) => {
+                        const dueDate = request.due_date ? new Date(request.due_date) : null;
+                        const today = new Date();
+                        const daysRemaining = dueDate ? Math.ceil((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)) : null;
+                        const progressPercent = daysRemaining !== null && daysRemaining >= 0 ? Math.max(0, Math.min(100, (daysRemaining / 14) * 100)) : 0;
+                        
+                        return (
                           <div
                             key={request.id}
-                            className="public-panel-soft rounded-2xl px-4 py-4"
+                            className="rounded-[14px] border border-line bg-gradient-to-br from-slate-50 to-white p-4 transition-all hover:shadow-[0_4px_16px_rgba(0,150,255,0.12)]"
                           >
-                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                              <div>
-                                <p className="text-sm font-semibold text-ink">{request.book.title}</p>
-                                <p className="mt-1 text-xs text-ink-muted">
-                                  Requested on {formatDate(request.requested_at)}
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="inline-flex items-center rounded-full border border-sky-300/40 bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700">
+                                    {request.receipt_number ?? 'Pending'}
+                                  </span>
+                                  <span
+                                    className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                                      request.status === 'RETURNED'
+                                        ? 'border border-emerald-300/40 bg-emerald-50 text-emerald-700'
+                                        : 'border border-amber-300/40 bg-amber-50 text-amber-700'
+                                    }`}
+                                  >
+                                    {request.status === 'RETURNED' ? 'Returned' : 'Active'}
+                                  </span>
+                                </div>
+                                <p className="mt-2 text-sm font-semibold text-ink">{request.book.title}</p>
+                                <p className="mt-1 text-[10px] text-ink-muted">
+                                  Borrowed: {formatDate(request.processed_at ?? request.requested_at)} • Due: {formatDate(request.due_date)}
                                 </p>
+                                {request.status === 'APPROVED' && daysRemaining !== null && (
+                                  <div className="mt-3">
+                                    <div className="flex items-center justify-between text-[10px]">
+                                      <span className="font-semibold text-ink-muted">Days remaining</span>
+                                      <span className="font-bold text-ink">{daysRemaining > 0 ? daysRemaining : 'Overdue'}</span>
+                                    </div>
+                                    <div className="mt-1.5 h-2 w-full rounded-full bg-slate-200">
+                                      <div
+                                        className={`h-full rounded-full transition-all ${
+                                          daysRemaining > 7 ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' :
+                                          daysRemaining > 3 ? 'bg-gradient-to-r from-amber-400 to-amber-500' :
+                                          'bg-gradient-to-r from-rose-400 to-rose-500'
+                                        }`}
+                                        style={{ width: `${progressPercent}%` }}
+                                      ></div>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
-                              <span className="inline-flex items-center rounded-full border border-amber-300/30 bg-amber-400/15 px-3 py-1 text-xs font-medium text-amber-700">
-                                Pending
-                              </span>
                             </div>
                           </div>
-                        ))}
-                    </div>
+                        );
+                      })}
                   </div>
                 </div>
               </div>

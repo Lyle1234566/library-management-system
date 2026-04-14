@@ -109,7 +109,7 @@ export default function BookDetailsPage() {
   const [returnStatus, setReturnStatus] = useState<RequestStatusState | null>(null);
   const [reservationStatus, setReservationStatus] = useState<RequestStatusState | null>(null);
   const [showBorrowModal, setShowBorrowModal] = useState(false);
-  const [borrowDays, setBorrowDays] = useState(14);
+  const [borrowDays, setBorrowDays] = useState(7);
   const [teacherReportingFrequency, setTeacherReportingFrequency] = useState<
     Exclude<ReportingFrequency, 'NONE'>
   >('MONTHLY');
@@ -379,7 +379,7 @@ export default function BookDetailsPage() {
   const reservationSubmitting = activeReservationStatus?.submitting ?? false;
   const reservationError = activeReservationStatus?.error ?? null;
   const reservationMessage = activeReservationStatus?.message ?? null;
-  const borrowDayOptions = [7, 14];
+  const borrowDayOptions = [7];
   const getEstimatedDueDateLabel = (days: number) => {
     const dueDate = new Date(todayReference);
     dueDate.setDate(dueDate.getDate() + days);
@@ -1215,7 +1215,7 @@ export default function BookDetailsPage() {
                           className={`flex-1 rounded-full px-6 py-3 font-semibold transition-all duration-400 ${
                             isReturnDisabled
                               ? 'cursor-not-allowed bg-white/72 text-ink-muted/70'
-                              : 'bg-sky-300 text-[#17314e] hover:bg-sky-200 shadow-[0_14px_40px_-12px_rgba(43,92,135,0.28)]'
+                              : 'bg-[#1e3a5f] text-white hover:bg-[#2d4a6f] shadow-[0_14px_40px_-12px_rgba(30,58,95,0.35)]'
                           }`}
                           disabled={isReturnDisabled}
                           onClick={handleReturnRequest}
@@ -1231,7 +1231,7 @@ export default function BookDetailsPage() {
                           className={`flex-1 rounded-full px-6 py-3 font-semibold transition-all duration-400 ${
                             isBorrowDisabled
                               ? 'cursor-not-allowed bg-white/72 text-ink-muted/70'
-                              : 'bg-[color:var(--accent)] text-[#17314e] hover:bg-[color:var(--accent-strong)] shadow-[0_14px_40px_-12px_rgba(217,175,88,0.26)]'
+                              : 'bg-[#1e3a5f] text-white hover:bg-[#2d4a6f] shadow-[0_14px_40px_-12px_rgba(30,58,95,0.35)]'
                           }`}
                           disabled={isBorrowDisabled}
                           onClick={handleBorrowRequest}
@@ -1248,7 +1248,7 @@ export default function BookDetailsPage() {
                           className={`flex-1 rounded-full px-6 py-3 font-semibold transition-all duration-400 ${
                             isReserveDisabled
                               ? 'cursor-not-allowed bg-white/72 text-ink-muted/70'
-                              : 'bg-emerald-300 text-[#17314e] hover:bg-emerald-200 shadow-[0_14px_40px_-12px_rgba(16,185,129,0.24)]'
+                              : 'bg-[#1e3a5f] text-white hover:bg-[#2d4a6f] shadow-[0_14px_40px_-12px_rgba(30,58,95,0.35)]'
                           }`}
                           disabled={isReserveDisabled}
                           onClick={handleReserveRequest}
@@ -1454,7 +1454,7 @@ export default function BookDetailsPage() {
                       setReviewsExpanded(true);
                       setShowReviewForm(true);
                     }}
-                    className="rounded-full bg-[color:var(--accent)] px-4 py-2 text-sm font-semibold text-[#17314e] transition-colors hover:bg-[color:var(--accent-strong)]"
+                    className="rounded-full bg-[color:var(--accent)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[color:var(--accent-strong)]"
                   >
                     Write a Review
                   </button>
@@ -1534,7 +1534,7 @@ export default function BookDetailsPage() {
                       className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                         reviewSubmitting || reviewForm.rating === 0
                           ? 'cursor-not-allowed bg-white/72 text-ink-muted/70'
-                          : 'bg-[color:var(--accent)] text-[#17314e] hover:bg-[color:var(--accent-strong)]'
+                          : 'bg-[color:var(--accent)] text-white hover:bg-[color:var(--accent-strong)]'
                       }`}
                     >
                       {reviewSubmitting ? 'Submitting...' : editingReview ? 'Update Review' : 'Submit Review'}
@@ -1696,7 +1696,7 @@ export default function BookDetailsPage() {
                   className={`rounded-full px-6 py-3 font-semibold transition-colors ${
                     borrowSubmitting
                       ? 'cursor-not-allowed bg-white/72 text-ink-muted/70'
-                      : 'bg-sky-300 text-[#17314e] hover:bg-sky-200'
+                      : 'bg-[#1e3a5f] text-white hover:bg-[#2d4a6f]'
                   }`}
                 >
                   {borrowSubmitting ? 'Submitting...' : 'Submit teacher borrow'}
@@ -1969,7 +1969,7 @@ export default function BookDetailsPage() {
                   className={`flex-1 rounded-full px-6 py-3 font-semibold transition-colors ${
                     borrowSubmitting || !studentBorrowForm.agreementAccepted
                       ? 'cursor-not-allowed bg-white/72 text-ink-muted/70'
-                      : 'bg-sky-300 text-[#17314e] hover:bg-sky-200'
+                      : 'bg-[#1e3a5f] text-white hover:bg-[#2d4a6f]'
                   }`}
                 >
                   Confirm Request

@@ -132,10 +132,10 @@ export default function LibraryLocationSection() {
             <button
               type="button"
               onClick={tracking ? stopTracking : startTracking}
-              className={`inline-flex w-full items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 sm:w-auto ${
+              className={`inline-flex w-full items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 sm:w-auto ${
                 tracking
-                  ? 'bg-sky-300 text-[#17314e] hover:bg-sky-200'
-                  : 'bg-[color:var(--accent)] text-[#17314e] shadow-[0_16px_30px_rgba(217,175,88,0.22)] hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] hover:text-[#17314e]'
+                  ? 'bg-sky-600 text-white shadow-lg hover:bg-sky-700 hover:shadow-xl'
+                  : 'bg-[#2f3e9e] text-white shadow-lg hover:bg-[#253285] hover:shadow-xl'
               }`}
             >
               {tracking ? 'Stop Live Tracking' : 'Start Live Tracking'}

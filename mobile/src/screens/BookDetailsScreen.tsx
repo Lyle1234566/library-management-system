@@ -139,7 +139,7 @@ export const BookDetailsScreen = ({ route, navigation }: Props) => {
   const [similarLoading, setSimilarLoading] = useState(false);
   const [similarError, setSimilarError] = useState<string | null>(null);
   const [teacherReportingFrequency, setTeacherReportingFrequency] = useState<"WEEKLY" | "MONTHLY">("MONTHLY");
-  const [studentBorrowDays, setStudentBorrowDays] = useState<7 | 14>(14);
+  const [studentBorrowDays, setStudentBorrowDays] = useState<7>(7);
   const [studentBorrowForm, setStudentBorrowForm] = useState({
     courseProgram: "",
     yearLevel: "",
@@ -616,7 +616,7 @@ export const BookDetailsScreen = ({ route, navigation }: Props) => {
               Match the web flow by choosing how many days you need this book before sending the request.
             </Text>
             <View style={styles.optionWrap}>
-              {([7, 14] as const).map((days) => (
+              {([7] as const).map((days) => (
                 <Pressable
                   key={days}
                   style={[

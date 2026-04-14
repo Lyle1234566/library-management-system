@@ -3,7 +3,7 @@
 import { API_BASE_URL, API_ORIGIN } from '@/lib/api-config';
 import { authApi, tokenStorage } from '@/lib/auth';
 
-export { API_BASE_URL, API_ORIGIN };
+export { API_BASE_URL, API_ORIGIN, authApi };
 
 const buildHeaders = (): Record<string, string> => {
   const headers: Record<string, string> = {

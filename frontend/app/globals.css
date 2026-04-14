@@ -243,9 +243,13 @@ h3 {
 
   .public-shell {
     background:
+      linear-gradient(120deg, rgba(120, 159, 197, 0.08) 1px, transparent 1px),
+      linear-gradient(30deg, rgba(120, 159, 197, 0.06) 1px, transparent 1px),
       radial-gradient(circle at top left, rgba(126, 191, 231, 0.26), transparent 28%),
       radial-gradient(circle at bottom right, rgba(217, 175, 88, 0.18), transparent 26%),
       linear-gradient(180deg, #f8fbff 0%, #edf6ff 48%, #e7f2ff 100%);
+    background-size: 150px 150px, 150px 150px, auto, auto, auto;
+    background-position: 0 0, 48px 48px, 0 0, 0 0, 0 0;
   }
 
   .public-panel {
@@ -267,6 +271,59 @@ h3 {
     box-shadow: 0 10px 24px rgba(31, 53, 84, 0.05);
   }
 
+  .library-hero-pattern {
+    background:
+      radial-gradient(circle at 16% 18%, rgba(143, 203, 239, 0.18), transparent 24%),
+      radial-gradient(circle at 82% 24%, rgba(235, 192, 63, 0.12), transparent 20%),
+      linear-gradient(90deg, rgba(0, 68, 124, 0.05) 1px, transparent 1px),
+      linear-gradient(rgba(0, 68, 124, 0.035) 1px, transparent 1px);
+    background-size: auto, auto, 170px 170px, 170px 170px;
+    background-position: 0 0, 0 0, 0 0, 0 0;
+  }
+
+  .library-glass-card {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(230, 240, 248, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow:
+      0 18px 40px rgba(0, 68, 124, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(14px);
+  }
+
+  .library-glass-tile {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(230, 240, 248, 0.7));
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow:
+      0 12px 28px rgba(143, 203, 239, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.58);
+    backdrop-filter: blur(10px);
+  }
+
+  .library-gold-button {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ebc03f 0%, #f4d56a 100%);
+    box-shadow:
+      0 16px 34px rgba(122, 88, 20, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.58);
+  }
+
+  .library-gold-button::after {
+    content: "";
+    position: absolute;
+    inset: -40% auto -40% -30%;
+    width: 38%;
+    transform: translateX(-160%) skewX(-22deg);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.48), transparent);
+    transition: transform 650ms ease;
+  }
+
+  .library-gold-button:hover::after {
+    transform: translateX(520%) skewX(-22deg);
+  }
+
   .text-balance {
     text-wrap: balance;
   }
@@ -281,6 +338,14 @@ h3 {
 
   .animate-float-slow {
     animation: float 10s ease-in-out infinite;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+
+  .duration-250 {
+    transition-duration: 250ms;
   }
 }
 
@@ -414,6 +479,18 @@ html {
   }
   50% {
     transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(0.98);
   }
 }
 

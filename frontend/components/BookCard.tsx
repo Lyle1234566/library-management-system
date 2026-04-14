@@ -263,7 +263,7 @@ export default function BookCard({ book }: BookCardProps) {
                 ${
                   isDisabled
                     ? 'border border-line bg-white/72 text-ink-muted/70'
-                    : 'bg-[color:var(--accent)] text-[#17314e] hover:bg-[color:var(--accent-strong)] hover:text-[#17314e]'
+                    : 'bg-[color:var(--accent)] text-white hover:bg-[color:var(--accent-strong)] hover:text-white'
                 }
               `}
             >

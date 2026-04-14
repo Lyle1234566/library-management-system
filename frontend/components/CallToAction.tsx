@@ -23,15 +23,15 @@ export default function CallToAction() {
             Ready to Start Your Reading Journey?
           </h2>
           <p className="mx-auto mb-8 max-w-2xl text-xl text-ink-muted animate-fade-up delay-100">
-            Join readers who want a modern borrowing experience. Create your account,
-            explore the catalog, and track every receipt in one place.
+            Join our community of readers today. Sign up for free and unlock access
+            to our full catalog with instant borrowing and personalized recommendations.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-200">
             <Link
               href="/register"
               className="rounded-full bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-8 py-4 font-semibold text-[#1a1b1f] shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] hover:text-[#1a1b1f]"
             >
-              Get Started
+              Create Account
             </Link>
             <Link
               href="/about"

@@ -587,6 +587,52 @@ class PublicStatsView(APIView):
         )
 
 
+class ActiveStudentsMetricView(APIView):
+    """
+    Get count of active students with library activity in the last N days.
+    Uses PostgreSQL function for optimized performance.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Check if user has permission to view metrics
+        if not is_circulation_staff(request.user):
+            return Response(
+                {'detail': 'You do not have permission to view this metric.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Get days parameter (default 30)
+        try:
+            days = int(request.query_params.get('days', 30))
+            if days < 1 or days > 365:
+                return Response(
+                    {'detail': 'Days parameter must be between 1 and 365.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (TypeError, ValueError):
+            return Response(
+                {'detail': 'Invalid days parameter.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Call PostgreSQL function
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT get_active_students_count(%s)', [days])
+            result = cursor.fetchone()
+            active_count = result[0] if result else 0
+
+        return Response(
+            {
+                'active_students_count': active_count,
+                'days_window': days,
+                'description': f'Students with library activity in the last {days} days',
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
 class ExportReportsView(APIView):
     """Export library reports as CSV."""
     permission_classes = [IsAuthenticated]
@@ -944,9 +990,17 @@ class BookViewSet(viewsets.ModelViewSet):
                 )
             requested_borrow_days = 0
         else:
+            try:
+                student_borrow_days = max(
+                    int(getattr(settings, 'STUDENT_BORROW_DURATION_DAYS', 7)),
+                    1,
+                )
+            except (TypeError, ValueError):
+                student_borrow_days = 7
+
             requested_days_raw = request.data.get(
                 'borrow_days',
-                getattr(settings, 'BORROW_DURATION_DAYS', 14),
+                student_borrow_days,
             )
             try:
                 requested_borrow_days = int(requested_days_raw)
@@ -956,10 +1010,13 @@ class BookViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            max_borrow_days = getattr(settings, 'MAX_BORROW_DURATION_DAYS', 30)
-            if requested_borrow_days < 1 or requested_borrow_days > max_borrow_days:
+            if requested_borrow_days != student_borrow_days:
                 return Response(
-                    {'detail': f'borrow_days must be between 1 and {max_borrow_days}.'},
+                    {
+                        'detail': (
+                            f'Students can only borrow books for {student_borrow_days} days.'
+                        )
+                    },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 

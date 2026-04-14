@@ -17,12 +17,13 @@
     "nodemailer": "^7.0.10",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "recharts": "^3.8.1",
     "resend": "^6.9.3"
   },
   "devDependencies": {
-    "@types/nodemailer": "^6.4.17",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

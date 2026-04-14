@@ -160,7 +160,7 @@ function LoginPageContent() {
                 <div className="space-y-4">
                   <h1 className="max-w-3xl text-4xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-6xl lg:text-[4.25rem] xl:text-[5.1rem]">
                     Borrow Smarter.
-                    <span className="block" style={{ color: '#d4af37' }}>Read with less Friction.</span>
+                    <span className="block font-extrabold italic bg-gradient-to-r from-[#00447C] to-[#3b82f6] bg-clip-text text-transparent">Read with less Friction.</span>
                   </h1>
                   <p className="max-w-2xl text-base text-ink-muted sm:text-lg">
                     Sign in once with your approved library account. The platform detects your role, protects your

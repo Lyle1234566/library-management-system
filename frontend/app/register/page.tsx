@@ -175,7 +175,7 @@ function RegisterPageShell() {
                 <div className="space-y-4">
                   <h1 className="max-w-3xl text-4xl font-extrabold leading-[0.93] tracking-tight text-ink sm:text-6xl lg:text-[4.15rem] xl:text-[5rem]">
                     Join the
-                    <span className="block" style={{ color: '#d4af37' }}>Salazar Library System.</span>
+                    <span className="block font-extrabold italic bg-gradient-to-r from-[#00447C] to-[#3b82f6] bg-clip-text text-transparent">Salazar Library System.</span>
                   </h1>
                   <p className="max-w-2xl text-base leading-7 text-ink-muted sm:text-lg">
                     Choose whether you are registering as a student or teacher, then verify your email and wait for staff approval before your first sign in.

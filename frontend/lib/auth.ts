@@ -1285,8 +1285,12 @@ export const authApi = {
             ...(access ? { Authorization: `Bearer ${access}` } : {}),
           },
           body: JSON.stringify({ refresh }),
+        }).catch(() => {
+          // Silently ignore logout API errors
         });
       }
+    } catch (error) {
+      // Silently ignore any logout errors
     } finally {
       tokenStorage.clearTokens();
     }

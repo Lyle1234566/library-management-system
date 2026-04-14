@@ -29,10 +29,10 @@ const statusLabel: Record<BorrowRequest['status'], string> = {
 };
 
 const statusStyles: Record<BorrowRequest['status'], string> = {
-  PENDING: 'border border-amber-300/35 bg-amber-500/15 text-amber-100',
-  APPROVED: 'border border-sky-300/35 bg-sky-500/15 text-sky-100',
-  RETURNED: 'border border-emerald-300/35 bg-emerald-500/15 text-emerald-100',
-  REJECTED: 'border border-rose-300/35 bg-rose-500/15 text-rose-100',
+  PENDING: 'border border-amber-300/40 bg-amber-100/90 text-amber-800',
+  APPROVED: 'border border-sky-300/40 bg-sky-100/90 text-[color:var(--accent-cool-strong)]',
+  RETURNED: 'border border-emerald-300/40 bg-emerald-100/90 text-emerald-700',
+  REJECTED: 'border border-rose-300/40 bg-rose-100/90 text-rose-700',
 };
 
 function formatDate(dateString?: string | null) {
@@ -269,18 +269,22 @@ export default function MyBooksPage() {
 
   return (
     <ProtectedRoute>
-      <div className="theme-login min-h-screen bg-[#0b1324] text-white">
-        <Navbar variant="dark" />
+      <div className="public-shell min-h-screen text-ink">
+        <Navbar />
 
         <main className="relative overflow-hidden pt-16 pb-16">
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-sky-500/12 blur-3xl" />
-            <div className="absolute right-0 top-1/3 h-[28rem] w-[28rem] rounded-full bg-amber-400/10 blur-3xl" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(56,189,248,0.12),transparent_40%)]" />
+            <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-sky-300/18 blur-3xl" />
+            <div className="absolute right-0 top-1/3 h-[28rem] w-[28rem] rounded-full bg-amber-300/12 blur-3xl" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(126,191,231,0.16),transparent_40%)]" />
           </div>
 
-          <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#0a1221] via-[#0e1629] to-[#0b1324] text-white">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(56,189,248,0.15),transparent_50%)]" />
+          <section className="relative overflow-hidden border-b border-line">
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-sky-300/20 blur-3xl" />
+              <div className="absolute -bottom-24 -right-20 h-96 w-96 rounded-full bg-amber-300/18 blur-3xl" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.24),rgba(220,236,255,0.42))]" />
+            </div>
             <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center shadow-lg shadow-sky-500/25">
@@ -289,15 +293,15 @@ export default function MyBooksPage() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-sky-300/80 font-semibold">My Library</p>
-                  <h1 className="text-3xl sm:text-4xl font-bold text-white">Books</h1>
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[color:var(--accent-cool-strong)]/80">My Library</p>
+                  <h1 className="text-3xl sm:text-4xl font-bold text-ink">Books</h1>
                 </div>
               </div>
-              <p className="mt-3 max-w-2xl text-base text-white/75">
+              <p className="mt-3 max-w-2xl text-base text-ink-muted">
                 Track your borrowed books, due dates, and reading journey.
               </p>
               {user && (
-                <p className="mt-4 text-sm text-sky-200/90">
+                <p className="mt-4 text-sm text-[color:var(--accent-cool-strong)]/85">
                   Welcome back, {user.full_name?.split(' ')[0] || 'there'}! 👋
                 </p>
               )}
@@ -305,59 +309,59 @@ export default function MyBooksPage() {
           </section>
 
           <section className="-mt-8 relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-            <div className="space-y-6 rounded-3xl border border-sky-500/20 bg-gradient-to-br from-slate-900/95 to-slate-800/95 p-6 shadow-2xl shadow-sky-500/10 backdrop-blur-xl sm:p-8">
+            <div className="public-panel space-y-6 rounded-3xl p-6 backdrop-blur-xl sm:p-8">
               {(user?.role === 'LIBRARIAN' ||
                 user?.role === 'WORKING' ||
                 user?.role === 'STAFF' ||
                 user?.role === 'ADMIN') && (
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  <div className="group rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-5 transition-all hover:border-white/20 hover:shadow-lg hover:shadow-white/5">
+                  <div className="group rounded-2xl border border-line bg-white/82 p-5 shadow-[0_16px_36px_rgba(0,68,124,0.08)] transition-all hover:border-sky-300/30 hover:shadow-[0_20px_40px_rgba(0,68,124,0.12)]">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-xs font-medium uppercase tracking-wider text-white/50">Total Books</p>
-                        <p className="mt-2 text-3xl font-bold text-white">{stats.total}</p>
+                        <p className="text-xs font-medium uppercase tracking-wider text-ink-muted/80">Total Books</p>
+                        <p className="mt-2 text-3xl font-bold text-ink">{stats.total}</p>
                       </div>
-                      <div className="h-12 w-12 rounded-xl bg-white/10 flex items-center justify-center">
-                        <svg className="h-6 w-6 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100">
+                        <svg className="h-6 w-6 text-[color:var(--accent-cool-strong)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                         </svg>
                       </div>
                     </div>
                   </div>
-                  <div className="group rounded-2xl border border-sky-400/30 bg-gradient-to-br from-sky-500/20 to-sky-600/10 p-5 transition-all hover:border-sky-400/50 hover:shadow-lg hover:shadow-sky-500/20">
+                  <div className="group rounded-2xl border border-sky-300/30 bg-sky-50/90 p-5 transition-all hover:border-sky-400/40 hover:shadow-[0_18px_34px_rgba(56,189,248,0.18)]">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-xs font-medium uppercase tracking-wider text-sky-200/70">Borrowed</p>
-                        <p className="mt-2 text-3xl font-bold text-sky-100">{stats.active}</p>
+                        <p className="text-xs font-medium uppercase tracking-wider text-sky-700/70">Borrowed</p>
+                        <p className="mt-2 text-3xl font-bold text-[color:var(--accent-cool-strong)]">{stats.active}</p>
                       </div>
-                      <div className="h-12 w-12 rounded-xl bg-sky-400/20 flex items-center justify-center">
-                        <svg className="h-6 w-6 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100">
+                        <svg className="h-6 w-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
                     </div>
                   </div>
-                  <div className="group rounded-2xl border border-amber-400/30 bg-gradient-to-br from-amber-500/20 to-amber-600/10 p-5 transition-all hover:border-amber-400/50 hover:shadow-lg hover:shadow-amber-500/20">
+                  <div className="group rounded-2xl border border-amber-300/35 bg-amber-50/90 p-5 transition-all hover:border-amber-400/45 hover:shadow-[0_18px_34px_rgba(245,158,11,0.16)]">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-xs font-medium uppercase tracking-wider text-amber-200/70">Pending</p>
-                        <p className="mt-2 text-3xl font-bold text-amber-100">{stats.pending}</p>
+                        <p className="text-xs font-medium uppercase tracking-wider text-amber-700/75">Pending</p>
+                        <p className="mt-2 text-3xl font-bold text-amber-800">{stats.pending}</p>
                       </div>
-                      <div className="h-12 w-12 rounded-xl bg-amber-400/20 flex items-center justify-center">
-                        <svg className="h-6 w-6 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100">
+                        <svg className="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
                     </div>
                   </div>
-                  <div className="group rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 p-5 transition-all hover:border-emerald-400/50 hover:shadow-lg hover:shadow-emerald-500/20">
+                  <div className="group rounded-2xl border border-emerald-300/35 bg-emerald-50/90 p-5 transition-all hover:border-emerald-400/45 hover:shadow-[0_18px_34px_rgba(16,185,129,0.16)]">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-xs font-medium uppercase tracking-wider text-emerald-200/70">Returned</p>
-                        <p className="mt-2 text-3xl font-bold text-emerald-100">{stats.returned}</p>
+                        <p className="text-xs font-medium uppercase tracking-wider text-emerald-700/75">Returned</p>
+                        <p className="mt-2 text-3xl font-bold text-emerald-700">{stats.returned}</p>
                       </div>
-                      <div className="h-12 w-12 rounded-xl bg-emerald-400/20 flex items-center justify-center">
-                        <svg className="h-6 w-6 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100">
+                        <svg className="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
@@ -366,16 +370,16 @@ export default function MyBooksPage() {
                 </div>
               )}
 
-              <div className="rounded-2xl border border-white/14 bg-[#10203a]/70 p-5">
+              <div className="rounded-2xl border border-line bg-white/82 p-5 shadow-[0_12px_28px_rgba(0,68,124,0.08)]">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <h2 className="text-sm font-semibold uppercase tracking-widest text-white">
+                  <h2 className="text-sm font-semibold uppercase tracking-widest text-ink">
                     Borrow Alerts
                   </h2>
                   <span
                     className={`inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-semibold ${
                       dueAlerts.length > 0
-                        ? 'border border-rose-300/35 bg-rose-500/20 text-rose-100'
-                        : 'border border-white/15 bg-white/10 text-white/70'
+                        ? 'border border-rose-300/35 bg-rose-100 text-rose-700'
+                        : 'border border-line bg-slate-50 text-ink-muted'
                     }`}
                   >
                     {dueAlerts.length > 0
@@ -385,7 +389,7 @@ export default function MyBooksPage() {
                 </div>
 
                 {dueAlerts.length === 0 ? (
-                  <p className="mt-3 text-sm text-white/70">
+                  <p className="mt-3 text-sm text-ink-muted">
                     No overdue or near-due borrow alerts right now.
                   </p>
                 ) : (
@@ -393,12 +397,12 @@ export default function MyBooksPage() {
                     {dueAlerts.map((alert) => (
                       <div
                         key={alert.requestId}
-                        className="rounded-xl border border-white/14 bg-[#0f1b30]/80 px-4 py-3"
+                        className="rounded-xl border border-line bg-white/84 px-4 py-3"
                       >
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <div>
-                            <p className="text-sm font-semibold text-white">{alert.title}</p>
-                            <p className="text-xs text-white/70">
+                            <p className="text-sm font-semibold text-ink">{alert.title}</p>
+                            <p className="text-xs text-ink-muted">
                               {alert.kind === 'REPORT' ? 'Report due' : 'Due'}:{' '}
                               {formatDate(alert.scheduleDate)} - {formatRelative(alert.scheduleDate)}
                             </p>
@@ -407,10 +411,10 @@ export default function MyBooksPage() {
                             <span
                               className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ${
                                 alert.level === 'OVERDUE'
-                                  ? 'border border-rose-300/35 bg-rose-500/20 text-rose-100'
+                                  ? 'border border-rose-300/35 bg-rose-100 text-rose-700'
                                   : alert.level === 'TODAY'
-                                    ? 'border border-amber-300/35 bg-amber-500/20 text-amber-100'
-                                    : 'border border-sky-300/35 bg-sky-500/20 text-sky-100'
+                                    ? 'border border-amber-300/35 bg-amber-100 text-amber-800'
+                                    : 'border border-sky-300/35 bg-sky-100 text-[color:var(--accent-cool-strong)]'
                               }`}
                             >
                               {alert.level === 'OVERDUE'
@@ -427,7 +431,7 @@ export default function MyBooksPage() {
                             </span>
                             <Link
                               href={`/books/${alert.bookId}`}
-                              className="text-xs font-semibold text-sky-300 hover:text-sky-200"
+                              className="text-xs font-semibold text-[color:var(--accent-cool-strong)] hover:text-[color:var(--accent)]"
                             >
                               Open
                             </Link>
@@ -448,17 +452,17 @@ export default function MyBooksPage() {
                       onClick={() => setFilter(key as FilterKey)}
                       className={`rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-colors ${
                         filter === key
-                          ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25'
-                          : 'border border-white/15 bg-white/10 text-white/75 hover:bg-white/15 hover:text-white'
+                          ? 'border border-sky-300/40 bg-sky-100/90 text-[color:var(--accent-cool-strong)] shadow-sm'
+                          : 'border border-line bg-white/80 text-ink-muted hover:bg-white hover:text-ink'
                       }`}
                     >
                       {label}
                     </button>
                   ))}
                 </div>
-                <div className="flex w-full max-w-md items-center gap-3 rounded-full border border-white/15 bg-[#0f1b30]/85 px-4 py-2">
+                <div className="flex w-full max-w-md items-center gap-3 rounded-full border border-line bg-white/85 px-4 py-2.5 shadow-[0_8px_18px_rgba(0,68,124,0.06)]">
                   <svg
-                    className="h-4 w-4 text-white/55"
+                    className="h-4 w-4 text-ink-muted"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -473,28 +477,28 @@ export default function MyBooksPage() {
                   <input
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    className="w-full bg-transparent text-sm text-white placeholder:text-white/45 focus:outline-none"
+                    className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/65 focus:outline-none"
                     placeholder="Search by title, author, or receipt"
                   />
                 </div>
               </div>
 
               {loading && (
-                <div className="flex items-center gap-3 text-white/70">
+                <div className="flex items-center gap-3 text-ink-muted">
                   <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-[color:var(--accent)]"></div>
                   Loading your books...
                 </div>
               )}
 
               {error && (
-                <div className="rounded-2xl border border-rose-300/35 bg-rose-500/15 px-4 py-3 text-sm text-rose-100">
+                <div className="rounded-2xl border border-rose-300/35 bg-rose-50 px-4 py-3 text-sm text-rose-700">
                   {error}
                 </div>
               )}
 
               {!loading && !error && filteredRequests.length === 0 && (
-                <div className="rounded-3xl border border-dashed border-white/20 bg-[#10203a]/65 p-10 text-center">
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/10 text-sky-100">
+                <div className="public-panel-soft rounded-3xl p-10 text-center">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-line bg-white/80 text-[color:var(--accent-cool-strong)]">
                     <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
@@ -504,13 +508,13 @@ export default function MyBooksPage() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-white">No books here yet</h3>
-                  <p className="mt-2 text-sm text-white/70">
+                  <h3 className="text-lg font-semibold text-ink">No books here yet</h3>
+                  <p className="mt-2 text-sm text-ink-muted">
                     Start borrowing to build your personal shelf.
                   </p>
                   <Link
                     href="/books"
-                    className="mt-4 inline-flex items-center rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-[#1a1b1f] shadow-md hover:bg-amber-400"
+                    className="mt-4 inline-flex items-center rounded-full bg-[color:var(--accent)] px-4 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-200 hover:bg-[color:var(--accent-strong)] hover:shadow-xl"
                   >
                     Browse books
                   </Link>
@@ -543,10 +547,10 @@ export default function MyBooksPage() {
                     return (
                       <div
                         key={request.id}
-                        className="group rounded-3xl border border-white/15 bg-[#0f1b2f]/85 shadow-xl shadow-black/25 transition-all hover:-translate-y-1 hover:border-sky-300/35"
+                        className="group rounded-3xl border border-line bg-white/90 shadow-[0_18px_42px_rgba(0,68,124,0.10)] transition-all hover:-translate-y-1 hover:border-sky-300/35"
                       >
                         <div className="flex gap-4 p-5">
-                          <div className="relative h-28 w-20 overflow-hidden rounded-2xl border border-white/10 bg-white/10">
+                          <div className="relative h-28 w-20 overflow-hidden rounded-2xl border border-line bg-slate-50/80">
                             {coverUrl ? (
                               <Image
                                 src={coverUrl}
@@ -557,7 +561,7 @@ export default function MyBooksPage() {
                                 unoptimized
                               />
                             ) : (
-                              <div className="flex h-full w-full items-center justify-center text-white/55">
+                              <div className="flex h-full w-full items-center justify-center text-ink-muted/70">
                                 <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path
                                     strokeLinecap="round"
@@ -572,10 +576,10 @@ export default function MyBooksPage() {
                           <div className="flex-1 space-y-2">
                             <div className="flex items-start justify-between gap-3">
                               <div>
-                                <h3 className="line-clamp-2 text-base font-semibold text-white">
+                                <h3 className="line-clamp-2 text-base font-semibold text-ink">
                                   {request.book.title}
                                 </h3>
-                                <p className="text-sm text-white/70">{request.book.author}</p>
+                                <p className="text-sm text-ink-muted">{request.book.author}</p>
                               </div>
                               <span
                                 className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold ${statusStyles[request.status]}`}
@@ -583,21 +587,21 @@ export default function MyBooksPage() {
                                 {statusLabel[request.status]}
                               </span>
                             </div>
-                            <div className="space-y-1 text-xs text-white/65">
+                            <div className="space-y-1 text-xs text-ink-muted">
                               <p>Requested: {formatDate(request.requested_at)}</p>
                               {request.processed_at && (
                                 <p>Processed: {formatDate(request.processed_at)}</p>
                               )}
                               {isTeacherReporting && (
                                 <>
-                                  <p className="text-indigo-100">No due date limit</p>
+                                  <p className="text-indigo-600">No due date limit</p>
                                   <p>
                                     Reporting: {formatReportingFrequency(request.reporting_frequency)}
                                   </p>
                                 </>
                               )}
                               {scheduleDate && (
-                                <p className={dueLabel?.includes('Overdue') ? 'text-rose-200' : 'text-sky-100'}>
+                                <p className={dueLabel?.includes('Overdue') ? 'text-rose-700' : 'text-[color:var(--accent-cool-strong)]'}>
                                   {isTeacherReporting ? 'Next report' : 'Due'}: {formatDate(scheduleDate)}{' '}
                                   {dueLabel && `- ${dueLabel}`}
                                 </p>
@@ -606,7 +610,7 @@ export default function MyBooksPage() {
                                 <p>Last report: {formatDate(request.last_reported_at)}</p>
                               )}
                               {hasLateFee && (
-                                <p className="text-amber-100">
+                                <p className="text-amber-700">
                                   Late fee: ₱{lateFeeValue.toFixed(2)}
                                 </p>
                               )}
@@ -621,7 +625,7 @@ export default function MyBooksPage() {
                               {request.status === 'APPROVED' &&
                                 !isTeacherReporting &&
                                 pendingRenewalRequestId && (
-                                <p className="text-sky-100">
+                                <p className="text-[color:var(--accent-cool-strong)]">
                                   Renewal request pending since {formatDate(pendingRenewalRequestedAt)}
                                 </p>
                               )}
@@ -630,7 +634,7 @@ export default function MyBooksPage() {
                             <div className="pt-2 flex items-center gap-3">
                               <Link
                                 href={`/books/${request.book.id}`}
-                                className="text-xs font-semibold text-sky-300 hover:text-sky-200"
+                                className="text-xs font-semibold text-[color:var(--accent-cool-strong)] hover:text-[color:var(--accent)]"
                               >
                                 View book details -&gt;
                               </Link>
@@ -638,7 +642,7 @@ export default function MyBooksPage() {
                                 <button
                                   onClick={() => void handleSubmitReport(request.id)}
                                   disabled={reportSubmittingId === request.id}
-                                  className="text-xs font-semibold text-indigo-300 hover:text-indigo-200 disabled:cursor-not-allowed disabled:text-indigo-200/50"
+                                  className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 disabled:cursor-not-allowed disabled:text-slate-400"
                                 >
                                   {reportSubmittingId === request.id
                                     ? 'Submitting report...'
@@ -650,7 +654,7 @@ export default function MyBooksPage() {
                                 <button
                                   onClick={() => void handleRenewBorrow(request.id)}
                                   disabled={renewingId === request.id || !canRenew}
-                                  className="text-xs font-semibold text-emerald-300 hover:text-emerald-200 disabled:cursor-not-allowed disabled:text-white/40"
+                                  className="text-xs font-semibold text-emerald-700 hover:text-emerald-800 disabled:cursor-not-allowed disabled:text-slate-400"
                                 >
                                   {renewingId === request.id
                                     ? 'Submitting...'
@@ -665,7 +669,7 @@ export default function MyBooksPage() {
                                 !isTeacherReporting &&
                                 !canRenew &&
                                 renewalBlockReason && (
-                                <span className="text-[11px] text-amber-100/90">
+                                <span className="text-[11px] text-amber-700">
                                   {renewalBlockReason}
                                 </span>
                               )}

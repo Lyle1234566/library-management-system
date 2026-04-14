@@ -78,20 +78,23 @@ export default function ChangePasswordPage() {
 
   return (
     <ProtectedRoute>
-      <div className="royal-app min-h-screen bg-[#0b1324] text-white">
-        <Navbar variant="dark" />
-        <main className="pt-16">
-          <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#0a1221] via-[#0e1629] to-[#0b1324]">
-            <div className="absolute inset-0">
-              <div className="absolute -left-20 top-10 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl" />
-              <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl" />
+      <div className="public-shell min-h-screen text-ink">
+        <Navbar />
+        <main className="relative overflow-hidden pt-16">
+          <section className="relative overflow-hidden border-b border-line">
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-sky-300/20 blur-3xl" />
+              <div className="absolute -bottom-20 -right-16 h-80 w-80 rounded-full bg-amber-300/18 blur-3xl" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.22),rgba(220,236,255,0.4))]" />
             </div>
             <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-sky-300/80">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[color:var(--accent-cool-strong)]/80">
                 Security
               </p>
-              <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">Change your password</h1>
-              <p className="mt-3 max-w-2xl text-white/70">
+              <h1 className="mt-4 text-3xl font-semibold text-ink sm:text-4xl">
+                Change your password
+              </h1>
+              <p className="mt-3 max-w-2xl text-ink-muted">
                 Update your sign-in password for your {roleLabel || 'library'} account.
                 This works for student, librarian, and working accounts while you are signed in.
               </p>
@@ -100,20 +103,22 @@ export default function ChangePasswordPage() {
 
           <section className="-mt-8 relative z-10 mx-auto max-w-4xl px-4 pb-16 sm:px-6 lg:px-8">
             <div className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]">
-              <div className="rounded-[28px] border border-white/15 bg-white/5 p-5 backdrop-blur-xl shadow-2xl shadow-black/30 sm:p-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/55">Account</p>
+              <div className="public-panel-soft rounded-[28px] p-5 backdrop-blur-xl sm:p-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[color:var(--accent-cool-strong)]/70">
+                  Account
+                </p>
                 <div className="mt-5 space-y-4">
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-white/45">{displayIdLabel}</p>
-                    <p className="mt-2 text-lg font-semibold text-white">{displayIdValue}</p>
+                  <div className="rounded-2xl border border-line bg-white/78 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-ink-muted/75">{displayIdLabel}</p>
+                    <p className="mt-2 text-lg font-semibold text-ink">{displayIdValue}</p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-white/45">Email</p>
-                    <p className="mt-2 text-sm font-medium text-white/80">{user?.email ?? 'No email on file'}</p>
+                  <div className="rounded-2xl border border-line bg-white/78 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-ink-muted/75">Email</p>
+                    <p className="mt-2 text-sm font-medium text-ink-muted">{user?.email ?? 'No email on file'}</p>
                   </div>
-                  <div className="rounded-2xl border border-amber-300/20 bg-amber-500/10 p-4 text-sm text-white/75">
+                  <div className="rounded-2xl border border-amber-300/30 bg-amber-50 p-4 text-sm text-amber-900/80">
                     If you no longer remember your current password, use the{' '}
-                    <Link href="/forgot-password" className="font-semibold text-amber-300 hover:text-amber-200">
+                    <Link href="/forgot-password" className="font-semibold text-[color:var(--accent-strong)] hover:text-[color:var(--accent)]">
                       forgot-password flow
                     </Link>
                     .
@@ -121,21 +126,21 @@ export default function ChangePasswordPage() {
                 </div>
               </div>
 
-              <div className="rounded-[28px] border border-white/15 bg-white/5 p-5 backdrop-blur-xl shadow-2xl shadow-black/30 sm:p-8">
+              <div className="public-panel rounded-[28px] p-5 backdrop-blur-xl sm:p-8">
                 <form className="space-y-5" onSubmit={handleSubmit}>
                   {message && (
-                    <div className="rounded-2xl border border-emerald-300/30 bg-emerald-500/15 px-4 py-3 text-sm text-emerald-100">
+                    <div className="rounded-2xl border border-emerald-300/40 bg-emerald-100 px-4 py-3 text-sm text-emerald-700">
                       {message}
                     </div>
                   )}
                   {error && (
-                    <div className="rounded-2xl border border-rose-300/30 bg-rose-500/15 px-4 py-3 text-sm text-rose-100">
+                    <div className="rounded-2xl border border-rose-300/40 bg-rose-50 px-4 py-3 text-sm text-rose-700">
                       {error}
                     </div>
                   )}
 
                   <div>
-                    <label htmlFor="oldPassword" className="block text-sm font-medium text-white/90">
+                    <label htmlFor="oldPassword" className="block text-sm font-medium text-ink">
                       Current Password
                     </label>
                     <div className="relative mt-2">
@@ -148,13 +153,13 @@ export default function ChangePasswordPage() {
                           setOldPassword(event.target.value);
                           setError('');
                         }}
-                        className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 pr-16 text-white placeholder-white/35 focus:border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+                        className="w-full rounded-xl border border-line bg-white/85 px-4 py-3 pr-16 text-ink placeholder:text-ink-muted/55 focus:border-sky-300/60 focus:outline-none focus:ring-2 focus:ring-sky-300/30"
                         placeholder="Enter your current password"
                       />
                       <button
                         type="button"
                         onClick={() => setShowOldPassword((prev) => !prev)}
-                        className="absolute inset-y-0 right-0 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-white/55 hover:text-white"
+                        className="absolute inset-y-0 right-0 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--accent-cool-strong)]/75 hover:text-[color:var(--accent-cool-strong)]"
                       >
                         {showOldPassword ? 'Hide' : 'Show'}
                       </button>
@@ -162,7 +167,7 @@ export default function ChangePasswordPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="newPassword" className="block text-sm font-medium text-white/90">
+                    <label htmlFor="newPassword" className="block text-sm font-medium text-ink">
                       New Password
                     </label>
                     <div className="relative mt-2">
@@ -175,24 +180,24 @@ export default function ChangePasswordPage() {
                           setNewPassword(event.target.value);
                           setError('');
                         }}
-                        className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 pr-16 text-white placeholder-white/35 focus:border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+                        className="w-full rounded-xl border border-line bg-white/85 px-4 py-3 pr-16 text-ink placeholder:text-ink-muted/55 focus:border-sky-300/60 focus:outline-none focus:ring-2 focus:ring-sky-300/30"
                         placeholder="Enter your new password"
                       />
                       <button
                         type="button"
                         onClick={() => setShowNewPassword((prev) => !prev)}
-                        className="absolute inset-y-0 right-0 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-white/55 hover:text-white"
+                        className="absolute inset-y-0 right-0 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--accent-cool-strong)]/75 hover:text-[color:var(--accent-cool-strong)]"
                       >
                         {showNewPassword ? 'Hide' : 'Show'}
                       </button>
                     </div>
-                    <p className="mt-2 text-xs text-white/50">
+                    <p className="mt-2 text-xs text-ink-muted/80">
                       {PASSWORD_REQUIREMENTS_SUMMARY}
                     </p>
                   </div>
 
                   <div>
-                    <label htmlFor="newPasswordConfirm" className="block text-sm font-medium text-white/90">
+                    <label htmlFor="newPasswordConfirm" className="block text-sm font-medium text-ink">
                       Confirm New Password
                     </label>
                     <div className="relative mt-2">
@@ -205,13 +210,13 @@ export default function ChangePasswordPage() {
                           setNewPasswordConfirm(event.target.value);
                           setError('');
                         }}
-                        className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 pr-16 text-white placeholder-white/35 focus:border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+                        className="w-full rounded-xl border border-line bg-white/85 px-4 py-3 pr-16 text-ink placeholder:text-ink-muted/55 focus:border-sky-300/60 focus:outline-none focus:ring-2 focus:ring-sky-300/30"
                         placeholder="Re-enter your new password"
                       />
                       <button
                         type="button"
                         onClick={() => setShowNewPasswordConfirm((prev) => !prev)}
-                        className="absolute inset-y-0 right-0 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-white/55 hover:text-white"
+                        className="absolute inset-y-0 right-0 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--accent-cool-strong)]/75 hover:text-[color:var(--accent-cool-strong)]"
                       >
                         {showNewPasswordConfirm ? 'Hide' : 'Show'}
                       </button>
@@ -222,13 +227,13 @@ export default function ChangePasswordPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="inline-flex items-center justify-center rounded-full bg-amber-500 px-5 py-3 text-sm font-semibold text-[#1a1b1f] transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[color:var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {isSubmitting ? 'Updating...' : 'Change Password'}
                     </button>
                     <Link
                       href="/profile"
-                      className="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+                      className="inline-flex items-center justify-center rounded-full border border-line bg-white/80 px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white"
                     >
                       Back to Profile
                     </Link>

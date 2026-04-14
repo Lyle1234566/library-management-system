@@ -87,7 +87,7 @@ export default function AboutPage() {
               </div>
               <Link
                 href="/books"
-                className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-5 py-2.5 text-sm font-semibold text-[#17314e] shadow-[0_16px_30px_rgba(217,175,88,0.24)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] hover:text-[#17314e]"
+                className="inline-flex items-center justify-center rounded-full bg-[#2f3e9e] px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-200 hover:bg-[#253285] hover:shadow-xl"
               >
                 Browse books
               </Link>

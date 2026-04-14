@@ -196,20 +196,32 @@ function ForgotPasswordPageContent() {
   };
 
   return (
-    <div className="royal-app flex min-h-screen items-center justify-center bg-hero px-4 py-10 sm:px-6 lg:px-8">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}></div>
+    <div className="public-shell relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10 text-ink sm:px-6 lg:px-8">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-sky-300/24 blur-3xl animate-float" />
+        <div className="absolute bottom-[-4rem] right-[-2rem] h-[26rem] w-[26rem] rounded-full bg-amber-300/16 blur-3xl animate-float-slow" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.52),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(220,236,255,0.14))]" />
       </div>
 
-      <div className="relative max-w-md w-full space-y-8">
-        {/* Logo and Header */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.18]">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2398bfe6' fill-opacity='0.6'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 w-full max-w-[34rem] space-y-7">
         <div className="text-center">
-          <Link href="/" className="inline-flex items-center space-x-2 mb-6">
+          <div className="mb-5">
+            <span className="inline-flex items-center gap-2 rounded-full border border-sky-200/60 bg-white/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-[color:var(--accent-cool-strong)]/80">
+              Account Recovery
+            </span>
+          </div>
+          <Link href="/" className="inline-flex items-center gap-3 text-ink">
             <svg
-              className="w-10 h-10 text-white"
+              className="h-10 w-10 text-[color:var(--accent-cool-strong)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -221,26 +233,27 @@ function ForgotPasswordPageContent() {
                 d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
               />
             </svg>
-            <span className="text-2xl font-bold text-white">SCSIT Digital Library</span>
+            <span className="text-[1.65rem] font-semibold tracking-tight text-ink">SCSIT Digital Library</span>
           </Link>
-          <h2 className="text-3xl font-bold text-white">Reset your password</h2>
-          <p className="mt-2 text-white/70">{headerDescription}</p>
+          <h2 className="mt-5 text-4xl font-semibold tracking-tight text-ink sm:text-[2.8rem]">Reset your password</h2>
+          <p className="mx-auto mt-3 max-w-xl text-base leading-7 text-ink-muted sm:text-[1.05rem]">{headerDescription}</p>
         </div>
 
-        {/* Form */}
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-5 shadow-card backdrop-blur-md sm:p-8">
+        <div className="public-panel relative overflow-hidden rounded-[34px] p-[1px] shadow-card">
+          <div className="pointer-events-none absolute inset-x-12 top-0 h-24 rounded-full bg-sky-300/24 blur-3xl" />
+          <div className="relative rounded-[33px] bg-white/95 p-5 backdrop-blur-2xl sm:p-8">
           {phase === 'done' ? (
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+                <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Password Reset Complete</h3>
-              <p className="text-white/70 mb-6">{message || 'You can now sign in with your new password.'}</p>
+              <h3 className="mb-2 text-xl font-semibold text-ink">Password Reset Complete</h3>
+              <p className="mb-6 text-ink-muted">{message || 'You can now sign in with your new password.'}</p>
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-[#0f1c2e] hover:bg-[#e7f1ff] transition-colors"
+                className="inline-flex items-center justify-center rounded-lg bg-[color:var(--accent)] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[color:var(--accent-strong)]"
               >
                 Back to Sign In
               </Link>
@@ -248,29 +261,29 @@ function ForgotPasswordPageContent() {
           ) : phase === 'confirm' ? (
             <form className="space-y-6" onSubmit={handleConfirmSubmit}>
               {message && (
-                <div className="bg-emerald-500/15 border border-emerald-400/40 text-emerald-100 px-4 py-3 rounded-lg text-sm">
+                <div className="rounded-lg border border-emerald-300/40 bg-emerald-100 px-4 py-3 text-sm text-emerald-700">
                   {message}
                 </div>
               )}
               {!!debugCode && (
-                <div className="bg-amber-500/15 border border-amber-400/50 text-amber-100 px-4 py-3 rounded-lg text-sm">
+                <div className="rounded-lg border border-amber-300/50 bg-amber-50 px-4 py-3 text-sm text-amber-800">
                   <p className="font-semibold">Development fallback code</p>
                   <p className="mt-1 tracking-[0.22em] text-base">{debugCode}</p>
                 </div>
               )}
               {error && (
-                <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-lg text-sm">
+                <div className="rounded-lg border border-red-300/50 bg-red-50 px-4 py-3 text-sm text-red-700">
                   {error}
                 </div>
               )}
               {isAutoVerifying && (
-                <div className="bg-sky-500/20 border border-sky-400/40 text-sky-100 px-4 py-3 rounded-lg text-sm">
+                <div className="rounded-lg border border-sky-300/40 bg-sky-100 px-4 py-3 text-sm text-sky-700">
                   Verifying your reset link...
                 </div>
               )}
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-white/90 mb-2">
+                <label htmlFor="email" className="mb-2 block text-sm font-medium text-ink">
                   Email Address
                 </label>
                 <input
@@ -280,17 +293,17 @@ function ForgotPasswordPageContent() {
                   autoComplete="email"
                   value={email}
                   readOnly
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white/85 placeholder-white/40 focus:outline-none transition-all cursor-not-allowed"
+                  className="w-full cursor-not-allowed rounded-lg border border-line bg-white/70 px-4 py-3 text-ink-muted placeholder:text-ink-muted/50 focus:outline-none transition-all"
                   placeholder="Email used for request"
                 />
-                <p className="mt-2 text-xs text-white/55">
+                <p className="mt-2 text-xs text-ink-muted/75">
                   Reset code was sent to this email.
                 </p>
               </div>
 
               {!isCodeVerified && (
                 <div>
-                  <label htmlFor="code" className="block text-sm font-medium text-white/90 mb-2">
+                  <label htmlFor="code" className="mb-2 block text-sm font-medium text-ink">
                     Reset Code
                   </label>
                   <input
@@ -305,11 +318,11 @@ function ForgotPasswordPageContent() {
                       setCode(sanitizedCode);
                       setError('');
                     }}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-transparent transition-all tracking-[0.3em]"
+                    className="w-full rounded-lg border border-line bg-white/85 px-4 py-3 tracking-[0.3em] text-ink placeholder:text-ink-muted/55 transition-all focus:border-sky-300/60 focus:outline-none focus:ring-2 focus:ring-sky-300/30"
                     placeholder={`Enter ${codeLength}-digit code`}
                   />
                   {expiresInMinutes && (
-                    <p className="mt-2 text-xs text-white/55">
+                    <p className="mt-2 text-xs text-ink-muted/75">
                       Code expires in {expiresInMinutes} minute{expiresInMinutes === 1 ? '' : 's'}.
                     </p>
                   )}
@@ -317,7 +330,7 @@ function ForgotPasswordPageContent() {
               )}
 
               <div>
-                <label htmlFor="newPassword" className="block text-sm font-medium text-white/90 mb-2">
+                <label htmlFor="newPassword" className="mb-2 block text-sm font-medium text-ink">
                   New Password
                 </label>
                 <div className="relative">
@@ -331,23 +344,23 @@ function ForgotPasswordPageContent() {
                       setNewPassword(e.target.value);
                       setError('');
                     }}
-                    className="w-full px-4 py-3 pr-16 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-transparent transition-all"
+                    className="w-full rounded-lg border border-line bg-white/85 px-4 py-3 pr-16 text-ink placeholder:text-ink-muted/55 transition-all focus:border-sky-300/60 focus:outline-none focus:ring-2 focus:ring-sky-300/30"
                     placeholder="Enter a new password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowNewPassword((prev) => !prev)}
-                    className="absolute inset-y-0 right-0 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-white/65 hover:text-white"
+                    className="absolute inset-y-0 right-0 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--accent-cool-strong)]/75 hover:text-[color:var(--accent-cool-strong)]"
                     aria-label={showNewPassword ? 'Hide new password' : 'Show new password'}
                   >
                     {showNewPassword ? 'Hide' : 'Show'}
                   </button>
                 </div>
-                <p className="mt-2 text-xs text-white/55">{PASSWORD_REQUIREMENTS_SUMMARY}</p>
+                <p className="mt-2 text-xs text-ink-muted/75">{PASSWORD_REQUIREMENTS_SUMMARY}</p>
               </div>
 
               <div>
-                <label htmlFor="newPasswordConfirm" className="block text-sm font-medium text-white/90 mb-2">
+                <label htmlFor="newPasswordConfirm" className="mb-2 block text-sm font-medium text-ink">
                   Confirm New Password
                 </label>
                 <div className="relative">
@@ -361,13 +374,13 @@ function ForgotPasswordPageContent() {
                       setNewPasswordConfirm(e.target.value);
                       setError('');
                     }}
-                    className="w-full px-4 py-3 pr-16 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-transparent transition-all"
+                    className="w-full rounded-lg border border-line bg-white/85 px-4 py-3 pr-16 text-ink placeholder:text-ink-muted/55 transition-all focus:border-sky-300/60 focus:outline-none focus:ring-2 focus:ring-sky-300/30"
                     placeholder="Re-enter your new password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowNewPasswordConfirm((prev) => !prev)}
-                    className="absolute inset-y-0 right-0 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-white/65 hover:text-white"
+                    className="absolute inset-y-0 right-0 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--accent-cool-strong)]/75 hover:text-[color:var(--accent-cool-strong)]"
                     aria-label={showNewPasswordConfirm ? 'Hide confirm password' : 'Show confirm password'}
                   >
                     {showNewPasswordConfirm ? 'Hide' : 'Show'}
@@ -378,11 +391,11 @@ function ForgotPasswordPageContent() {
               <button
                 type="submit"
                 disabled={isLoading || isAutoVerifying}
-                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-[#0f1c2e] bg-white hover:bg-[#e7f1ff] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[color:var(--accent)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex w-full items-center justify-center rounded-lg border border-transparent bg-[color:var(--accent)] px-4 py-3 text-base font-medium text-white shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-sky-300/40 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-[color:var(--accent-strong)]"
               >
                 {isLoading ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#0f1c2e]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -398,7 +411,7 @@ function ForgotPasswordPageContent() {
                   type="button"
                   onClick={handleResendCode}
                   disabled={isLoading || isResendingCode}
-                  className="w-full text-sm text-white/75 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full text-sm text-[color:var(--accent-cool-strong)] hover:text-[color:var(--accent)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isResendingCode ? 'Resending code...' : 'Resend code'}
                 </button>
@@ -422,7 +435,7 @@ function ForgotPasswordPageContent() {
                   attemptedLinkVerification.current = false;
                   router.replace('/forgot-password');
                 }}
-                className="w-full text-sm text-white/80 hover:text-white transition-colors"
+                className="w-full text-sm text-[color:var(--accent-cool-strong)] hover:text-[color:var(--accent)] transition-colors"
               >
                 Start over
               </button>
@@ -430,13 +443,13 @@ function ForgotPasswordPageContent() {
           ) : (
             <form className="space-y-6" onSubmit={handleRequestSubmit}>
               {error && (
-                <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-lg text-sm">
+                <div className="rounded-lg border border-red-300/50 bg-red-50 px-4 py-3 text-sm text-red-700">
                   {error}
                 </div>
               )}
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-white/90 mb-2">
+                <label htmlFor="email" className="mb-2 block text-sm font-medium text-ink">
                   Email Address
                 </label>
                 <input
@@ -449,13 +462,13 @@ function ForgotPasswordPageContent() {
                     setEmail(e.target.value);
                     setError('');
                   }}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-transparent transition-all"
+                  className="w-full rounded-lg border border-line bg-white/85 px-4 py-3 text-ink placeholder:text-ink-muted/55 transition-all focus:border-sky-300/60 focus:outline-none focus:ring-2 focus:ring-sky-300/30"
                   placeholder="Enter your email address"
                 />
-                <p className="mt-2 text-xs text-white/65">
+                <p className="mt-2 text-xs text-ink-muted/80">
                   Use the recovery email saved on your library account. If you can still sign in, update
                   it from{' '}
-                  <Link href="/profile" className="font-semibold text-white underline-offset-4 hover:underline">
+                  <Link href="/profile" className="font-semibold text-[color:var(--accent-cool-strong)] underline-offset-4 hover:underline">
                     Profile
                   </Link>
                   . Otherwise, contact library support to update your email first.
@@ -465,11 +478,11 @@ function ForgotPasswordPageContent() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-[#0f1c2e] bg-white hover:bg-[#e7f1ff] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[color:var(--accent)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex w-full items-center justify-center rounded-lg border border-transparent bg-[color:var(--accent)] px-4 py-3 text-base font-medium text-white shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-sky-300/40 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-[color:var(--accent-strong)]"
               >
                 {isLoading ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#0f1c2e]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -484,10 +497,10 @@ function ForgotPasswordPageContent() {
 
           {/* Back to Login */}
           <div className="mt-6 text-center">
-            <Link
-              href="/login"
-              className="text-[color:var(--accent)] hover:text-[color:var(--accent-strong)] transition-colors inline-flex items-center"
-            >
+          <Link
+            href="/login"
+            className="inline-flex items-center font-medium text-[color:var(--accent-cool-strong)] transition-colors hover:text-[color:var(--accent)]"
+          >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
@@ -495,12 +508,13 @@ function ForgotPasswordPageContent() {
             </Link>
           </div>
         </div>
+        </div>
 
         {/* Back to Home */}
-        <div className="text-center">
+        <div className="text-center text-sm">
           <Link
             href="/"
-            className="text-white/70 hover:text-white transition-colors inline-flex items-center"
+            className="inline-flex items-center font-medium text-ink-muted transition-colors hover:text-[color:var(--accent-cool-strong)]"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -517,8 +531,8 @@ export default function ForgotPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="royal-app flex min-h-screen items-center justify-center bg-hero text-white">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-white border-r-transparent" />
+        <div className="public-shell flex min-h-screen items-center justify-center text-ink">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-[color:var(--accent)] border-r-transparent" />
         </div>
       }
     >
@@ -526,5 +540,3 @@ export default function ForgotPasswordPage() {
     </Suspense>
   );
 }
-
-

@@ -80,7 +80,7 @@ export default function HistoryPage() {
                   </p>
                   <Link
                     href="/books"
-                    className="mt-4 inline-flex items-center rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-[#1a1b1f] shadow-md hover:bg-amber-400"
+                    className="mt-4 inline-flex items-center rounded-full bg-[#2f3e9e] px-4 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-200 hover:bg-[#253285] hover:shadow-xl"
                   >
                     Browse books
                   </Link>

@@ -50,21 +50,21 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
   const getNavLinkClasses = (href: string, mobile = false) => {
     const isActive = isNavItemActive(href);
     const baseClasses = mobile
-      ? 'group flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium tracking-[0.01em] transition-all duration-300'
-      : 'group relative inline-flex items-center rounded-full px-4.5 py-2.5 text-[0.92rem] font-medium tracking-[0.01em] transition-all duration-300';
+      ? 'group flex items-center justify-between rounded-2xl border border-transparent px-4 py-3 text-sm font-medium tracking-[0.01em] transition-all duration-300'
+      : 'group relative inline-flex items-center rounded-full border border-transparent px-[1.125rem] py-2.5 text-[0.92rem] font-medium tracking-[0.015em] transition-all duration-300';
 
     return `${baseClasses} ${
       isActive
-        ? 'bg-[color:var(--header-active-bg)] text-[color:var(--header-text)] ring-1 ring-inset ring-white/15'
-        : 'text-[color:var(--header-text-muted)] hover:bg-[color:var(--header-button-bg)] hover:text-[color:var(--header-text)]'
+        ? 'border-sky-200/30 bg-white/[0.04] text-[color:var(--header-text)] shadow-[0_0_24px_rgba(143,203,239,0.14)]'
+        : 'text-[color:var(--header-text-muted)] hover:border-white/10 hover:bg-white/[0.045] hover:text-[color:var(--header-text)]'
     }`;
   };
 
   const getNavIndicatorClasses = (href: string) => {
     const isActive = isNavItemActive(href);
     return isActive
-      ? 'opacity-100 scale-100 bg-gradient-to-r from-transparent via-sky-200 to-transparent shadow-[0_0_20px_rgba(143,203,239,0.42)]'
-      : 'opacity-0 scale-75 bg-gradient-to-r from-transparent via-sky-200/80 to-transparent group-hover:opacity-100 group-hover:scale-100';
+      ? 'opacity-100 scale-100 bg-gradient-to-r from-transparent via-sky-100/95 to-transparent shadow-[0_0_18px_rgba(230,240,248,0.28)]'
+      : 'opacity-0 scale-75 bg-gradient-to-r from-transparent via-sky-100/75 to-transparent group-hover:opacity-100 group-hover:scale-100';
   };
 
   // Close profile dropdown when clicking outside
@@ -147,15 +147,15 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
   const avatarUrl = user?.avatar ? resolveMediaUrl(user.avatar) : null;
   const defaultAvatarUrl = '/student-avatar.svg';
   const dropdownPanelClasses =
-    'border border-line bg-white shadow-lg';
-  const dropdownBorderClasses = 'border-line';
+    'border border-slate-200/85 bg-white/96 shadow-[0_22px_46px_rgba(0,38,77,0.14)] backdrop-blur-xl';
+  const dropdownBorderClasses = 'border-slate-200/80';
   const dropdownPrimaryTextClasses = 'text-ink';
   const dropdownSecondaryTextClasses = 'text-ink-muted';
-  const dropdownBadgeClasses = 'bg-sky-500/15 text-sky-700 border border-sky-300/30';
+  const dropdownBadgeClasses = 'border border-sky-100 bg-sky-50 text-[color:var(--accent-strong)]';
   const dropdownItemClasses =
-    'flex items-center px-4 py-2 text-sm text-ink transition-colors hover:bg-sky-50';
+    'flex items-center px-3.5 py-2 text-[0.92rem] text-ink transition-colors hover:bg-sky-50/80';
   const dropdownSignOutClasses =
-    'flex items-center w-full px-4 py-2 text-sm text-rose-600 transition-colors hover:bg-rose-50';
+    'flex items-center w-full px-3.5 py-2 text-[0.92rem] text-rose-600 transition-colors hover:bg-rose-50';
 
   return (
     <nav
@@ -173,7 +173,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
         />
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative flex min-w-0 items-center justify-between gap-3 py-3 sm:h-[4.7rem] sm:py-0">
+        <div className="relative flex min-w-0 items-center justify-between gap-3 py-2.5 sm:h-[4.2rem] sm:py-0">
           {/* Logo */}
           <Link href="/" className="group flex min-w-0 items-center gap-2.5 sm:gap-3">
             <div
@@ -224,14 +224,14 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="relative flex items-center space-x-2 rounded-full border border-white/12 bg-white/10 px-2 py-1.5 transition-all hover:bg-white/14 focus:outline-none"
+                  className="relative flex items-center space-x-1.5 rounded-full border border-white/10 bg-white/[0.08] px-2.5 py-1.5 transition-all duration-200 hover:border-white/14 hover:bg-white/[0.12] focus:outline-none"
                 >
                   {unreadCount > 0 && (
                     <span className="absolute -right-1 -top-1 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-amber-400 px-1.5 text-[10px] font-bold text-[#10203a] shadow-[0_10px_24px_rgba(251,191,36,0.35)]">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
-                  <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white/12 font-semibold text-[color:var(--header-text)] shadow-soft">
+                  <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-white/12 bg-white/12 font-semibold text-[color:var(--header-text)] shadow-[0_10px_22px_rgba(11,27,61,0.2)]">
                     {avatarUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={avatarUrl} alt={user.full_name} className="h-full w-full object-cover" />
@@ -245,7 +245,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                     )}
                   </div>
                   <svg
-                    className={`h-4 w-4 text-[color:var(--header-text-muted)] transition-transform ${
+                    className={`h-3.5 w-3.5 text-[color:var(--header-text-muted)] transition-transform ${
                       isProfileOpen ? 'rotate-180' : ''
                     }`}
                     fill="none"
@@ -258,9 +258,9 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
 
                 {/* Profile Dropdown Menu */}
                 {isProfileOpen && (
-                  <div className={`absolute right-0 mt-2 w-56 rounded-[1.6rem] py-2 z-50 ${dropdownPanelClasses}`}>
+                  <div className={`absolute right-0 mt-2 w-52 rounded-[1.45rem] py-2 z-50 ${dropdownPanelClasses}`}>
                     {/* User Info */}
-                    <div className={`px-4 py-3 border-b ${dropdownBorderClasses}`}>
+                    <div className={`px-3.5 py-3 border-b ${dropdownBorderClasses}`}>
                       <p className={`text-sm font-semibold truncate ${dropdownPrimaryTextClasses}`}>
                         {user.full_name}
                       </p>
@@ -283,21 +283,6 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                         Profile
-                      </Link>
-                      <Link
-                        href="/notifications"
-                        className={dropdownItemClasses}
-                        onClick={() => setIsProfileOpen(false)}
-                      >
-                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                        </svg>
-                        Notifications
-                        {unreadCount > 0 && (
-                          <span className="ml-auto rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-[#10203a]">
-                            {unreadCount > 9 ? '9+' : unreadCount}
-                          </span>
-                        )}
                       </Link>
                       {showLibrarianDesk && (
                         <Link
@@ -352,7 +337,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                   </Link>
                   <Link
                     href="/register"
-                    className="bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] text-[#1a1b1f] px-4 py-2 rounded-full hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] transition-colors font-semibold shadow-soft"
+                    className="rounded-full bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-4 py-2 font-semibold text-[#1a1b1f] shadow-[0_12px_24px_rgba(122,88,20,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[linear-gradient(135deg,#caa531_0%,#ebc03f_100%)] hover:shadow-[0_16px_28px_rgba(122,88,20,0.24)]"
                   >
                     Get Started
                   </Link>
@@ -363,7 +348,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
 
           {/* Mobile Menu Button */}
           <button
-            className="rounded-full border border-white/12 bg-white/10 p-2.5 text-[color:var(--header-text-muted)] transition-all hover:bg-white/14 md:hidden"
+            className="rounded-full border border-white/10 bg-white/[0.08] p-2.5 text-[color:var(--header-text-muted)] transition-all duration-200 hover:border-white/14 hover:bg-white/[0.12] md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <svg
@@ -395,7 +380,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
         {isMenuOpen && (
           <div className="border-t border-white/12 py-4 md:hidden">
             <div
-              className="rounded-[1.75rem] border border-white/12 bg-white/[0.08] p-3 shadow-[0_22px_50px_rgba(21,33,94,0.3)]"
+              className="rounded-[1.75rem] border border-white/12 bg-white/[0.08] p-3 shadow-[0_22px_50px_rgba(21,33,94,0.24)] backdrop-blur-xl"
             >
               <div className="flex flex-col gap-2">
                 {navItems
@@ -450,13 +435,6 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                       >
                         Profile
                       </Link>
-                      <Link
-                        href="/notifications"
-                        className="block text-[color:var(--header-text-muted)] transition-colors hover:text-[color:var(--header-text)]"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Notifications {unreadCount > 0 ? `(${unreadCount > 9 ? '9+' : unreadCount})` : ''}
-                      </Link>
                       {showLibrarianDesk && (
                         <Link
                           href="/librarian"
@@ -495,7 +473,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
                         </Link>
                         <Link
                           href="/register"
-                          className="bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] text-[#1a1b1f] px-4 py-3 rounded-full hover:bg-[linear-gradient(135deg,#c19b2e_0%,#d4af37_100%)] transition-colors font-semibold text-center shadow-soft"
+                          className="rounded-full bg-[linear-gradient(135deg,#d4af37_0%,#f4d03f_100%)] px-4 py-3 text-center font-semibold text-[#1a1b1f] shadow-[0_12px_24px_rgba(122,88,20,0.2)] transition-all duration-200 hover:bg-[linear-gradient(135deg,#caa531_0%,#ebc03f_100%)]"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           Get Started

@@ -10,7 +10,10 @@ import {
   Clock3,
   Loader2,
   ShieldCheck,
+  TrendingUp,
+  BarChart3,
 } from 'lucide-react';
+import BookCover from '@/components/BookCover';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -175,6 +178,66 @@ export default function DashboardPage() {
       .slice(0, 3);
   }, [stats.activeBorrows]);
 
+  const chartData = useMemo(() => {
+    const days = 30;
+    const now = new Date();
+    const dataPoints: { date: string; borrows: number; returns: number; label: string }[] = [];
+    
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date(now);
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      
+      const borrowsOnDay = requests.filter((req) => {
+        const reqDate = req.requested_at?.split('T')[0];
+        return reqDate === dateStr && (req.status === 'APPROVED' || req.status === 'PENDING');
+      }).length;
+      
+      const returnsOnDay = requests.filter((req) => {
+        const returnDate = req.returned_at?.split('T')[0];
+        return returnDate === dateStr && req.status === 'RETURNED';
+      }).length;
+      
+      dataPoints.push({
+        date: dateStr,
+        borrows: borrowsOnDay,
+        returns: returnsOnDay,
+        label: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      });
+    }
+    
+    const maxValue = Math.max(
+      ...dataPoints.map((d) => Math.max(d.borrows, d.returns)),
+      1
+    );
+    
+    return { dataPoints, maxValue };
+  }, [requests]);
+
+  const statusDistribution = useMemo(() => {
+    const total = requests.length || 1;
+    return [
+      {
+        label: 'Active',
+        count: stats.activeBorrows.length,
+        percentage: Math.round((stats.activeBorrows.length / total) * 100),
+        color: 'bg-sky-500',
+      },
+      {
+        label: 'Pending',
+        count: stats.pendingBorrows.length,
+        percentage: Math.round((stats.pendingBorrows.length / total) * 100),
+        color: 'bg-amber-500',
+      },
+      {
+        label: 'Returned',
+        count: stats.returnedBorrows.length,
+        percentage: Math.round((stats.returnedBorrows.length / total) * 100),
+        color: 'bg-emerald-500',
+      },
+    ];
+  }, [requests.length, stats]);
+
   const quickActions = useMemo(() => {
     const actions = [
       {
@@ -327,6 +390,219 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
+                {/* Data Visualization Section */}
+                <div className="grid gap-6 xl:grid-cols-2">
+                  {/* Borrow Activity Chart */}
+                  <div className="rounded-[2rem] border border-white/12 bg-[linear-gradient(180deg,rgba(10,19,36,0.94)_0%,rgba(12,22,41,0.97)_100%)] p-6 shadow-[0_28px_80px_rgba(2,8,23,0.46)] backdrop-blur-2xl">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.28em] text-white/46">Activity trends</p>
+                        <h2 className="mt-2 text-xl font-semibold text-white">Borrow Activity (Last 30 Days)</h2>
+                      </div>
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-500/14 text-sky-200">
+                        <TrendingUp className="h-5 w-5" />
+                      </div>
+                    </div>
+
+                    <div className="mt-6">
+                      {chartData.dataPoints.every((d) => d.borrows === 0 && d.returns === 0) ? (
+                        <div className="rounded-[1.6rem] border border-dashed border-white/14 bg-white/[0.03] px-5 py-16 text-center">
+                          <TrendingUp className="mx-auto h-12 w-12 text-white/20" />
+                          <p className="mt-4 text-white/72">No borrow activity in the last 30 days.</p>
+                          <p className="mt-2 text-sm text-white/48">Start borrowing books to see your activity trends here.</p>
+                        </div>
+                      ) : (
+                      <div className="relative h-64">
+                        <svg className="h-full w-full" viewBox="0 0 800 256" preserveAspectRatio="none">
+                          {/* Grid lines */}
+                          {[0, 0.25, 0.5, 0.75, 1].map((ratio) => (
+                            <line
+                              key={ratio}
+                              x1="40"
+                              y1={40 + (1 - ratio) * 176}
+                              x2="780"
+                              y2={40 + (1 - ratio) * 176}
+                              stroke="rgba(255,255,255,0.08)"
+                              strokeWidth="1"
+                            />
+                          ))}
+
+                          {/* Y-axis labels */}
+                          {[0, 0.25, 0.5, 0.75, 1].map((ratio) => (
+                            <text
+                              key={ratio}
+                              x="30"
+                              y={40 + (1 - ratio) * 176 + 4}
+                              fill="rgba(255,255,255,0.4)"
+                              fontSize="10"
+                              textAnchor="end"
+                            >
+                              {Math.round(chartData.maxValue * ratio)}
+                            </text>
+                          ))}
+
+                          {/* Borrow line */}
+                          <polyline
+                            points={chartData.dataPoints
+                              .map((d, i) => {
+                                const x = 40 + (i / (chartData.dataPoints.length - 1)) * 740;
+                                const y = 216 - (d.borrows / chartData.maxValue) * 176;
+                                return `${x},${y}`;
+                              })
+                              .join(' ')}
+                            fill="none"
+                            stroke="rgb(56, 189, 248)"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+
+                          {/* Return line */}
+                          <polyline
+                            points={chartData.dataPoints
+                              .map((d, i) => {
+                                const x = 40 + (i / (chartData.dataPoints.length - 1)) * 740;
+                                const y = 216 - (d.returns / chartData.maxValue) * 176;
+                                return `${x},${y}`;
+                              })
+                              .join(' ')}
+                            fill="none"
+                            stroke="rgb(16, 185, 129)"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+
+                          {/* Data points */}
+                          {chartData.dataPoints.map((d, i) => {
+                            const x = 40 + (i / (chartData.dataPoints.length - 1)) * 740;
+                            const yBorrow = 216 - (d.borrows / chartData.maxValue) * 176;
+                            const yReturn = 216 - (d.returns / chartData.maxValue) * 176;
+                            return (
+                              <g key={i}>
+                                <circle cx={x} cy={yBorrow} r="3" fill="rgb(56, 189, 248)" />
+                                <circle cx={x} cy={yReturn} r="3" fill="rgb(16, 185, 129)" />
+                              </g>
+                            );
+                          })}
+
+                          {/* X-axis labels (show every 5th day) */}
+                          {chartData.dataPoints.map((d, i) => {
+                            if (i % 5 !== 0 && i !== chartData.dataPoints.length - 1) return null;
+                            const x = 40 + (i / (chartData.dataPoints.length - 1)) * 740;
+                            return (
+                              <text
+                                key={i}
+                                x={x}
+                                y="240"
+                                fill="rgba(255,255,255,0.4)"
+                                fontSize="10"
+                                textAnchor="middle"
+                              >
+                                {d.label}
+                              </text>
+                            );
+                          })}
+                        </svg>
+                      </div>
+
+                      <div className="mt-6 flex flex-wrap gap-4">
+                        <div className="flex items-center gap-2">
+                          <div className="h-3 w-3 rounded-full bg-sky-500" />
+                          <span className="text-sm text-white/68">Borrows</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="h-3 w-3 rounded-full bg-emerald-500" />
+                          <span className="text-sm text-white/68">Returns</span>
+                        </div>
+                      </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Book Status Distribution */}
+                  <div className="rounded-[2rem] border border-white/12 bg-[linear-gradient(180deg,rgba(10,19,36,0.94)_0%,rgba(12,22,41,0.97)_100%)] p-6 shadow-[0_28px_80px_rgba(2,8,23,0.46)] backdrop-blur-2xl">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.28em] text-white/46">Status overview</p>
+                        <h2 className="mt-2 text-xl font-semibold text-white">Book Status Distribution</h2>
+                      </div>
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-500/14 text-violet-200">
+                        <BarChart3 className="h-5 w-5" />
+                      </div>
+                    </div>
+
+                    <div className="mt-6">
+                      {requests.length === 0 ? (
+                        <div className="rounded-[1.6rem] border border-dashed border-white/14 bg-white/[0.03] px-5 py-16 text-center">
+                          <BarChart3 className="mx-auto h-12 w-12 text-white/20" />
+                          <p className="mt-4 text-white/72">No book status data available.</p>
+                          <p className="mt-2 text-sm text-white/48">Your book status distribution will appear here once you start borrowing.</p>
+                        </div>
+                      ) : (
+                        <>
+                      <div className="flex items-center justify-center">
+                        <svg className="h-48 w-48" viewBox="0 0 200 200">
+                          {statusDistribution.map((item, index) => {
+                            const total = statusDistribution.reduce((sum, s) => sum + s.count, 0) || 1;
+                            let startAngle = 0;
+                            for (let i = 0; i < index; i++) {
+                              startAngle += (statusDistribution[i].count / total) * 360;
+                            }
+                            const angle = (item.count / total) * 360;
+                            const endAngle = startAngle + angle;
+
+                            const startRad = (startAngle - 90) * (Math.PI / 180);
+                            const endRad = (endAngle - 90) * (Math.PI / 180);
+
+                            const x1 = 100 + 70 * Math.cos(startRad);
+                            const y1 = 100 + 70 * Math.sin(startRad);
+                            const x2 = 100 + 70 * Math.cos(endRad);
+                            const y2 = 100 + 70 * Math.sin(endRad);
+
+                            const largeArc = angle > 180 ? 1 : 0;
+
+                            const colors: Record<string, string> = {
+                              'bg-sky-500': 'rgb(56, 189, 248)',
+                              'bg-amber-500': 'rgb(245, 158, 11)',
+                              'bg-emerald-500': 'rgb(16, 185, 129)',
+                            };
+
+                            return (
+                              <path
+                                key={item.label}
+                                d={`M 100 100 L ${x1} ${y1} A 70 70 0 ${largeArc} 1 ${x2} ${y2} Z`}
+                                fill={colors[item.color]}
+                                opacity="0.85"
+                              />
+                            );
+                          })}
+                          <circle cx="100" cy="100" r="45" fill="rgba(10,19,36,0.95)" />
+                        </svg>
+                      </div>
+
+                      <div className="mt-6 space-y-3">
+                        {statusDistribution.map((item) => (
+                          <div key={item.label} className="flex items-center justify-between rounded-[1.4rem] border border-white/10 bg-white/[0.04] p-4">
+                            <div className="flex items-center gap-3">
+                              <div className={`h-3 w-3 rounded-full ${item.color}`} />
+                              <span className="text-sm font-semibold text-white">{item.label}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="text-sm text-white/68">{item.count} books</span>
+                              <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white">
+                                {item.percentage}%
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
                   <div className="rounded-[2rem] border border-white/12 bg-[linear-gradient(180deg,rgba(10,19,36,0.94)_0%,rgba(12,22,41,0.97)_100%)] p-6 shadow-[0_28px_80px_rgba(2,8,23,0.46)] backdrop-blur-2xl">
                     <div className="flex items-center justify-between gap-4">
@@ -363,7 +639,13 @@ export default function DashboardPage() {
                               className="rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-5"
                             >
                               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                                <div>
+                                <div className="flex items-start gap-4">
+                                  <BookCover
+                                    coverImage={request.book.cover_image}
+                                    title={request.book.title}
+                                    size="md"
+                                  />
+                                  <div>
                                   <h3 className="text-lg font-semibold text-white">{request.book.title}</h3>
                                   <p className="mt-1 text-sm text-white/60">{request.book.author}</p>
                                   <p className="mt-3 text-sm text-white/68">
@@ -380,6 +662,7 @@ export default function DashboardPage() {
                                   >
                                     {dueState}
                                   </p>
+                                  </div>
                                 </div>
                                 <Link
                                   href={`/books/${request.book.id}`}
@@ -427,22 +710,29 @@ export default function DashboardPage() {
                               href={`/books/${item.book.id}`}
                               className="block rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4 transition hover:border-white/16 hover:bg-white/[0.07]"
                             >
-                              <div className="flex items-start justify-between gap-3">
-                                <div>
+                              <div className="flex items-start gap-3">
+                                <BookCover
+                                  coverImage={item.book.cover_image}
+                                  title={item.book.title}
+                                  size="sm"
+                                />
+                                <div className="flex-1 min-w-0">
+                                <div className="flex items-start justify-between gap-3">
                                   <p className="text-sm font-semibold text-white">{item.book.title}</p>
-                                  <p className="mt-1 text-sm text-white/58">{item.book.author}</p>
+                                  <span
+                                    className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${
+                                      item.book.available
+                                        ? 'bg-emerald-500/15 text-emerald-100'
+                                        : 'bg-amber-500/15 text-amber-100'
+                                    }`}
+                                  >
+                                    {item.book.available ? 'Available' : 'Queued'}
+                                  </span>
                                 </div>
-                                <span
-                                  className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${
-                                    item.book.available
-                                      ? 'bg-emerald-500/15 text-emerald-100'
-                                      : 'bg-amber-500/15 text-amber-100'
-                                  }`}
-                                >
-                                  {item.book.available ? 'Available' : 'Queued'}
-                                </span>
+                                <p className="mt-1 text-sm text-white/58">{item.book.author}</p>
+                                <p className="mt-3 text-sm leading-6 text-white/64">{item.reason}</p>
+                                </div>
                               </div>
-                              <p className="mt-3 text-sm leading-6 text-white/64">{item.reason}</p>
                             </Link>
                           ))
                         )}
@@ -496,13 +786,18 @@ export default function DashboardPage() {
                             href={`/books/${item.book.id}`}
                             className="rounded-[1.4rem] border border-white/10 bg-white/[0.04] p-4 transition hover:border-white/16 hover:bg-white/[0.07]"
                           >
-                            <div className="flex items-start justify-between gap-3">
-                              <div>
+                            <div className="flex items-start gap-3">
+                              <BookCover
+                                coverImage={item.book.cover_image}
+                                title={item.book.title}
+                                size="sm"
+                              />
+                              <div className="flex-1 min-w-0">
                                 <p className="text-sm font-semibold text-white">{item.book.title}</p>
                                 <p className="mt-1 text-sm text-white/60">{item.book.author}</p>
                                 <p className="mt-3 text-sm leading-6 text-white/60">{item.reason}</p>
                               </div>
-                              <ArrowRight className="mt-0.5 h-4 w-4 text-white/35" />
+                              <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-white/35" />
                             </div>
                           </Link>
                         ))}

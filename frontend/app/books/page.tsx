@@ -107,6 +107,16 @@ function BooksPageContent() {
     [books]
   );
 
+  const categoryCounts = useMemo(() => {
+    const counts = new Map<number, number>();
+    books.forEach((book) => {
+      (book.categories ?? []).forEach((category) => {
+        counts.set(category.id, (counts.get(category.id) ?? 0) + 1);
+      });
+    });
+    return counts;
+  }, [books]);
+
   const selectedCategoryName = useMemo(() => {
     if (!selectedCategoryId) return null;
     return categories.find((category) => category.id === selectedCategoryId)?.name ?? null;
@@ -221,73 +231,101 @@ function BooksPageContent() {
           </div>
         </section>
 
-        <section className="relative py-16 sm:py-20">
+        <section className="relative py-10 sm:py-12">
           <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_80%_10%,rgba(126,191,231,0.16),transparent_38%)]" />
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="public-panel mb-10 rounded-3xl p-6 backdrop-blur-xl">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[color:var(--accent-cool-strong)]/80">
+            <div className="public-panel relative mb-8 overflow-hidden rounded-[2rem] p-6 shadow-card backdrop-blur-xl sm:p-7 lg:p-8">
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(135deg,rgba(126,191,231,0.16),rgba(59,130,246,0.12),rgba(0,68,124,0.08))]" />
+                <div className="absolute -left-10 top-0 h-32 w-32 rounded-full bg-sky-300/25 blur-3xl" />
+                <div className="absolute -right-8 top-4 h-28 w-28 rounded-full bg-blue-400/18 blur-3xl" />
+              </div>
+
+              <div className="relative flex flex-wrap items-start justify-between gap-4">
+                <div className="max-w-2xl">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[color:var(--accent-cool-strong)]/55">
                     Categories
                   </p>
-                  <h2 className="mt-2 text-xl sm:text-2xl font-semibold text-ink">
+                  <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-[2rem]">
                     Browse by category
                   </h2>
-                  <p className="mt-2 text-sm text-ink-muted">
-                    Filter the catalog by category to find the right shelf faster.
+                  <p className="mt-3 max-w-xl text-sm leading-6 text-ink-muted sm:text-[0.96rem]">
+                    Jump into a specific shelf, compare categories faster, and narrow the catalog
+                    with cleaner filters built for quick browsing.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setSelectedCategoryId(null)}
-                  className="rounded-full border border-line bg-white/80 px-4 py-2 text-xs font-semibold text-ink hover:bg-white transition-all"
+                  disabled={selectedCategoryId === null}
+                  className="inline-flex items-center rounded-full border border-line bg-white/74 px-4 py-2 text-xs font-semibold text-ink-muted transition-all hover:border-sky-300/55 hover:bg-sky-50 hover:text-[color:var(--accent-cool-strong)] disabled:cursor-default disabled:opacity-45"
                 >
                   Clear filter
                 </button>
               </div>
 
-              <div className="mt-5">
+              <div className="relative mt-6 rounded-[1.6rem] border border-sky-200/55 bg-white/70 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] sm:p-4">
                 {categoriesLoading && (
-                  <div className="flex items-center gap-3 text-sm text-ink-muted">
-                    <div className="h-4 w-4 animate-spin rounded-full border border-line border-t-transparent" />
+                  <div className="flex items-center gap-3 px-1 py-1 text-sm text-ink-muted">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-sky-200 border-t-[color:var(--accent-cool-strong)]" />
                     Loading categories...
                   </div>
                 )}
                 {!categoriesLoading && categoriesError && (
-                  <div className="rounded-2xl border border-rose-300/30 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                  <div className="rounded-2xl border border-rose-300/40 bg-rose-50 px-4 py-3 text-sm text-rose-700">
                     {categoriesError}
                   </div>
                 )}
                 {!categoriesLoading && categories.length === 0 && !categoriesError && (
-                  <div className="rounded-2xl border border-dashed border-line bg-white/70 px-4 py-6 text-sm text-ink-muted">
+                  <div className="rounded-2xl border border-dashed border-sky-200/70 bg-white/70 px-4 py-6 text-sm text-ink-muted">
                     No categories available yet.
                   </div>
                 )}
                 {!categoriesLoading && categories.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-3">
                     <button
                       type="button"
                       onClick={() => setSelectedCategoryId(null)}
-                      className={`rounded-full border px-4 py-2 text-xs font-semibold transition-all ${
+                      aria-pressed={selectedCategoryId === null}
+                      className={`inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
                         selectedCategoryId === null
-                          ? 'border-sky-300/40 bg-sky-100/90 text-[color:var(--accent-cool-strong)]'
-                          : 'border-line bg-white/75 text-ink-muted hover:bg-white'
+                          ? 'border-[color:var(--accent-cool-strong)] bg-[color:var(--accent-cool-strong)] text-white shadow-[0_12px_24px_rgba(0,68,124,0.22)]'
+                          : 'border-sky-200/80 bg-white/84 text-[color:var(--accent-cool-strong)] hover:-translate-y-0.5 hover:border-sky-300/80 hover:bg-sky-50'
                       }`}
                     >
-                      All categories
+                      <span>All categories</span>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                          selectedCategoryId === null
+                            ? 'bg-white/16 text-white'
+                            : 'bg-sky-100 text-[color:var(--accent-cool-strong)]/90'
+                        }`}
+                      >
+                        {loading ? '...' : books.length}
+                      </span>
                     </button>
                     {categories.map((category) => (
                       <button
                         key={category.id}
                         type="button"
                         onClick={() => setSelectedCategoryId(category.id)}
-                        className={`flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition-all ${
+                        aria-pressed={selectedCategoryId === category.id}
+                        className={`inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
                           selectedCategoryId === category.id
-                            ? 'border-sky-300/40 bg-sky-100/90 text-[color:var(--accent-cool-strong)]'
-                            : 'border-line bg-white/75 text-ink-muted hover:bg-white'
+                            ? 'border-[color:var(--accent-cool-strong)] bg-[color:var(--accent-cool-strong)] text-white shadow-[0_12px_24px_rgba(0,68,124,0.22)]'
+                            : 'border-sky-200/80 bg-white/84 text-[color:var(--accent-cool-strong)] hover:-translate-y-0.5 hover:border-sky-300/80 hover:bg-sky-50'
                         }`}
                       >
                         <span>{category.name}</span>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                            selectedCategoryId === category.id
+                              ? 'bg-white/16 text-white'
+                              : 'bg-sky-100 text-[color:var(--accent-cool-strong)]/90'
+                          }`}
+                        >
+                          {categoryCounts.get(category.id) ?? 0}
+                        </span>
                       </button>
                     ))}
                   </div>
