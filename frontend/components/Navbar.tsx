@@ -173,7 +173,7 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
         />
       </div>
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
-        <div className="relative flex min-w-0 items-center justify-between gap-3 py-6">
+        <div className="relative flex min-w-0 items-center justify-between gap-3" style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
           {/* Logo */}
           <Link href="/" className="group flex min-w-0 items-center gap-2.5 sm:gap-3">
             <div
