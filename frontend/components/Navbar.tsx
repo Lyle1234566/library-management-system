@@ -172,8 +172,8 @@ export default function Navbar({ variant = 'light' }: NavbarProps) {
           className={`absolute right-[10%] top-[-9rem] h-64 w-64 rounded-full blur-3xl ${isDark ? 'bg-blue-200/16' : 'bg-blue-200/14'}`}
         />
       </div>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative flex min-w-0 items-center justify-between gap-3 py-2.5 sm:h-[4.2rem] sm:py-0">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
+        <div className="relative flex min-w-0 items-center justify-between gap-3 py-6">
           {/* Logo */}
           <Link href="/" className="group flex min-w-0 items-center gap-2.5 sm:gap-3">
             <div

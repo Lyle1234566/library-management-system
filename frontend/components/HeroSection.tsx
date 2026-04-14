@@ -39,10 +39,10 @@ export default function HeroSection() {
         <div className="absolute right-[13%] top-[24%] h-28 w-28 rounded-full border border-sky-100/70" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-32 pb-16 sm:px-8 sm:pt-36 lg:px-10">
+      <div className="relative z-10 mx-auto w-full max-w-[1200px] px-4 pt-32 pb-16 sm:px-8 lg:px-10">
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.06fr)_minmax(21rem,0.94fr)] lg:gap-10 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] xl:gap-12">
-          <div className="space-y-8 sm:space-y-9">
-            <div className="space-y-5">
+          <div className="space-y-6 sm:space-y-7">
+            <div className="space-y-4">
               <h1 className="text-ink animate-fade-up delay-100">
                 <span
                   className="block text-[clamp(2.5rem,6.5vw,3.8rem)] lg:text-[clamp(3.5rem,4.5vw,4.5rem)] xl:text-[clamp(4rem,5vw,5rem)]"

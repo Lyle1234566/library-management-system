@@ -1,3 +1,15 @@
+/* CSS Reset for consistent spacing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 @import "tailwindcss";
 
 :root {
@@ -187,6 +199,8 @@ iframe {
 
 .container {
   max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 h1,
