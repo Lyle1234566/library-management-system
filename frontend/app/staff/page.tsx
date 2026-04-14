@@ -446,8 +446,8 @@ export default function StaffDeskPage() {
       return;
     }
 
-    setNotifications(response.data.results);
-    setNotificationUnreadCount(response.data.unread_count);
+    setNotifications(response.data.results ?? []);
+    setNotificationUnreadCount(response.data.unread_count ?? 0);
     setNotificationsError(null);
     setNotificationsState('idle');
   };

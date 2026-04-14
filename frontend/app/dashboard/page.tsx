@@ -412,6 +412,7 @@ export default function DashboardPage() {
                           <p className="mt-2 text-sm text-white/48">Start borrowing books to see your activity trends here.</p>
                         </div>
                       ) : (
+                        <>
                       <div className="relative h-64">
                         <svg className="h-full w-full" viewBox="0 0 800 256" preserveAspectRatio="none">
                           {/* Grid lines */}
@@ -516,6 +517,7 @@ export default function DashboardPage() {
                           <span className="text-sm text-white/68">Returns</span>
                         </div>
                       </div>
+                      </>
                       )}
                     </div>
                   </div>
